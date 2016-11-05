@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1478376164 source:/home/bag/c++/BagCraft/src/main.cpp
+	<iostream>
+	"MainGame.h"
+
+1478376049 /home/bag/c++/BagCraft/src/MainGame.h
+	<GL/glew.h>
+	<SFML/Graphics.hpp>
+	<iostream>
+
+1478376630 source:/home/bag/c++/BagCraft/src/MainGame.cpp
+	"MainGame.h"
+

@@ -40,8 +40,12 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="src/Entity.cpp" />
+		<Unit filename="src/Entity.h" />
+		<Unit filename="src/Loader.cpp" />
 		<Unit filename="src/MainGame.cpp" />
 		<Unit filename="src/MainGame.h" />
+		<Unit filename="src/OBJLoader.cpp" />
 		<Unit filename="src/RawModel.cpp" />
 		<Unit filename="src/RawModel.h" />
 		<Unit filename="src/ShaderProgram.h" />

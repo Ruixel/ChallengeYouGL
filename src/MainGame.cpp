@@ -20,7 +20,9 @@ void MainGame::mainLoop()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         glClearColor(2.f/255, 119.f/255, 189.f/255, 1.0f);
-sshader->use();
+
+        cube.update(0.f);
+
         cube.draw();
 
         window->display();

@@ -29,8 +29,8 @@ Cube::Cube(Loader& loader, StaticShader* sh)
 
 void Cube::draw()
 {
-    //shader->use();
-    //shader->loadTransformationMatrix(transformationMatrix);
+    shader->use();
+    shader->loadTransformationMatrix(transformationMatrix);
 
     glBindVertexArray(mesh->getVaoID());
     glDrawElements(GL_TRIANGLES, mesh->getVertexCount(), GL_UNSIGNED_INT, 0);
@@ -41,5 +41,7 @@ void Cube::draw()
 
 void Cube::update(const float dt)
 {
+    this->rotation = sf::Vector3f(this->rotation.x + 0.1, 0, 0);
+
     createTransformationMatrix();
 }

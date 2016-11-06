@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 
 #include <vector>
+#include <SFML/Graphics.hpp>
 
 #include "Entity.h"
 #include "StaticShader.h"

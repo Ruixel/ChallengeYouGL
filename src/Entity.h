@@ -17,9 +17,9 @@ protected:
     RawModel*       mesh;
 
     // Positional Properties
-    glm::vec3       position;
-    sf::Vector3f    rotation;
-    float           scale;
+    glm::vec3       position    = glm::vec3(0,0,0);
+    sf::Vector3f    rotation    = sf::Vector3f(0,0,0);
+    float           scale       = 1;
     glm::mat4       transformationMatrix;
 
     // Quick transformation matrix

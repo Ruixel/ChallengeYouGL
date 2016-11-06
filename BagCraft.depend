@@ -13,19 +13,20 @@
 	"Loader.h"
 	"GLError.h"
 
-1478463428 source:/home/bag/c++/BagCraft/src/MainGame.cpp
+1478463832 source:/home/bag/c++/BagCraft/src/MainGame.cpp
 	"MainGame.h"
 
-1478463372 source:/home/bag/c++/BagCraft/src/Cube.cpp
+1478463898 source:/home/bag/c++/BagCraft/src/Cube.cpp
 	"Cube.h"
 
-1478446931 /home/bag/c++/BagCraft/src/Cube.h
+1478463879 /home/bag/c++/BagCraft/src/Cube.h
 	<GL/glew.h>
 	<vector>
+	<SFML/Graphics.hpp>
 	"Entity.h"
 	"StaticShader.h"
 
-1478446914 /home/bag/c++/BagCraft/src/Entity.h
+1478464011 /home/bag/c++/BagCraft/src/Entity.h
 	"RawModel.h"
 	"Loader.h"
 	<glm/common.hpp>
@@ -87,7 +88,7 @@
 
 1478429378 /home/bag/c++/BagCraft/src/World.h
 
-1478463213 source:/home/bag/c++/BagCraft/src/StaticShader.cpp
+1478463759 source:/home/bag/c++/BagCraft/src/StaticShader.cpp
 	"StaticShader.h"
 
 1478457385 /home/bag/c++/BagCraft/src/StaticShader.h

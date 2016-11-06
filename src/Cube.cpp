@@ -19,21 +19,27 @@ std::vector<GLfloat> texCoords = {
     0.f, 1.f
 };
 
-Cube::Cube(Loader& loader)
+Cube::Cube(Loader& loader, StaticShader* sh)
 : Entity(loader)
 {
     //this->mGame = mainGame;
-    this->mesh = mLoader->loadToVAO(vertices, indices, texCoords);
+    this->mesh      = mLoader->loadToVAO(vertices, indices, texCoords);
+    this->shader    = shader;
 }
 
 void Cube::draw()
 {
+    shader->use();
+    //shader->loadTransformationMatrix(transformationMatrix);
+
     glBindVertexArray(mesh->getVaoID());
     glDrawElements(GL_TRIANGLES, mesh->getVertexCount(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+
+    shader->stop();
 }
 
 void Cube::update(const float dt)
 {
-    //
+    createTransformationMatrix();
 }

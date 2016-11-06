@@ -6,7 +6,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <string>
 
+#include "StaticShader.h"
 #include "Cube.h"
 #include "Loader.h"
 
@@ -23,6 +25,7 @@ private:
     bool initGL();
     void initWindow();
 
+    void checkForGLerrors();
     void updateWindow();
 
 public:

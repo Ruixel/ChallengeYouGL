@@ -11,10 +11,13 @@ MainGame::MainGame()
 
 void MainGame::mainLoop()
 {
-    Cube cube(this->loader);
+    StaticShader* sshader = new StaticShader();
+    Cube cube(this->loader, sshader);
 
     while (this->window->isOpen())
     {
+        checkForGLerrors();
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         glClearColor(2.f/255, 119.f/255, 189.f/255, 1.0f);
 
@@ -33,6 +36,8 @@ void MainGame::initWindow()
     settings.antialiasingLevel  = ANTI_ALIAS;
     settings.stencilBits        = 8;
     settings.depthBits          = 24;
+    settings.majorVersion       = 3;
+    settings.minorVersion       = 3;
 
     this->window = new sf::Window(sf::VideoMode(WIDTH, HEIGHT), "BagCraft",
                               sf::Style::Default, settings);
@@ -76,6 +81,27 @@ void MainGame::updateWindow()
             glViewport(0, 0, event.size.width, event.size.height);
             break;
         }
+    }
+}
+
+void MainGame::checkForGLerrors()
+{
+    GLenum errCode;
+    const GLubyte *errString;
+    if ((errCode = glGetError()) != GL_NO_ERROR)
+    {
+        std::string error;
+
+        switch(errCode) {
+                case GL_INVALID_OPERATION:              error="INVALID_OPERATION";      break;
+                case GL_INVALID_ENUM:                   error="INVALID_ENUM";           break;
+                case GL_INVALID_VALUE:                  error="INVALID_VALUE";          break;
+                case GL_OUT_OF_MEMORY:                  error="OUT_OF_MEMORY";          break;
+                case GL_INVALID_FRAMEBUFFER_OPERATION:  error="INVALID_FRAMEBUFFER_OPERATION";  break;
+        }
+
+        std::cerr << "Error: " << error.c_str() << std::endl;
+
     }
 }
 

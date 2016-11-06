@@ -7,13 +7,15 @@
 #include <vector>
 
 #include "Entity.h"
+#include "StaticShader.h"
 
 class Cube : public Entity
 {
 private:
+    StaticShader* shader;
 
 public:
-    Cube(Loader& loader);
+    Cube(Loader& loader, StaticShader* sh);
 
     void draw();
     void update(const float dt);

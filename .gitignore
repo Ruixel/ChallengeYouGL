@@ -1,0 +1,8 @@
+# Unwanted folders
+bin/
+obj/
+
+# Codeblocks project files
+*.cbp
+*.layout
+*.depend

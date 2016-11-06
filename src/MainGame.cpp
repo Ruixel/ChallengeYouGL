@@ -11,10 +11,15 @@ MainGame::MainGame()
 
 void MainGame::mainLoop()
 {
+    Cube cube(this->loader);
+
     while (this->window->isOpen())
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         glClearColor(2.f/255, 119.f/255, 189.f/255, 1.0f);
+
+        cube.draw();
+
         window->display();
         this->updateWindow();
     }

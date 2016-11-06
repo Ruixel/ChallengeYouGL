@@ -6,6 +6,18 @@ Loader::Loader()
 }
 
 RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
+                            std::vector<GLfloat>& texCoords)
+{
+    GLint vaoID = createVAO();
+    bindIndicesBuffer(indices);
+    storeDataInAttributeList(0, 3, positions);
+    storeDataInAttributeList(1, 2, texCoords);
+    unbindVAO();
+
+    return new RawModel(vaoID, indices.size());
+}
+
+RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
                             std::vector<GLfloat>& texCoords, std::vector<GLfloat>& normals)
 {
     GLint vaoID = createVAO();

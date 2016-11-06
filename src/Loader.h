@@ -28,6 +28,9 @@ public:
     Loader();
 
     RawModel* loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
+                        std::vector<GLfloat>& texCoords);
+
+    RawModel* loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
                         std::vector<GLfloat>& texCoords, std::vector<GLfloat>& normals);
 
     int loadTexture(const GLchar* fileName);

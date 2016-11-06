@@ -7,6 +7,9 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "Cube.h"
+#include "Loader.h"
+
 class MainGame
 {
 private:
@@ -27,6 +30,8 @@ public:
     ~MainGame();
 
     void mainLoop();
+
+    Loader loader;
 };
 
 #endif // MAINGAME_H

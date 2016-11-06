@@ -14,7 +14,7 @@ private:
    void bindAttributes();
    void getAllUniformLocations();
 
-   int location_transformationMatrix;
+   int location_transformationMatrix = 0;
 
 public:
     StaticShader();

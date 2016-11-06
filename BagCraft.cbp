@@ -42,11 +42,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="shaders/StaticShader.frag" />
 		<Unit filename="shaders/StaticShader.vert" />
 		<Unit filename="src/Cube.cpp" />
 		<Unit filename="src/Cube.h" />
 		<Unit filename="src/Entity.cpp" />
 		<Unit filename="src/Entity.h" />
+		<Unit filename="src/GLError.h" />
 		<Unit filename="src/Loader.cpp" />
 		<Unit filename="src/Loader.h" />
 		<Unit filename="src/MainGame.cpp" />

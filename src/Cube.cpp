@@ -23,13 +23,13 @@ Cube::Cube(Loader& loader, StaticShader* sh)
 : Entity(loader)
 {
     //this->mGame = mainGame;
-    this->mesh      = mLoader->loadToVAO(vertices, indices, texCoords);
-    this->shader    = shader;
+    this->mesh      = mLoader->loadToVAO(vertices, indices, texCoords, vertices);
+    this->shader    = sh;
 }
 
 void Cube::draw()
 {
-    shader->use();
+    //shader->use();
     //shader->loadTransformationMatrix(transformationMatrix);
 
     glBindVertexArray(mesh->getVaoID());

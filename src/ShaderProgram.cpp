@@ -1,4 +1,5 @@
 #include "ShaderProgram.h"
+#include "GLError.h"
 
 void ShaderProgram::load(const GLchar* vertexPath, const GLchar* fragmentPath)
 {
@@ -72,11 +73,18 @@ void ShaderProgram::load(const GLchar* vertexPath, const GLchar* fragmentPath)
     glAttachShader(this->programID, fragment);
     glLinkProgram(this->programID);
 
-    glGetProgramiv(this->programID, GL_COMPILE_STATUS, &success);
+    /*glGetProgramiv(this->programID, GL_LINK_STATUS, &success);
     if (!success)
     {
-        glGetShaderInfoLog(fragment, 512, NULL, infolog);
+        glGetProgramInfoLog(this->programID, 512, NULL, infolog);
         std::cout << "Error compiling shader program: " << infolog << std::endl;
+    }*/
+
+    glGetProgramiv(this->programID, GL_LINK_STATUS, &success);
+    if (!success)
+    {
+        glGetProgramInfoLog(this->programID, 512, NULL, infolog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infolog << std::endl;
     }
 
     // clear what we have
@@ -88,6 +96,7 @@ void ShaderProgram::load(const GLchar* vertexPath, const GLchar* fragmentPath)
 
 void ShaderProgram::use()
 {
+    bag::checkForGLerrors();
     glUseProgram(programID);
 }
 

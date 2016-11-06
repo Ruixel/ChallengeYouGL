@@ -11,6 +11,7 @@
 #include "StaticShader.h"
 #include "Cube.h"
 #include "Loader.h"
+#include "GLError.h"
 
 class MainGame
 {
@@ -25,7 +26,6 @@ private:
     bool initGL();
     void initWindow();
 
-    void checkForGLerrors();
     void updateWindow();
 
 public:

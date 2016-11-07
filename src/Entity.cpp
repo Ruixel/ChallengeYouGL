@@ -1,14 +1,11 @@
 #include "Entity.h"
 
-Entity::Entity(Loader& loader)
-{
-    this->mLoader = &loader;
-}
+Entity::Entity(RawModel* entityMesh)
+:   mesh(entityMesh)
+{}
 
 Entity::~Entity()
-{
-    delete mesh;
-}
+{}
 
 void Entity::createTransformationMatrix()
 {

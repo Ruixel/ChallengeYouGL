@@ -33,8 +33,6 @@ public:
     ~MainGame();
 
     void mainLoop();
-
-    Loader loader;
 };
 
 #endif // MAINGAME_H

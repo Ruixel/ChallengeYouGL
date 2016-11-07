@@ -26,10 +26,10 @@ protected:
     void createTransformationMatrix();
 
     // Loader reference
-    Loader*         mLoader;
+    //Loader*         mLoader;
 
 public:
-    Entity(Loader& loader);
+    Entity(RawModel* entityMesh);
     virtual ~Entity();
 
     virtual void update(const float dt)  = 0;

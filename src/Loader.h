@@ -9,23 +9,15 @@
 
 #include "RawModel.h"
 
-class Loader
+namespace Loader
 {
-private:
-    std::vector<GLuint> vaos;
-    std::vector<GLuint> vbos;
-    std::vector<GLuint> textures;
-
     GLint createVAO();
     void unbindVAO();
 
-    void storeDataInAttributeList(GLint attributeNumber, int vectorSize,
+    GLuint storeDataInAttributeList(GLint attributeNumber, int vectorSize,
                                   std::vector<GLfloat>& data);
 
-    void bindIndicesBuffer(std::vector<GLuint>& indices);
-
-public:
-    Loader();
+    GLuint bindIndicesBuffer(std::vector<GLuint>& indices);
 
     RawModel* loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
                         std::vector<GLfloat>& texCoords);
@@ -35,7 +27,11 @@ public:
 
     int loadTexture(const GLchar* fileName);
 
-    void cleanUp();
+    //std::vector<GLuint> vaos;
+    //std::vector<GLuint> vbos;
+    //std::vector<GLuint> textures;
+
+    //void cleanUp();
 };
 
 #endif // LOADER_H

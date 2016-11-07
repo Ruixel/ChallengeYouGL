@@ -13,7 +13,7 @@ void MainGame::mainLoop()
 {
     StaticShader* sshader = new StaticShader();
 
-    Cube cube(this->loader, sshader);
+    Cube cube(sshader);
 
     while (this->window->isOpen())
     {

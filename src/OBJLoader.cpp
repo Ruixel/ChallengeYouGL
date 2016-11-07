@@ -2,7 +2,7 @@
 
 using namespace std;
 
-RawModel* OBJLoader::loadObjModel(const GLchar* fileName, Loader& loader)
+RawModel* Loader::loadObjModel(const GLchar* fileName)
 {
     // OBJ File Vectors
     std::vector<vector3f> vertices, normals;
@@ -87,12 +87,12 @@ RawModel* OBJLoader::loadObjModel(const GLchar* fileName, Loader& loader)
 
     }
 
-    RawModel* model = loader.loadToVAO(a_vertices, a_indices, a_texCoords, a_normals);
+    RawModel* model = Loader::loadToVAO(a_vertices, a_indices, a_texCoords, a_normals);
     return model;
 }
 
 template<typename T>
-void OBJLoader::insertIntoFloatVector(std::vector<T>* vec, std::istringstream* ss,
+void Loader::insertIntoFloatVector(std::vector<T>* vec, std::istringstream* ss,
                                       size_t arraySize)
  {
     std::array<string, 3> x;
@@ -113,7 +113,7 @@ void OBJLoader::insertIntoFloatVector(std::vector<T>* vec, std::istringstream* s
     //cout << "Vector: " << tArray[0] << ", " << tArray[1] << ", " << tArray[2] << endl;
 }
 
-void OBJLoader::insertIntoStringVector(std::vector<string>* vec, std::istringstream* ss)
+void Loader::insertIntoStringVector(std::vector<string>* vec, std::istringstream* ss)
 {
     std::array<string, 3> x;
     ss->seekg(2);

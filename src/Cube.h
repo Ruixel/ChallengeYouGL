@@ -7,6 +7,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "OBJLoader.h"
 #include "Entity.h"
 #include "StaticShader.h"
 

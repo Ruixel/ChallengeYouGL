@@ -1,16 +1,30 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include <list>
+
+#include "Entity.h"
+#include "Cube.h"
+#include "Camera.h"
+#include "StaticShader.h"
 
 class World
 {
-    public:
-        World();
-        virtual ~World();
+private:
+    std::list<Entity*> worldEntities;
 
-    protected:
+    Camera m_camera;
+    StaticShader* m_staticShader;
 
-    private:
+    Cube* m_cube;
+
+public:
+    World();
+    ~World();
+
+    void initWorld();
+    void updateWorld();
+    void renderWorld();
 };
 
 #endif // WORLD_H

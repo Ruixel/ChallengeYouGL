@@ -6,24 +6,21 @@ MainGame::MainGame()
     initWindow();
     initGL();
 
+    m_world.initWorld();
     mainLoop();
 }
 
 void MainGame::mainLoop()
 {
-    StaticShader* sshader = new StaticShader();
-
-    Cube cube(sshader);
-
     while (this->window->isOpen())
     {
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         glClearColor(2.f/255, 119.f/255, 189.f/255, 1.0f);
 
-        cube.update(0.f);
+        m_world.updateWorld();
 
-        cube.draw();
+        m_world.renderWorld();
 
         window->display();
         this->updateWindow();

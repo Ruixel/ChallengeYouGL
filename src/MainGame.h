@@ -12,6 +12,7 @@
 #include "Cube.h"
 #include "Loader.h"
 #include "GLError.h"
+#include "World.h"
 
 class MainGame
 {
@@ -22,6 +23,8 @@ private:
     const int ANTI_ALIAS = 4;
 
     sf::Window* window;
+
+    World m_world;
 
     bool initGL();
     void initWindow();

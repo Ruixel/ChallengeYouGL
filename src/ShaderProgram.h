@@ -35,7 +35,7 @@ public:
     void load(const GLchar* vertexPath, const GLchar* fragmentPath);
     GLuint getProgramId() { return this->programID; }
 
-    virtual void loadProjectionMatrix(glm::mat4 matrix) = 0;
+    virtual void loadProjectionMatrix(const glm::mat4& matrix) = 0;
 
     void use();
     void stop();

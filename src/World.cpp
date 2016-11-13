@@ -6,21 +6,48 @@ World::World()
 void World::initWorld()
 {
     m_staticShader  = new StaticShader();
-    m_cube          = new Cube(m_staticShader);
+
+    m_staticShader->use();
+    glm::mat4 pMatrix = m_camera.generateProjectionMatrix(1.6f);
+    m_staticShader->loadProjectionMatrix(pMatrix);
+    m_staticShader->stop();
+
+    for (int i = 0; i < 200; i++)
+    {
+        Cube* m_cube = new Cube(m_staticShader);
+        m_cube->setPosition(glm::vec3(0, 0, -5));
+
+        insertEntity(m_cube);
+    }
 }
 
 void World::updateWorld()
 {
-    m_cube->update(0.f);
+    for (auto m_entity : worldEntities)
+    {
+        m_entity->update(0.f);
+    }
 }
 
 void World::renderWorld()
 {
-    m_cube->draw();
+    for (auto m_entity : worldEntities)
+    {
+        m_entity->draw();
+    }
 }
 
 World::~World()
 {
     delete m_staticShader;
-    delete m_cube;
+
+    for (auto m_entity : worldEntities)
+        delete m_entity;
+}
+
+////////////////////////
+
+void World::insertEntity(Entity* entity)
+{
+    worldEntities.push_back(entity);
 }

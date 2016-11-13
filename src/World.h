@@ -16,8 +16,6 @@ private:
     Camera m_camera;
     StaticShader* m_staticShader;
 
-    Cube* m_cube;
-
 public:
     World();
     ~World();
@@ -25,6 +23,8 @@ public:
     void initWorld();
     void updateWorld();
     void renderWorld();
+
+    void insertEntity(Entity* entity);
 };
 
 #endif // WORLD_H

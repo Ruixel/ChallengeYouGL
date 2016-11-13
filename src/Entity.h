@@ -34,6 +34,9 @@ public:
 
     virtual void update(const float dt)  = 0;
     virtual void draw() = 0;
+
+    glm::vec3   getPosition()                { return position; }
+    void        setPosition(glm::vec3 pos)   { position = pos; }
 };
 
 #endif // ENTITY_H

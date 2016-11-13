@@ -14,13 +14,14 @@ private:
    void bindAttributes();
    void getAllUniformLocations();
 
-   int location_transformationMatrix = 0;
+   int location_transformationMatrix    = 0;
+   int location_projectionMatrix        = 0;
 
 public:
     StaticShader();
 
     void loadTransformationMatrix(const glm::mat4& matrix);
-    void loadProjectionMatrix(glm::mat4 projectionMatrix);
+    void loadProjectionMatrix(const glm::mat4& projectionMatrix);
 };
 
 #endif // STATICSHADER_H

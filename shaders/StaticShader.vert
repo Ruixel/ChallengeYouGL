@@ -5,7 +5,12 @@ layout (location = 1) in vec2 texCoords;
 uniform mat4 projectionTransformation;
 uniform mat4 modelTransformation;
 
+out vec3 pos;
+
 void main()
 {
-    gl_Position = projectionTransformation * modelTransformation * vec4(position, 1.0f);
+    vec4 world_Position = projectionTransformation * modelTransformation * vec4(position, 1.0f);
+
+    gl_Position = world_Position;
+    pos         = position.xyz;
 }

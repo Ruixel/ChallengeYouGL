@@ -20,7 +20,8 @@ std::vector<GLfloat> texCoords = {
 };
 
 Cube::Cube(StaticShader* sh)
-: Entity(Loader::loadToVAO(vertices, indices, texCoords, vertices))
+//: Entity(Loader::loadToVAO(vertices, indices, texCoords, vertices))
+: Entity(Loader::loadObjModel("cube.obj"))
 , shader(sh)
 {}
 
@@ -38,7 +39,8 @@ void Cube::draw()
 
 void Cube::update(const float dt)
 {
-    this->rotation = sf::Vector3f(this->rotation.x + 0.1, 0, 0);
+    this->rotation  = sf::Vector3f(0, this->rotation.y + 0.015, this->rotation.z + 0.01);
+    this->scale     = 1.f;
 
     createTransformationMatrix();
 }

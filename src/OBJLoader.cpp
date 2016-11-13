@@ -63,7 +63,13 @@ RawModel* Loader::loadObjModel(const GLchar* fileName)
 
         pointAt = 0;
         while (getline(ss, str, '/')) {
-                glf[pointAt] = stoi(str);
+                //std::cout << "String: '" << str << "'" << std::endl;
+
+                if (str == "")
+                    glf[pointAt] = 1;
+                else
+                    glf[pointAt] = stoi(str);
+
                 pointAt++;
         }
 
@@ -74,8 +80,11 @@ RawModel* Loader::loadObjModel(const GLchar* fileName)
         for (int v = 0; v < 3; v++)
             a_vertices.push_back(vertices.at(glf[0]-1).at(v));
 
-        for (int v = 0; v < 2; v++)
-            a_texCoords.push_back(textureCoordinates.at(glf[1]-1).at(v));
+        for (int v = 0; v < 2; v++){
+            //std::cout << "Yeah: " << glf[1]-1 << std::endl;
+            if (glf[1]-1 != 0)
+                a_texCoords.push_back(textureCoordinates.at(glf[1]-1).at(v));
+        }
 
         for (int v = 0; v < 3; v++)
             a_normals.push_back(normals.at(glf[2]-1).at(v));

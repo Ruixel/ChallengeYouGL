@@ -2,6 +2,7 @@
 
 in vec3 pos;
 in vec2 uvCoord;
+in vec4 outColor;
 
 uniform sampler2D textureSampler;
 
@@ -9,5 +10,5 @@ out vec4 Color;
 
 void main()
 {
-    Color = texture(textureSampler, uvCoord) * vec4(1, 1, 1, 1);
+    Color = outColor * texture(textureSampler, uvCoord);
 }

@@ -11,6 +11,8 @@ RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>
     GLuint vboVTex = storeDataInAttributeList(1, 2, texCoords);
     unbindVAO();
 
+    std::cout << "Don't use this please" << std::endl;
+
     return new RawModel(vaoID, indices.size(), vboVPos, vboVTex, vboInd);
 }
 
@@ -99,8 +101,9 @@ int Loader::loadTexture(const GLchar* fileName)
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     return textureID;
 }

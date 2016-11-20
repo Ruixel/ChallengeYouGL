@@ -82,7 +82,7 @@ RawModel* Loader::loadObjModel(const GLchar* fileName)
 
         for (int v = 0; v < 2; v++){
             //std::cout << "Yeah: " << glf[1]-1 << std::endl;
-            if (glf[1]-1 != 0)
+            //if (glf[1]-1 != 0)
                 a_texCoords.push_back(textureCoordinates.at(glf[1]-1).at(v));
         }
 

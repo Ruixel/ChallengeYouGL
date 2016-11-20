@@ -1,5 +1,7 @@
 #include "Entity.h"
 
+Entity::Entity()    {}    // No mesh
+
 Entity::Entity(RawModel* entityMesh, int textureID)
 :   mesh(entityMesh)
 ,   m_textureID(textureID)

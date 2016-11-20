@@ -26,7 +26,7 @@ namespace bag
                     default:                                error="MISCELLANEOUS";          break;
             }
 
-            //std::cerr << "Error: " << error.c_str() << std::endl;
+            std::cerr << "Error: " << error.c_str() << std::endl;
 
         }
     }

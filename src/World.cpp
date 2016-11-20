@@ -12,13 +12,16 @@ void World::initWorld()
     m_staticShader->loadProjectionMatrix(pMatrix);
     m_staticShader->stop();
 
-    for (int i = 0; i < 200; i++)
+    for (int i = 0; i < 20; i++)
     {
         Cube* m_cube = new Cube(m_staticShader);
         m_cube->setPosition(glm::vec3(0, 0, -5));
 
-        insertEntity(m_cube);
+        //insertEntity(m_cube);
     }
+
+    WorldSpawn* ws = new WorldSpawn(m_staticShader);
+    insertEntity(ws);
 }
 
 void World::updateWorld()

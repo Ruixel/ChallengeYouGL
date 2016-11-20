@@ -15,7 +15,7 @@ class Entity
 protected:
     // Entity Properties TBA
     RawModel*       mesh;
-    const int       m_textureID;
+    int             m_textureID = 0;
 
     // Positional Properties
     glm::vec3       position    = glm::vec3(0,0,0);
@@ -30,6 +30,7 @@ protected:
     //Loader*         mLoader;
 
 public:
+    Entity();
     Entity(RawModel* entityMesh, int textureID);
     virtual ~Entity();
 

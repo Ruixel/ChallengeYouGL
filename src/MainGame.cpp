@@ -6,7 +6,7 @@ MainGame::MainGame()
     initWindow();
     initGL();
 
-    m_world.initWorld();
+    m_world.initWorld(this->window);
     mainLoop();
 }
 
@@ -57,6 +57,9 @@ bool MainGame::initGL()
 
     glViewport(0, 0, WIDTH, HEIGHT);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    glCullFace(GL_BACK);
 
     return true;
 }

@@ -16,12 +16,13 @@ private:
 
     Camera m_camera;
     StaticShader* m_staticShader;
+    sf::Window* m_window;
 
 public:
     World();
     ~World();
 
-    void initWorld();
+    void initWorld(sf::Window* window);
     void updateWorld();
     void renderWorld();
 

@@ -15,7 +15,7 @@ private:
     Vector3 m_position;
     Vector3 m_rotation;
 
-    sf::Vector2i m_lastMosuePos;
+    sf::Vector2i m_lastMousePos;
 
 public:
     Camera();
@@ -32,7 +32,7 @@ public:
     void movePosition (const Vector3& position);
 
     void move (float dt);
-    void update ();
+    void update (sf::Window* m_window);
 };
 
 #endif // CAMERA_H

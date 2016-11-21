@@ -1,39 +1,70 @@
 #include "Camera.h"
+#include <iostream>
+
+#define PI (3.141592653589793)
+#define HALF_PI (1.570796326794897)
 
 Camera::Camera()
 {}
 
 glm::mat4 Camera::generateProjectionMatrix(float aspectRatio)
 {
-    return glm::perspective(70.f, aspectRatio, 1.f, 1000.f);
+    return glm::perspective(70.f, aspectRatio, .1f, 1000.f);
 }
 
 glm::mat4 Camera::generateViewMatrix()
 {
     glm::mat4 viewMatrix;
-    viewMatrix = glm::rotate(viewMatrix, glm::radians(m_rotation.x), {1, 0, 0});
-    viewMatrix = glm::rotate(viewMatrix, glm::radians(m_rotation.y), {0, 1, 0});
-    viewMatrix = glm::rotate(viewMatrix, glm::radians(m_rotation.z), {0, 0, 1});
+    viewMatrix = glm::rotate(viewMatrix, m_rotation.x, {1, 0, 0});
+    viewMatrix = glm::rotate(viewMatrix, m_rotation.y, {0, 1, 0});
+    viewMatrix = glm::rotate(viewMatrix, m_rotation.z, {0, 0, 1});
 
     return glm::translate(viewMatrix, -m_position);
 }
 
 // Stolen from Matt (Hopson97)
 
-void Camera::update ()
+void Camera::update (sf::Window* window)
 {
-    auto mouseMove = m_lastMosuePos - sf::Mouse::getPosition();
+    auto mouseMove = m_lastMousePos - sf::Mouse::getPosition();
 
-    m_rotation.y -= (float)mouseMove.x / 6.0;
-    m_rotation.x -= (float)mouseMove.y / 6.0;
+    m_rotation.y -= (float)mouseMove.x / 260.0;
+    m_rotation.x -= (float)mouseMove.y / 260.0;
 
-    m_lastMosuePos = sf::Mouse::getPosition();
+    if      (m_rotation.x > HALF_PI ) m_rotation.x = HALF_PI;
+    else if (m_rotation.x < -HALF_PI) m_rotation.x = -HALF_PI;
 
-    if      (m_rotation.x > 80 ) m_rotation.x = 80;
-    else if (m_rotation.x < -80) m_rotation.x = -80;
+    if      (m_rotation.y < 0 ) m_rotation.y = 2*PI;
+    else if (m_rotation.y > 2*PI) m_rotation.y = 0;
 
-    if      (m_rotation.y < 0 ) m_rotation.y = 360;
-    else if (m_rotation.y > 360) m_rotation.y = 0;
+    auto yaw    = this->m_rotation.y + glm::radians(90.f);
+    auto pitch  = this->m_rotation.x;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+    {
+        this->m_position = Vector3(m_position.x - cos(yaw) * .2, m_position.y - sin(pitch) * .2, m_position.z - sin(yaw) * .2);
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    {
+        this->m_position = Vector3(m_position.x + cos(yaw) * .2, m_position.y + sin(pitch) * .2, m_position.z + sin(yaw) * .2);
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    {
+        this->m_position = Vector3(m_position.x + cos(yaw + HALF_PI) * .2, m_position.y, m_position.z + sin(yaw + HALF_PI) * .2);
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    {
+        this->m_position = Vector3(m_position.x - cos(yaw + HALF_PI) * .2, m_position.y, m_position.z - sin(yaw + HALF_PI) * .2);
+    }
+
+    sf::Vector2u windowSize = window->getSize();
+    sf::Mouse::setPosition(sf::Vector2i(windowSize.x / 2, windowSize.y / 2), *window);
+
+    m_lastMousePos = sf::Mouse::getPosition();
+    window->setMouseCursorVisible(false);
 }
 
 void Camera::setPosition(const Vector3& position)

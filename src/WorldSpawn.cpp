@@ -78,8 +78,7 @@ void WorldSpawn::draw()
 
 void WorldSpawn::update(const float dt)
 {
-    this->position  = glm::vec3(0, -2, -30);
-    this->rotation  = sf::Vector3f(0, 0, glm::radians(0.f));
+    this->position  = glm::vec3(0, -0.01f, 0);
     this->scale     = 20.0f;
 
     createTransformationMatrix();

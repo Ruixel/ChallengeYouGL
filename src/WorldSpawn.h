@@ -2,15 +2,17 @@
 #define WORLDSPAWN_H
 
 #include <Entity.h>
+#include <iostream>
 
 #include "StaticShader.h"
+#include "OBJLoader.h"
 
-const int WORLD_SIZE = 400;
+const int WORLD_SIZE = 400 / 2;
 
 // PRIMITIVES
 
 struct cyQuad
-{ glm::vec2 v1, v2, v3, v4; };
+{ glm::vec3 v1, v2, v3, v4; };
 
 struct cyTexture
 { int texture; glm::vec3 color; };

@@ -4,6 +4,7 @@ layout (location = 1) in vec2 texCoords;
 layout (location = 2) in vec3 normal;
 
 uniform mat4 projectionTransformation;
+uniform mat4 viewTransformation;
 uniform mat4 modelTransformation;
 
 out vec2 uvCoord;
@@ -16,7 +17,7 @@ vec3 light_Color   = vec3(1.0, 1.0, 1.0);
 
 void main()
 {
-    vec4 wPos = projectionTransformation * modelTransformation * vec4(position, 1.0f);
+    vec4 wPos = projectionTransformation * viewTransformation * modelTransformation * vec4(position, 1.0f);
     gl_Position = wPos;
 
     vec3 normalDirection = normalize(normal);

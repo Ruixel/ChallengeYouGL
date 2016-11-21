@@ -2,6 +2,7 @@
 #define STATICSHADER_H
 
 #include "ShaderProgram.h"
+#include "Camera.h"
 
 #include <glm/glm.hpp>
 
@@ -16,12 +17,14 @@ private:
 
    int location_transformationMatrix    = 0;
    int location_projectionMatrix        = 0;
+   int location_viewMatrix              = 0;
 
 public:
     StaticShader();
 
     void loadTransformationMatrix(const glm::mat4& matrix);
     void loadProjectionMatrix(const glm::mat4& projectionMatrix);
+    void loadViewMatrix(Camera& cam);
 };
 
 #endif // STATICSHADER_H

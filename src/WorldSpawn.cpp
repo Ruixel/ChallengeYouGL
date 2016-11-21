@@ -1,32 +1,14 @@
 #include "WorldSpawn.h"
 
-std::vector<GLfloat> v = {
-     0.5f,  0.5f, 0.0f,  // Top Right
-     0.5f, -0.5f, 0.0f,  // Bottom Right
-    -0.5f, -0.5f, 0.0f,  // Bottom Left
-    -0.5f,  0.5f, 0.0f   // Top Left
-};
-
-std::vector<GLuint> i = {
-    0, 1, 3,
-    1, 2, 3
-};
-
-std::vector<GLfloat> n = {
-    0, 0, 1,
-    0, 0, 1,
-    0, 0, 1,
-    0, 0, 1
-};
-
 WorldSpawn::WorldSpawn(StaticShader* sh)
+//:   Entity(Loader::loadToVAO(v, i, t, v), Loader::loadTexture("iceman.jpg"))
 :   shader(sh)
 {
     cyQuad  q1;
-    q1.v1 = glm::vec2(0     / WORLD_SIZE, 400   / WORLD_SIZE);
-    q1.v2 = glm::vec2(400   / WORLD_SIZE, 400   / WORLD_SIZE);
-    q1.v3 = glm::vec2(400   / WORLD_SIZE, 0     / WORLD_SIZE);
-    q1.v4 = glm::vec2(0     / WORLD_SIZE, 0     / WORLD_SIZE);
+    q1.v1 = glm::vec3((0   - 200)    / WORLD_SIZE, 0, (400 - 200)   / WORLD_SIZE);
+    q1.v2 = glm::vec3((400 - 200)    / WORLD_SIZE, 0, (400 - 200)   / WORLD_SIZE);
+    q1.v3 = glm::vec3((400 - 200)    / WORLD_SIZE, 0, (0   - 200)   / WORLD_SIZE);
+    q1.v4 = glm::vec3((0   - 200)    / WORLD_SIZE, 0, (0   - 200)   / WORLD_SIZE);
 
     cyTexture t1;
     t1.texture = 1;
@@ -42,45 +24,48 @@ WorldSpawn::WorldSpawn(StaticShader* sh)
 
 void WorldSpawn::generateWorldMesh()
 {
-    std::vector<GLfloat> vertices;
+    std::vector<GLfloat> vertices, t_Coords, normals;
     std::vector<GLuint>  indices;
-    std::vector<GLfloat> t_Coords;
 
     // FLOORS
     uint16_t c = 0;
     for (auto f : floors)
     {
         // Vertices
-       /* vertices.insert(vertices.end(), {f.coordinates.v2.x, 0, f.coordinates.v2.y});
-        vertices.insert(vertices.end(), {f.coordinates.v3.x, 0, f.coordinates.v3.y});
-        vertices.insert(vertices.end(), {f.coordinates.v4.x, 0, f.coordinates.v4.y});
-        vertices.insert(vertices.end(), {f.coordinates.v1.x, 0, f.coordinates.v1.y});*/
-        vertices.insert(vertices.end(), {1, 1, 0});
-        vertices.insert(vertices.end(), {1, 0, 0});
-        vertices.insert(vertices.end(), {0, 0, 0});
-        vertices.insert(vertices.end(), {0, 1, 0});
+        vertices.insert(vertices.end(), {f.coordinates.v2.x, 0, f.coordinates.v2.z});
+        vertices.insert(vertices.end(), {f.coordinates.v3.x, 0, f.coordinates.v3.z});
+        vertices.insert(vertices.end(), {f.coordinates.v4.x, 0, f.coordinates.v4.z});
+        vertices.insert(vertices.end(), {f.coordinates.v1.x, 0, f.coordinates.v1.z});
 
         // Triangles
         indices.insert (indices.end(),  {c, c+1, c+3});
         indices.insert (indices.end(),  {c+1, c+2, c+3});
 
         // Texture Coordinates
-        t_Coords.insert(t_Coords.end(), {0, 0, 0, 0, 0, 0, 0, 0});
+        t_Coords.insert(t_Coords.end(), {f.coordinates.v2.x*3.0, f.coordinates.v2.z*3.0});
+        t_Coords.insert(t_Coords.end(), {f.coordinates.v3.x*3.0, f.coordinates.v3.z*3.0});
+        t_Coords.insert(t_Coords.end(), {f.coordinates.v4.x*3.0, f.coordinates.v4.z*3.0});
+        t_Coords.insert(t_Coords.end(), {f.coordinates.v1.x*3.0, f.coordinates.v1.z*3.0});
+
+        // Normals
+        glm::vec3 normal = glm::cross(f.coordinates.v2 - f.coordinates.v1, f.coordinates.v3 - f.coordinates.v1);
+        normals.insert(normals.end(), {normal.x, normal.y, normal.z});
+        normals.insert(normals.end(), {normal.x, normal.y, normal.z});
+        normals.insert(normals.end(), {normal.x, normal.y, normal.z});
+        normals.insert(normals.end(), {normal.x, normal.y, normal.z});
 
         c += 4;
     }
 
-    this->mesh = Loader::loadToVAO(v, i, t_Coords, n);
-    this->m_textureID = Loader::loadTexture("iceman.jpg");
+    this->mesh = Loader::loadToVAO(vertices, indices, t_Coords, vertices);
+    this->m_textureID = Loader::loadTexture("000d1e44.jpg");
+
+    std::cout << "Vertex count: " << mesh->getVaoID() << std::endl;
 }
 
 void WorldSpawn::draw()
 {
-    shader->use();
     shader->loadTransformationMatrix(transformationMatrix);
-
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->m_textureID);
@@ -89,16 +74,13 @@ void WorldSpawn::draw()
     glDrawElements(GL_TRIANGLES, mesh->getVertexCount(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 
-    glDisableVertexAttribArray(0);
-    glDisableVertexAttribArray(1);
-
-    shader->stop();
 }
 
 void WorldSpawn::update(const float dt)
 {
-    this->rotation  = sf::Vector3f(0, this->rotation.y + 0.015, this->rotation.z + 0.01);
-    this->scale     = 2.5f;
+    this->position  = glm::vec3(0, -2, -30);
+    this->rotation  = sf::Vector3f(0, 0, glm::radians(0.f));
+    this->scale     = 20.0f;
 
     createTransformationMatrix();
 }

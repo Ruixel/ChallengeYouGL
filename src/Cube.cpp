@@ -27,7 +27,6 @@ Cube::Cube(StaticShader* sh)
 
 void Cube::draw()
 {
-    shader->use();
     shader->loadTransformationMatrix(transformationMatrix);
 
     glEnableVertexAttribArray(0);
@@ -42,8 +41,6 @@ void Cube::draw()
 
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
-
-    shader->stop();
 }
 
 void Cube::update(const float dt)

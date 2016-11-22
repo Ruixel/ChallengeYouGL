@@ -57,7 +57,7 @@ void WorldSpawn::generateWorldMesh()
         c += 4;
     }
 
-    this->mesh = Loader::loadToVAO(vertices, indices, t_Coords, vertices);
+    this->mesh = Loader::loadToVAO(vertices, indices, t_Coords, normals);
     this->m_textureID = Loader::loadTexture("000d1e44.jpg");
 
     std::cout << "Vertex count: " << mesh->getVaoID() << std::endl;
@@ -79,6 +79,7 @@ void WorldSpawn::draw()
 void WorldSpawn::update(const float dt)
 {
     this->position  = glm::vec3(0, -.6f, 0);
+    //this->rotation  = sf::Vector3f(0, this->rotation.y + 0.015, this->rotation.z + 0.01);
     this->scale     = 20.0f;
 
     createTransformationMatrix();

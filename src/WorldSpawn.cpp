@@ -6,8 +6,8 @@ WorldSpawn::WorldSpawn(StaticShader* sh)
 {
     cyQuad  q1;
     q1.v1 = glm::vec3((0   - 200)    / WORLD_SIZE, 0, (400 - 200)   / WORLD_SIZE);
-    q1.v2 = glm::vec3((400 - 200)    / WORLD_SIZE, 0, (400 - 200)   / WORLD_SIZE);
-    q1.v3 = glm::vec3((400 - 200)    / WORLD_SIZE, 0, (0   - 200)   / WORLD_SIZE);
+    q1.v2 = glm::vec3((300 - 200)    / WORLD_SIZE, 0, (400 - 200)   / WORLD_SIZE);
+    q1.v3 = glm::vec3((400 - 200)    / WORLD_SIZE, 0, (50   - 200)   / WORLD_SIZE);
     q1.v4 = glm::vec3((0   - 200)    / WORLD_SIZE, 0, (0   - 200)   / WORLD_SIZE);
 
     cyTexture t1;
@@ -78,7 +78,7 @@ void WorldSpawn::draw()
 
 void WorldSpawn::update(const float dt)
 {
-    this->position  = glm::vec3(0, -0.01f, 0);
+    this->position  = glm::vec3(0, -.6f, 0);
     this->scale     = 20.0f;
 
     createTransformationMatrix();

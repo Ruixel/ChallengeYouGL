@@ -1,11 +1,13 @@
 #include "Camera.h"
 #include <iostream>
 
-#define PI (3.141592653589793)
-#define HALF_PI (1.570796326794897)
-
 Camera::Camera()
 {}
+
+void Camera::init(sf::Window* window)
+{
+    this->m_window = window;
+}
 
 glm::mat4 Camera::generateProjectionMatrix(float aspectRatio)
 {
@@ -24,7 +26,7 @@ glm::mat4 Camera::generateViewMatrix()
 
 // Stolen from Matt (Hopson97)
 
-void Camera::update (sf::Window* window)
+void Camera::update ()
 {
     auto mouseMove = m_lastMousePos - sf::Mouse::getPosition();
 
@@ -60,11 +62,11 @@ void Camera::update (sf::Window* window)
         this->m_position = Vector3(m_position.x - cos(yaw + HALF_PI) * .2, m_position.y, m_position.z - sin(yaw + HALF_PI) * .2);
     }
 
-    sf::Vector2u windowSize = window->getSize();
-    sf::Mouse::setPosition(sf::Vector2i(windowSize.x / 2, windowSize.y / 2), *window);
+    sf::Vector2u windowSize = m_window->getSize();
+    sf::Mouse::setPosition(sf::Vector2i(windowSize.x / 2, windowSize.y / 2), *m_window);
 
     m_lastMousePos = sf::Mouse::getPosition();
-    window->setMouseCursorVisible(false);
+    m_window->setMouseCursorVisible(false);
 }
 
 void Camera::setPosition(const Vector3& position)

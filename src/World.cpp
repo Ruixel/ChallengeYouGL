@@ -6,6 +6,7 @@ World::World()
 void World::initWorld(sf::Window* window)
 {
     this->m_window = window;
+    this->m_camera.init(window);
     m_staticShader  = new StaticShader();
 
     m_staticShader->use();
@@ -27,7 +28,7 @@ void World::initWorld(sf::Window* window)
 
 void World::updateWorld()
 {
-    m_camera.update(m_window);
+    m_camera.update();
 
     for (auto m_entity : worldEntities)
     {

@@ -7,18 +7,23 @@
 
 #include <SFML/Window.hpp>
 
+#define PI (3.141592653589793)
+#define HALF_PI (1.570796326794897)
+
 typedef glm::vec3 Vector3;
 
 class Camera
 {
 private:
-    Vector3 m_position;
-    Vector3 m_rotation;
+    Vector3 m_position = Vector3(0, 2, 0);
+    Vector3 m_rotation = Vector3(-HALF_PI, HALF_PI, 0);
 
     sf::Vector2i m_lastMousePos;
+    sf::Window* m_window = nullptr;
 
 public:
     Camera();
+    void init(sf::Window* window);
 
     glm::mat4 generateProjectionMatrix(float aspectRatio);
     glm::mat4 generateViewMatrix();
@@ -32,7 +37,7 @@ public:
     void movePosition (const Vector3& position);
 
     void move (float dt);
-    void update (sf::Window* m_window);
+    void update ();
 };
 
 #endif // CAMERA_H

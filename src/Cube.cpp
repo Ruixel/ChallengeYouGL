@@ -21,7 +21,7 @@ std::vector<GLfloat> texCoords = {
 
 Cube::Cube(StaticShader* sh)
 //: Entity(Loader::loadToVAO(vertices, indices, texCoords, vertices))
-: Entity(Loader::loadObjModel("iceman.obj"), Loader::loadTexture("iceman.jpg"))
+: Entity(Loader::loadObjModel("dat/iceman.obj"), Loader::loadTexture("dat/iceman.jpg"))
 , shader(sh)
 {}
 

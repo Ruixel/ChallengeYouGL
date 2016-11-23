@@ -2,6 +2,9 @@
 #define WORLDSPAWN_H
 
 #include <Entity.h>
+
+#include <string>
+#include <fstream>
 #include <iostream>
 
 #include "StaticShader.h"
@@ -37,7 +40,7 @@ private:
     void renderWorld();
 
 public:
-    WorldSpawn(StaticShader* sh);
+    WorldSpawn(const char* levelPath, StaticShader* sh);
 
     void draw();
     void update(const float dt);

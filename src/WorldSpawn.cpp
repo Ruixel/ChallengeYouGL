@@ -1,10 +1,49 @@
 #include "WorldSpawn.h"
 
-WorldSpawn::WorldSpawn(StaticShader* sh)
+WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
 //:   Entity(Loader::loadToVAO(v, i, t, v), Loader::loadTexture("iceman.jpg"))
 :   shader(sh)
 {
-    cyQuad  q1;
+    // Load file
+    std::string level;
+
+    std::ifstream level_string_buffer;
+    level_string_buffer.exceptions(std::ifstream::badbit);
+
+    // Variables & Iterators
+    int ptr = 0;
+    int bracket = 0;
+    std::string obj_type = "";
+
+    // Open File
+    try {
+        level_string_buffer.open(levelPath);
+
+        std::stringstream ss_level;
+        ss_level << level_string_buffer.rdbuf();
+
+        level = ss_level.str();
+        level_string_buffer.close();
+
+    } catch (std::ifstream::failure e) {
+        std::cout << "Issue loading file" << std::endl;
+    }
+
+    size_t str_length = level.length();
+    while (ptr < str_length)
+    {
+        // Move up and down brackets
+        if (level[ptr] == '[')
+            bracket++;
+
+        if (level[ptr] == ']')
+            bracket--;
+
+        ptr++;
+        std::cout << bracket << std::endl;
+    }
+
+    /*cyQuad  q1;
     q1.v1 = glm::vec3((0   - 200)    / WORLD_SIZE, 0, (400 - 200)   / WORLD_SIZE);
     q1.v2 = glm::vec3((300 - 200)    / WORLD_SIZE, 0, (400 - 200)   / WORLD_SIZE);
     q1.v3 = glm::vec3((400 - 200)    / WORLD_SIZE, 0, (50   - 200)   / WORLD_SIZE);
@@ -18,7 +57,9 @@ WorldSpawn::WorldSpawn(StaticShader* sh)
     f1.topSurface    = t1;
     f1.bottomSurface = t1;
 
-    floors.push_back(f1);
+    floors.push_back(f1);*/
+
+    // Generate Level Meshes
     this->generateWorldMesh();
 }
 
@@ -58,7 +99,7 @@ void WorldSpawn::generateWorldMesh()
     }
 
     this->mesh = Loader::loadToVAO(vertices, indices, t_Coords, normals);
-    this->m_textureID = Loader::loadTexture("000d1e44.jpg");
+    this->m_textureID = Loader::loadTexture("dat/000d1e44.jpg");
 
     std::cout << "Vertex count: " << mesh->getVaoID() << std::endl;
 }

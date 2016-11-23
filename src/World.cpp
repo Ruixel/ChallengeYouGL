@@ -22,7 +22,7 @@ void World::initWorld(sf::Window* window)
         insertEntity(m_cube);
     }
 
-    WorldSpawn* ws = new WorldSpawn(m_staticShader);
+    WorldSpawn* ws = new WorldSpawn("dat/CGMario.cy", m_staticShader);
     insertEntity(ws);
 }
 

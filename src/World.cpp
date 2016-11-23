@@ -28,6 +28,30 @@ void World::initWorld(sf::Window* window)
 
 void World::updateWorld()
 {
+    sf::Event event;
+    while (m_window->pollEvent(event))
+    {
+        switch (event.type)
+        {
+        case sf::Event::KeyPressed:
+            if (event.key.code == sf::Keyboard::T)
+                m_camera.toggleLockMouse();
+            break;
+
+        case sf::Event::Closed :
+            m_window->close();
+            break;
+
+        case sf::Event::Resized :
+            m_window->setSize({event.size.width, event.size.height});
+            glViewport(0, 0, event.size.width, event.size.height);
+            break;
+
+        default:
+            break;
+        }
+    }
+
     m_camera.update();
 
     for (auto m_entity : worldEntities)

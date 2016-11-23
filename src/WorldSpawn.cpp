@@ -39,8 +39,10 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
         if (level[ptr] == ']')
             bracket--;
 
+        // New type of object
+        //if (level[ptr] == '#')
+
         ptr++;
-        std::cout << bracket << std::endl;
     }
 
     /*cyQuad  q1;

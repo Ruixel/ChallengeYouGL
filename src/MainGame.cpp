@@ -68,21 +68,13 @@ bool MainGame::initGL()
 
 void MainGame::updateWindow()
 {
-    sf::Event event;
+    /*sf::Event event;
     while (window->pollEvent(event))
     {
         switch(event.type)
         {
-        case sf::Event::Closed :
-            window->close();
-            break;
 
-        case sf::Event::Resized :
-            window->setSize({event.size.width, event.size.height});
-            glViewport(0, 0, event.size.width, event.size.height);
-            break;
-        }
-    }
+    }*/
 }
 
 ////// DESTRUCTOR //////

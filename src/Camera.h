@@ -21,6 +21,8 @@ private:
     sf::Vector2i m_lastMousePos;
     sf::Window* m_window = nullptr;
 
+    bool camera_locked = true;
+
 public:
     Camera();
     void init(sf::Window* window);
@@ -35,6 +37,8 @@ public:
     void setRotation (const Vector3& rotation);
 
     void movePosition (const Vector3& position);
+
+    void toggleLockMouse();
 
     void move (float dt);
     void update ();

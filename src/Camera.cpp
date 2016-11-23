@@ -7,6 +7,7 @@ Camera::Camera()
 void Camera::init(sf::Window* window)
 {
     this->m_window = window;
+    m_window->setMouseCursorVisible(false);
 }
 
 glm::mat4 Camera::generateProjectionMatrix(float aspectRatio)
@@ -24,10 +25,13 @@ glm::mat4 Camera::generateViewMatrix()
     return glm::translate(viewMatrix, -m_position);
 }
 
-// Stolen from Matt (Hopson97)
+// Remastered from Matt (Hopson97)
 
 void Camera::update ()
 {
+    if (!camera_locked)
+        return;
+
     auto mouseMove = m_lastMousePos - sf::Mouse::getPosition();
 
     m_rotation.y -= (float)mouseMove.x / 260.0;
@@ -66,7 +70,12 @@ void Camera::update ()
     sf::Mouse::setPosition(sf::Vector2i(windowSize.x / 2, windowSize.y / 2), *m_window);
 
     m_lastMousePos = sf::Mouse::getPosition();
-    m_window->setMouseCursorVisible(false);
+}
+
+void Camera::toggleLockMouse()
+{
+    camera_locked = !camera_locked;
+    m_window->setMouseCursorVisible(!camera_locked);
 }
 
 void Camera::setPosition(const Vector3& position)

@@ -40,7 +40,37 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
             bracket--;
 
         // New type of object
-        //if (level[ptr] == '#')
+        if (level[ptr] == '#')
+        {
+            size_t str_end = level.find(':', ptr);
+            if (str_end != std::string::npos)
+            {
+                std::string obj_name = level.substr(ptr+1, str_end-ptr-1);
+                std::cout << obj_name << std::endl;
+
+                ptr = str_end;
+
+                if (bracket == 1 && obj_name != "Floor")
+                {
+                    ptr += 2;
+
+                    size_t info_end  = level.find(',', ptr);
+                    std::string info = "N/A";
+                    if (str_end != std::string::npos)
+                        info = level.substr(ptr, info_end-ptr);
+
+                    if (info[0] == '"')
+                        info = info.substr(1, info.length() - 2);
+
+                    if (obj_name == "name")         level_objs.name = info;
+                    else if (obj_name == "levels")  level_objs.levels = info;
+                    else if (obj_name == "version") level_objs.version = info;
+                    else if (obj_name == "creator") level_objs.author = info;
+
+                    std::cout << "Info: " << info << std::endl;
+                }
+            }
+        }
 
         ptr++;
     }

@@ -29,10 +29,17 @@ struct cyFloor
     cyTexture bottomSurface;
 };
 
+struct cyLevel
+{
+    std::string name, author, levels, version;
+    std::vector<cyFloor> level_floors;
+};
+
 class WorldSpawn : public Entity
 {
 private:
     std::vector<cyFloor> floors;
+    cyLevel level_objs;
 
     StaticShader* shader;
 

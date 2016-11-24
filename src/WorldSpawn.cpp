@@ -68,6 +68,46 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                     else if (obj_name == "creator") level_objs.author = info;
 
                     std::cout << "Info: " << info << std::endl;
+
+                } else {
+                    int end_bracket = bracket;
+                    bool waitForNewItem = false;
+                    ptr += 3;
+                    bracket++;
+
+                    // PLACEHOLDER VARIABLES
+                    int item_bracket = 3;
+                    cyFloor* floor = new cyFloor;
+                    std::vector<char*> properties;
+
+                    while (bracket > end_bracket && obj_name == "Floor")
+                    {
+                        // Move up and down brackets
+                        if (level[ptr] == '[')
+                            bracket++;
+
+                        if (level[ptr] == ']')
+                            bracket--;
+
+                        // FIND VALUE
+                        if (level[ptr] != '[' && level[ptr] != ']' && level[ptr] != ' ' && level[ptr] != ',') {
+                            ptr++;
+
+                            // Find when they end (Next , or ])
+                            size_t value_end_1 = level.find(',', ptr);
+                            size_t value_end_2 = level.find(']', ptr);
+                            size_t value_end   = (value_end_1 > value_end_2) ? value_end_2 : value_end_1;
+
+                            std::string value  = level.substr(ptr-1, value_end-ptr+1);
+                            ptr = value_end - 1;
+
+                            std::cout << value << std::endl;
+                        }
+
+                        ptr++;
+
+                    }
+
                 }
             }
         }

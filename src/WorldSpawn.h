@@ -10,7 +10,8 @@
 #include "StaticShader.h"
 #include "OBJLoader.h"
 
-const int WORLD_SIZE = 400 / 2;
+const float WORLD_SIZE = 400 / 2;
+const float HEIGHT     = 0.2f;
 
 // PRIMITIVES
 
@@ -35,6 +36,11 @@ struct cyLevel
     std::vector<cyFloor> level_floors;
 };
 
+enum class property_type
+{
+    CY_QUAD, CY_BOOL, CY_TEXTURE
+};
+
 class WorldSpawn : public Entity
 {
 private:
@@ -42,6 +48,12 @@ private:
     cyLevel level_objs;
 
     StaticShader* shader;
+
+    //template <typename OS>
+    //void createStruct(OS* object_struct, std::vector<property_type>& value_types,
+    //                  std::vector<std::string>* property_list);
+
+    void createStruct(const std::string& obj_name, std::vector<std::string>* properties);
 
     void generateWorldMesh();
     void renderWorld();

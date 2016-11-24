@@ -77,8 +77,8 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
 
                     // PLACEHOLDER VARIABLES
                     int item_bracket = 3;
-                    cyFloor* floor = new cyFloor;
-                    std::vector<char*> properties;
+                    std::vector<property_type> floor_types = {property_type::CY_QUAD, property_type::CY_TEXTURE, property_type::CY_BOOL, property_type::CY_TEXTURE};
+                    std::vector<std::string>* properties = new std::vector<std::string>();
 
                     while (bracket > end_bracket && obj_name == "Floor")
                     {
@@ -89,19 +89,43 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                         if (level[ptr] == ']')
                             bracket--;
 
-                        // FIND VALUE
-                        if (level[ptr] != '[' && level[ptr] != ']' && level[ptr] != ' ' && level[ptr] != ',') {
-                            ptr++;
+                        // New Item
+                        if (bracket < item_bracket)
+                        {
+                            if (!waitForNewItem)
+                            {
+                                // Object complete, add to cyLevel
+                                createStruct(obj_name, properties);
 
-                            // Find when they end (Next , or ])
-                            size_t value_end_1 = level.find(',', ptr);
-                            size_t value_end_2 = level.find(']', ptr);
-                            size_t value_end   = (value_end_1 > value_end_2) ? value_end_2 : value_end_1;
+                                // Delete property list and create a new one
+                                delete properties;
+                                properties = new std::vector<std::string>();
 
-                            std::string value  = level.substr(ptr-1, value_end-ptr+1);
-                            ptr = value_end - 1;
+                                // Avoid repetition (normally takes 3 loops until there's a new item)
+                                waitForNewItem = true;
+                                std::cout << "New Item" << std::endl;
+                            }
 
-                            std::cout << value << std::endl;
+                        } else {
+                            // Extract new values
+                            waitForNewItem = false;
+
+                            // FIND VALUE
+                            if (level[ptr] != '[' && level[ptr] != ']' && level[ptr] != ' ' && level[ptr] != ',')
+                            {
+                                ptr++;
+
+                                // Find when they end (Next , or ])
+                                size_t value_end_1 = level.find(',', ptr);
+                                size_t value_end_2 = level.find(']', ptr);
+                                size_t value_end   = (value_end_1 > value_end_2) ? value_end_2 : value_end_1;
+
+                                std::string value  = level.substr(ptr-1, value_end-ptr+1);
+                                ptr = value_end - 1;
+
+                                std::cout << value << std::endl;
+                                properties->push_back(value);
+                            }
                         }
 
                         ptr++;
@@ -115,10 +139,10 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
         ptr++;
     }
 
-    /*cyQuad  q1;
-    q1.v1 = glm::vec3((0   - 200)    / WORLD_SIZE, 0, (400 - 200)   / WORLD_SIZE);
-    q1.v2 = glm::vec3((300 - 200)    / WORLD_SIZE, 0, (400 - 200)   / WORLD_SIZE);
-    q1.v3 = glm::vec3((400 - 200)    / WORLD_SIZE, 0, (50   - 200)   / WORLD_SIZE);
+    cyQuad  q1;
+    q1.v1 = glm::vec3((0   - 200)    / WORLD_SIZE, 0, (40 - 200)    / WORLD_SIZE);
+    q1.v2 = glm::vec3((40 - 200)     / WORLD_SIZE, 0, (40 - 200)    / WORLD_SIZE);
+    q1.v3 = glm::vec3((40 - 200)     / WORLD_SIZE, 0, (0   - 200)   / WORLD_SIZE);
     q1.v4 = glm::vec3((0   - 200)    / WORLD_SIZE, 0, (0   - 200)   / WORLD_SIZE);
 
     cyTexture t1;
@@ -129,10 +153,47 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
     f1.topSurface    = t1;
     f1.bottomSurface = t1;
 
-    floors.push_back(f1);*/
+    /*level_objs.level_floors.push_back(f1);
+    level_objs.level_floors.push_back(f1);
+    level_objs.level_floors.push_back(f1);
+    level_objs.level_floors.push_back(f1);
+    level_objs.level_floors.push_back(f1);
+    level_objs.level_floors.push_back(f1);
+    level_objs.level_floors.push_back(f1);
+    level_objs.level_floors.push_back(f1);*/
 
     // Generate Level Meshes
     this->generateWorldMesh();
+}
+
+/*template <typename OS>
+void WorldSpawn::createStruct(OS* object_struct, std::vector<property_type>& value_types,
+                              std::vector<std::string>* property_list);
+{
+
+}*/
+
+void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::string>* properties)
+{
+    if (obj_name == "Floor")
+    {
+        //if (properties[9]== 0)
+        //    return;
+        cyQuad q1;
+        cyFloor f;
+        /*f.coordinates.v1 = glm::vec3(((stof(properties->at(0)) - 200)    / WORLD_SIZE, 0, stof(properties->at(1)) - 200)    / WORLD_SIZE);
+        f.coordinates.v2 = glm::vec3(((stof(properties->at(2)) - 200)    / WORLD_SIZE, 0, stof(properties->at(3)) - 200)    / WORLD_SIZE);
+        f.coordinates.v3 = glm::vec3(((stof(properties->at(4)) - 200)    / WORLD_SIZE, 0, stof(properties->at(5)) - 200)    / WORLD_SIZE);
+        f.coordinates.v4 = glm::vec3(((stof(properties->at(6)) - 200)    / WORLD_SIZE, 0, stof(properties->at(7)) - 200)    / WORLD_SIZE);*/
+
+        q1.v1 = glm::vec3((stof(properties->at(0))   - 200)    / WORLD_SIZE, 0, (stof(properties->at(1)) - 200)    / WORLD_SIZE);
+        q1.v2 = glm::vec3((stof(properties->at(2)) - 200)     / WORLD_SIZE, 0, (stof(properties->at(3)) - 200)    / WORLD_SIZE);
+        q1.v3 = glm::vec3((stof(properties->at(4)) - 200)     / WORLD_SIZE, 0, (stof(properties->at(5))   - 200)   / WORLD_SIZE);
+        q1.v4 = glm::vec3((stof(properties->at(6))   - 200)    / WORLD_SIZE, 0, (stof(properties->at(7))   - 200)   / WORLD_SIZE);
+
+        f.coordinates = q1;
+        level_objs.level_floors.push_back(f);
+    }
 }
 
 void WorldSpawn::generateWorldMesh()
@@ -142,13 +203,15 @@ void WorldSpawn::generateWorldMesh()
 
     // FLOORS
     uint16_t c = 0;
-    for (auto f : floors)
+    uint8_t f_level = 0;
+    for (auto f : level_objs.level_floors)
     {
+        std::cout << "Well, " << f.coordinates.v4.x << std::endl;
         // Vertices
-        vertices.insert(vertices.end(), {f.coordinates.v2.x, 0, f.coordinates.v2.z});
-        vertices.insert(vertices.end(), {f.coordinates.v3.x, 0, f.coordinates.v3.z});
-        vertices.insert(vertices.end(), {f.coordinates.v4.x, 0, f.coordinates.v4.z});
-        vertices.insert(vertices.end(), {f.coordinates.v1.x, 0, f.coordinates.v1.z});
+        vertices.insert(vertices.end(), {f.coordinates.v2.x, f_level*HEIGHT, f.coordinates.v2.z});
+        vertices.insert(vertices.end(), {f.coordinates.v3.x, f_level*HEIGHT, f.coordinates.v3.z});
+        vertices.insert(vertices.end(), {f.coordinates.v4.x, f_level*HEIGHT, f.coordinates.v4.z});
+        vertices.insert(vertices.end(), {f.coordinates.v1.x, f_level*HEIGHT, f.coordinates.v1.z});
 
         // Triangles
         indices.insert (indices.end(),  {c, c+1, c+3});
@@ -162,12 +225,13 @@ void WorldSpawn::generateWorldMesh()
 
         // Normals
         glm::vec3 normal = glm::cross(f.coordinates.v2 - f.coordinates.v1, f.coordinates.v3 - f.coordinates.v1);
-        normals.insert(normals.end(), {normal.x, normal.y, normal.z});
-        normals.insert(normals.end(), {normal.x, normal.y, normal.z});
-        normals.insert(normals.end(), {normal.x, normal.y, normal.z});
-        normals.insert(normals.end(), {normal.x, normal.y, normal.z});
+        normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+        normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+        normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+        normals.insert (normals.end(), {normal.x, normal.y, normal.z});
 
         c += 4;
+        f_level++;
     }
 
     this->mesh = Loader::loadToVAO(vertices, indices, t_Coords, normals);

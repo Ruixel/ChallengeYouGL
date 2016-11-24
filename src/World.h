@@ -2,6 +2,7 @@
 #define WORLD_H
 
 #include <list>
+#include <SFML/Graphics.hpp>
 
 #include "Entity.h"
 #include "Cube.h"
@@ -16,13 +17,16 @@ private:
 
     Camera m_camera;
     StaticShader* m_staticShader;
-    sf::Window* m_window;
+    sf::RenderWindow* m_window;
+
+    sf::Font font_GoldenRatio;
+    sf::Text text_MouseControl;
 
 public:
     World();
     ~World();
 
-    void initWorld(sf::Window* window);
+    void initWorld(sf::RenderWindow* window);
     void updateWorld();
     void renderWorld();
 

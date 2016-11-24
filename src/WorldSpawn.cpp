@@ -181,10 +181,6 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         //    return;
         cyQuad q1;
         cyFloor f;
-        /*f.coordinates.v1 = glm::vec3(((stof(properties->at(0)) - 200)    / WORLD_SIZE, 0, stof(properties->at(1)) - 200)    / WORLD_SIZE);
-        f.coordinates.v2 = glm::vec3(((stof(properties->at(2)) - 200)    / WORLD_SIZE, 0, stof(properties->at(3)) - 200)    / WORLD_SIZE);
-        f.coordinates.v3 = glm::vec3(((stof(properties->at(4)) - 200)    / WORLD_SIZE, 0, stof(properties->at(5)) - 200)    / WORLD_SIZE);
-        f.coordinates.v4 = glm::vec3(((stof(properties->at(6)) - 200)    / WORLD_SIZE, 0, stof(properties->at(7)) - 200)    / WORLD_SIZE);*/
 
         q1.v1 = glm::vec3((stof(properties->at(0))   - 200)    / WORLD_SIZE, 0, (stof(properties->at(1)) - 200)    / WORLD_SIZE);
         q1.v2 = glm::vec3((stof(properties->at(2)) - 200)     / WORLD_SIZE, 0, (stof(properties->at(3)) - 200)    / WORLD_SIZE);
@@ -198,37 +194,12 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
 
 void WorldSpawn::generateWorldMesh()
 {
-    std::vector<GLfloat> vertices, t_Coords, normals;
-    std::vector<GLuint>  indices;
-
     // FLOORS
     uint16_t c = 0;
     uint8_t f_level = 0;
     for (auto f : level_objs.level_floors)
     {
-        std::cout << "Well, " << f.coordinates.v4.x << std::endl;
-        // Vertices
-        vertices.insert(vertices.end(), {f.coordinates.v2.x, f_level*HEIGHT, f.coordinates.v2.z});
-        vertices.insert(vertices.end(), {f.coordinates.v3.x, f_level*HEIGHT, f.coordinates.v3.z});
-        vertices.insert(vertices.end(), {f.coordinates.v4.x, f_level*HEIGHT, f.coordinates.v4.z});
-        vertices.insert(vertices.end(), {f.coordinates.v1.x, f_level*HEIGHT, f.coordinates.v1.z});
-
-        // Triangles
-        indices.insert (indices.end(),  {c, c+1, c+3});
-        indices.insert (indices.end(),  {c+1, c+2, c+3});
-
-        // Texture Coordinates
-        t_Coords.insert(t_Coords.end(), {f.coordinates.v2.x*3.0, f.coordinates.v2.z*3.0});
-        t_Coords.insert(t_Coords.end(), {f.coordinates.v3.x*3.0, f.coordinates.v3.z*3.0});
-        t_Coords.insert(t_Coords.end(), {f.coordinates.v4.x*3.0, f.coordinates.v4.z*3.0});
-        t_Coords.insert(t_Coords.end(), {f.coordinates.v1.x*3.0, f.coordinates.v1.z*3.0});
-
-        // Normals
-        glm::vec3 normal = glm::cross(f.coordinates.v2 - f.coordinates.v1, f.coordinates.v3 - f.coordinates.v1);
-        normals.insert (normals.end(), {normal.x, normal.y, normal.z});
-        normals.insert (normals.end(), {normal.x, normal.y, normal.z});
-        normals.insert (normals.end(), {normal.x, normal.y, normal.z});
-        normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+        generatePlatform(f.coordinates, c, f_level);
 
         c += 4;
         f_level++;
@@ -238,6 +209,57 @@ void WorldSpawn::generateWorldMesh()
     this->m_textureID = Loader::loadTexture("dat/000d1e44.jpg");
 
     std::cout << "Vertex count: " << mesh->getVaoID() << std::endl;
+}
+
+void WorldSpawn::generatePlatform(cyQuad& q, int c, int f_level)
+{
+    // Vertices
+    vertices.insert(vertices.end(), {q.v2.x, f_level*HEIGHT, q.v2.z});
+    vertices.insert(vertices.end(), {q.v3.x, f_level*HEIGHT, q.v3.z});
+    vertices.insert(vertices.end(), {q.v4.x, f_level*HEIGHT, q.v4.z});
+    vertices.insert(vertices.end(), {q.v1.x, f_level*HEIGHT, q.v1.z});
+
+    // Triangles
+    indices.insert (indices.end(),  {c, c+1, c+3});
+    indices.insert (indices.end(),  {c+1, c+2, c+3});
+
+    // Texture Coordinates
+    t_Coords.insert(t_Coords.end(), {q.v2.x*3.0, q.v2.z*3.0});
+    t_Coords.insert(t_Coords.end(), {q.v3.x*3.0, q.v3.z*3.0});
+    t_Coords.insert(t_Coords.end(), {q.v4.x*3.0, q.v4.z*3.0});
+    t_Coords.insert(t_Coords.end(), {q.v1.x*3.0, q.v1.z*3.0});
+
+    // Normals
+    glm::vec3 normal = glm::cross(q.v2 - q.v1, q.v3 - q.v1);
+    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+
+
+
+    // Vertices
+    vertices.insert(vertices.end(), {q.v1.x, f_level*HEIGHT, q.v1.z});
+    vertices.insert(vertices.end(), {q.v4.x, f_level*HEIGHT, q.v4.z});
+    vertices.insert(vertices.end(), {q.v3.x, f_level*HEIGHT, q.v3.z});
+    vertices.insert(vertices.end(), {q.v2.x, f_level*HEIGHT, q.v2.z});
+
+    // Triangles
+    indices.insert (indices.end(),  {c, c+1, c+3});
+    indices.insert (indices.end(),  {c+1, c+2, c+3});
+
+    // Texture Coordinates
+    t_Coords.insert(t_Coords.end(), {q.v1.x*3.0, q.v1.z*3.0});
+    t_Coords.insert(t_Coords.end(), {q.v4.x*3.0, q.v4.z*3.0});
+    t_Coords.insert(t_Coords.end(), {q.v3.x*3.0, q.v3.z*3.0});
+    t_Coords.insert(t_Coords.end(), {q.v2.x*3.0, q.v2.z*3.0});
+
+    // Normals
+    normal = glm::cross(q.v1 - q.v2, q.v4 - q.v2);
+    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
+    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
 }
 
 void WorldSpawn::draw()

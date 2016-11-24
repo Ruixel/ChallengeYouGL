@@ -22,7 +22,7 @@ private:
     const int FRAME_RATE = 120;
     const int ANTI_ALIAS = 4;
 
-    sf::Window* window;
+    sf::RenderWindow* window;
 
     World m_world;
 

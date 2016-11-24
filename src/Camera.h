@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 #define PI (3.141592653589793)
 #define HALF_PI (1.570796326794897)
@@ -19,13 +20,13 @@ private:
     Vector3 m_rotation = Vector3(-HALF_PI, HALF_PI, 0);
 
     sf::Vector2i m_lastMousePos;
-    sf::Window* m_window = nullptr;
+    sf::RenderWindow* m_window = nullptr;
 
     bool camera_locked = true;
 
 public:
     Camera();
-    void init(sf::Window* window);
+    void init(sf::RenderWindow* window);
 
     glm::mat4 generateProjectionMatrix(float aspectRatio);
     glm::mat4 generateViewMatrix();
@@ -39,6 +40,7 @@ public:
     void movePosition (const Vector3& position);
 
     void toggleLockMouse();
+    bool getToggle();
 
     void move (float dt);
     void update ();

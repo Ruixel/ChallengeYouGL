@@ -3,7 +3,7 @@
 World::World()
 {}
 
-void World::initWorld(sf::Window* window)
+void World::initWorld(sf::RenderWindow* window)
 {
     this->m_window = window;
     this->m_camera.init(window);
@@ -13,6 +13,15 @@ void World::initWorld(sf::Window* window)
     glm::mat4 pMatrix = m_camera.generateProjectionMatrix(1.6f);
     m_staticShader->loadProjectionMatrix(pMatrix);
     m_staticShader->stop();
+
+    // Preload fonts
+    font_GoldenRatio.loadFromFile("dat/GoldenRatio.otf");
+
+    // GUI Text
+    text_MouseControl.setString("MOUSE CONTROL OFF - PRESS 'T'");
+    text_MouseControl.setCharacterSize(30);
+    text_MouseControl.setColor(sf::Color(255, 184, 16));
+    text_MouseControl.setPosition(100, 100);
 
     for (int i = 0; i < 20; i++)
     {
@@ -71,6 +80,11 @@ void World::renderWorld()
     }
 
     m_staticShader->stop();
+
+    m_window->pushGLStates();
+    m_window->draw(text_MouseControl);
+    m_window->popGLStates();
+
 }
 
 World::~World()

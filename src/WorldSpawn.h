@@ -44,7 +44,9 @@ enum class property_type
 class WorldSpawn : public Entity
 {
 private:
-    std::vector<cyFloor> floors;
+    std::vector<GLfloat> vertices, t_Coords, normals;
+    std::vector<GLuint>  indices;
+
     cyLevel level_objs;
 
     StaticShader* shader;
@@ -54,6 +56,8 @@ private:
     //                  std::vector<std::string>* property_list);
 
     void createStruct(const std::string& obj_name, std::vector<std::string>* properties);
+
+    void generatePlatform(cyQuad& q, int c, int f_level);
 
     void generateWorldMesh();
     void renderWorld();

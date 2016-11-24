@@ -4,7 +4,7 @@
 Camera::Camera()
 {}
 
-void Camera::init(sf::Window* window)
+void Camera::init(sf::RenderWindow* window)
 {
     this->m_window = window;
     m_window->setMouseCursorVisible(false);
@@ -76,6 +76,11 @@ void Camera::toggleLockMouse()
 {
     camera_locked = !camera_locked;
     m_window->setMouseCursorVisible(!camera_locked);
+}
+
+bool Camera::getToggle()
+{
+    return camera_locked;
 }
 
 void Camera::setPosition(const Vector3& position)

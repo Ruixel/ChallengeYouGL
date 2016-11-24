@@ -37,7 +37,7 @@ void MainGame::initWindow()
     settings.majorVersion       = 3;
     settings.minorVersion       = 3;
 
-    this->window = new sf::Window(sf::VideoMode(WIDTH, HEIGHT), "BagCraft",
+    this->window = new sf::RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "ChallengeYouGL",
                               sf::Style::Default, settings);
 
     this->window->setFramerateLimit(FRAME_RATE);

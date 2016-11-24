@@ -15,13 +15,15 @@ void World::initWorld(sf::RenderWindow* window)
     m_staticShader->stop();
 
     // Preload fonts
-    font_GoldenRatio.loadFromFile("dat/GoldenRatio.otf");
+    if (!font_GoldenRatio.loadFromFile("dat/GoldenRatio.otf"))
+        std::cout << "Error loading GoldenRatio font" << std::endl;
 
     // GUI Text
+    text_MouseControl.setFont(font_GoldenRatio);
     text_MouseControl.setString("MOUSE CONTROL OFF - PRESS 'T'");
-    text_MouseControl.setCharacterSize(30);
-    text_MouseControl.setColor(sf::Color(255, 184, 16));
-    text_MouseControl.setPosition(100, 100);
+    text_MouseControl.setCharacterSize(18);
+    text_MouseControl.setColor(sf::Color(255, 184, 16, 255));
+    text_MouseControl.setPosition(717, 5);
 
     for (int i = 0; i < 20; i++)
     {
@@ -82,7 +84,10 @@ void World::renderWorld()
     m_staticShader->stop();
 
     m_window->pushGLStates();
-    m_window->draw(text_MouseControl);
+
+    if (!m_camera.getToggle())
+        m_window->draw(text_MouseControl);
+
     m_window->popGLStates();
 
 }

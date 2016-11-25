@@ -113,14 +113,22 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                             // FIND VALUE
                             if (level[ptr] != '[' && level[ptr] != ']' && level[ptr] != ' ' && level[ptr] != ',')
                             {
-                                ptr++;
+                                size_t value_end;
 
-                                // Find when they end (Next , or ])
-                                size_t value_end_1 = level.find(',', ptr);
-                                size_t value_end_2 = level.find(']', ptr);
-                                size_t value_end   = (value_end_1 > value_end_2) ? value_end_2 : value_end_1;
+                                // Is it a color value?
+                                if (level[ptr] == 'c')
+                                {
+                                    // Find end of color value
+                                    value_end = level.find(')', ptr) + 1;
 
-                                std::string value  = level.substr(ptr-1, value_end-ptr+1);
+                                } else {
+                                    // Find when they end (Next , or ])
+                                    size_t value_end_1 = level.find(',', ptr);
+                                    size_t value_end_2 = level.find(']', ptr);
+                                    value_end          = (value_end_1 > value_end_2) ? value_end_2 : value_end_1;
+                                }
+
+                                std::string value  = level.substr(ptr, value_end-ptr);
                                 ptr = value_end - 1;
 
                                 std::cout << value << std::endl;
@@ -177,10 +185,11 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
 {
     if (obj_name == "Floor")
     {
-        //if (properties[9]== 0)
-        //    return;
         cyQuad q1;
         cyFloor f;
+
+        if (properties->at(9) == "2")
+            f.draw = false;
 
         q1.v1 = glm::vec3((stof(properties->at(0))   - 200)    / WORLD_SIZE, 0, (stof(properties->at(1)) - 200)    / WORLD_SIZE);
         q1.v2 = glm::vec3((stof(properties->at(2)) - 200)     / WORLD_SIZE, 0, (stof(properties->at(3)) - 200)    / WORLD_SIZE);
@@ -199,9 +208,11 @@ void WorldSpawn::generateWorldMesh()
     uint8_t f_level = 0;
     for (auto f : level_objs.level_floors)
     {
-        generatePlatform(f.coordinates, c, f_level);
+        if (f.draw) {
+            generatePlatform(f.coordinates, c, f_level);
+            c += 4;
+        }
 
-        c += 4;
         f_level++;
     }
 

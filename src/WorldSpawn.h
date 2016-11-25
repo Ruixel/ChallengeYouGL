@@ -28,6 +28,7 @@ struct cyFloor
     cyQuad coordinates;
     cyTexture topSurface;
     cyTexture bottomSurface;
+    bool draw = true;
 };
 
 struct cyLevel

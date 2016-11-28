@@ -54,7 +54,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
 
                 ptr = str_end;
 
-                if (bracket == 1 && obj_name != "Floor")
+                if (!std::isupper(obj_name[0]))
                 {
                     ptr += 2;
 
@@ -82,10 +82,13 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                     bracket++;
 
                     // PLACEHOLDER VARIABLES
-                    int item_bracket = 3;
                     std::vector<std::string>* properties = new std::vector<std::string>();
+                    int item_bracket = 3;
 
-                    while (bracket > end_bracket && obj_name == "Floor")
+                    if (obj_name == "Floor")
+                        int item_bracket = 4;
+
+                    while (bracket > end_bracket)
                     {
                         // Move up and down brackets
                         if (level[ptr] == '[')
@@ -102,7 +105,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                                 // If floor, add level number to the properties
                                 properties->push_back(std::to_string(item_number));
 
-                                // Object complete, add to cyLevel
+                                // Object complete, create entity
                                 createStruct(obj_name, properties);
 
                                 // Delete property list and create a new one
@@ -173,6 +176,33 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         f1.vertex[3]  = glm::vec3((stof(properties->at(6))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(7)) - 200)  / WORLD_SIZE);
         f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
         f1.textureID  = 1;
+
+        f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
+        f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
+        f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
+        f2.textureID  = 2;
+
+        polys.push_back(f1);
+        polys.push_back(f2);
+    }
+
+    if (obj_name == "Plat")
+    {
+        float p_height = stof(properties->at(5))*HEIGHT;
+        int size       = stoi(properties->at(4));
+
+        int x_min      = stoi(properties->at(0)) - size*2;
+        int x_max      = stoi(properties->at(0)) + size*2;
+        int y_min      = stoi(properties->at(1)) - size*2;
+        int y_max      = stoi(properties->at(1)) + size*2;
+
+        polygon f1, f2;
+        f1.vertex[0]  = glm::vec3((x_min   - 200)  / WORLD_SIZE, p_height, (y_max - 200)  / WORLD_SIZE);
+        f1.vertex[1]  = glm::vec3((x_max   - 200)  / WORLD_SIZE, p_height, (y_max - 200)  / WORLD_SIZE);
+        f1.vertex[2]  = glm::vec3((x_max   - 200)  / WORLD_SIZE, p_height, (y_min - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((x_min   - 200)  / WORLD_SIZE, p_height, (y_min - 200)  / WORLD_SIZE);
+        f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
+        f1.textureID  = 2;
 
         f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
         f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];

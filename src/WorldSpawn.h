@@ -6,7 +6,9 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <array>
 
+#include "Loader.h"
 #include "StaticShader.h"
 #include "OBJLoader.h"
 
@@ -31,6 +33,19 @@ struct cyFloor
     bool draw = true;
 };
 
+struct polygon
+{
+    glm::vec3    vertex[4];
+    glm::vec3    normal;
+    GLuint       textureID;
+};
+
+struct polygon_mesh
+{
+    RawModel*    meshID;
+    GLuint       textureID;
+};
+
 struct cyLevel
 {
     std::string name, author, levels, version;
@@ -47,6 +62,9 @@ class WorldSpawn : public Entity
 private:
     std::vector<GLfloat> vertices, t_Coords, normals;
     std::vector<GLuint>  indices;
+
+    std::vector<polygon> polys;
+    std::vector<polygon_mesh> poly_meshes;
 
     cyLevel level_objs;
 

@@ -185,7 +185,7 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
 {
     if (obj_name == "Floor")
     {
-        cyQuad q1;
+        /*cyQuad q1;
         cyFloor f;
 
         if (properties->at(9) == "2")
@@ -197,7 +197,17 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         q1.v4 = glm::vec3((stof(properties->at(6))   - 200)    / WORLD_SIZE, 0, (stof(properties->at(7))   - 200)   / WORLD_SIZE);
 
         f.coordinates = q1;
-        level_objs.level_floors.push_back(f);
+        level_objs.level_floors.push_back(f);*/
+
+        polygon f;
+        f.vertex[0]  = glm::vec3((stof(properties->at(0))   - 200)  / WORLD_SIZE, 0, (stof(properties->at(1)) - 200)  / WORLD_SIZE);
+        f.vertex[1]  = glm::vec3((stof(properties->at(2))   - 200)  / WORLD_SIZE, 0, (stof(properties->at(3)) - 200)  / WORLD_SIZE);
+        f.vertex[2]  = glm::vec3((stof(properties->at(4))   - 200)  / WORLD_SIZE, 0, (stof(properties->at(5)) - 200)  / WORLD_SIZE);
+        f.vertex[3]  = glm::vec3((stof(properties->at(6))   - 200)  / WORLD_SIZE, 0, (stof(properties->at(7)) - 200)  / WORLD_SIZE);
+        f.normal     = glm::cross(f.vertex[2] - f.vertex[1], f.vertex[3] - f.vertex[1]);
+        f.textureID  = 1;
+
+        polys.push_back(f);
     }
 }
 
@@ -214,6 +224,28 @@ void WorldSpawn::generateWorldMesh()
         }
 
         f_level++;
+    }
+
+    for (auto poly : this->polys)
+    {
+        polygon_mesh p_m;
+
+        std::vector<GLfloat> p, t, n;
+        std::vector<GLuint>  i;
+
+        p.insert(p.end(), {poly.vertex[1].x, poly.vertex[1].y, poly.vertex[1].z});
+        p.insert(p.end(), {poly.vertex[2].x, poly.vertex[2].y, poly.vertex[2].z});
+        p.insert(p.end(), {poly.vertex[3].x, poly.vertex[3].y, poly.vertex[3].z});
+        p.insert(p.end(), {poly.vertex[0].x, poly.vertex[0].y, poly.vertex[0].z});
+
+        i = {0, 1, 3, 1, 2, 3};
+        t = {0, 0, 0, 0, 0, 0, 0, 0};
+
+        for (int iterator = 0; iterator < 8; iterator++)
+            n.insert(n.end(), {poly.normal.x, poly.normal.y, poly.normal.z});
+
+        p_m.meshID = Loader::loadToVAO(p, i, t, n);
+        poly_meshes.push_back(p_m);
     }
 
     this->mesh = Loader::loadToVAO(vertices, indices, t_Coords, normals);
@@ -280,9 +312,16 @@ void WorldSpawn::draw()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->m_textureID);
 
-    glBindVertexArray(mesh->getVaoID());
+    /*glBindVertexArray(mesh->getVaoID());
     glDrawElements(GL_TRIANGLES, mesh->getVertexCount(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    glBindVertexArray(0);*/
+
+    for (auto poly : poly_meshes)
+    {
+        glBindVertexArray(poly.meshID->getVaoID());
+        glDrawElements(GL_TRIANGLES, poly.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    }
 
 }
 

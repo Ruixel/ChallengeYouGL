@@ -16,24 +16,7 @@ const float WORLD_SIZE    = 400 / 2;
 const float HEIGHT        = 0.2f;
 const float TEXTURE_SIZE  = 3;
 
-// PRIMITIVES
-
-struct cyQuad
-{ glm::vec3 v1, v2, v3, v4; };
-
-struct cyTexture
-{ int texture; glm::vec3 color; };
-
 // OBJECTS
-
-struct cyFloor
-{
-    cyQuad coordinates;
-    cyTexture topSurface;
-    cyTexture bottomSurface;
-    bool draw = true;
-};
-
 struct polygon
 {
     glm::vec3    vertex[4];
@@ -50,12 +33,7 @@ struct polygon_mesh
 struct cyLevel
 {
     std::string name, author, levels, version;
-    std::vector<cyFloor> level_floors;
-};
-
-enum class property_type
-{
-    CY_QUAD, CY_BOOL, CY_TEXTURE
+    //std::vector<cyFloor> level_floors;
 };
 
 class WorldSpawn : public Entity
@@ -66,6 +44,8 @@ private:
 
     std::vector<polygon> polys;
     std::vector<polygon_mesh> poly_meshes;
+
+    std::map<int, int> texture_hashmap;
 
     cyLevel level_objs;
 

@@ -4,6 +4,10 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
 //:   Entity(Loader::loadToVAO(v, i, t, v), Loader::loadTexture("iceman.jpg"))
 :   shader(sh)
 {
+    // Load Textures
+    texture_hashmap.insert(std::pair<int, int>(1, Loader::loadTexture("dat/000d1e44.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(2, Loader::loadTexture("dat/stucco.jpg")));
+
     // Load file
     std::string level;
 
@@ -156,13 +160,6 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
     this->generateWorldMesh();
 }
 
-/*template <typename OS>
-void WorldSpawn::createStruct(OS* object_struct, std::vector<property_type>& value_types,
-                              std::vector<std::string>* property_list);
-{
-
-}*/
-
 void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::string>* properties)
 {
     if (obj_name == "Floor")
@@ -180,7 +177,7 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
         f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
         f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
-        f2.textureID  = 1;
+        f2.textureID  = 2;
 
         polys.push_back(f1);
         polys.push_back(f2);
@@ -211,12 +208,13 @@ void WorldSpawn::generateWorldMesh()
         for (int iterator = 0; iterator < 8; iterator++)
             n.insert(n.end(), {poly.normal.x, poly.normal.y, poly.normal.z});
 
-        p_m.meshID = Loader::loadToVAO(p, i, t, n);
+        p_m.textureID = poly.textureID;
+        p_m.meshID    = Loader::loadToVAO(p, i, t, n);
+
         poly_meshes.push_back(p_m);
     }
 
     this->mesh = Loader::loadToVAO(vertices, indices, t_Coords, normals);
-    this->m_textureID = Loader::loadTexture("dat/000d1e44.jpg");
 
     std::cout << "Vertex count: " << mesh->getVaoID() << std::endl;
 }
@@ -226,14 +224,11 @@ void WorldSpawn::draw()
     shader->loadTransformationMatrix(transformationMatrix);
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, this->m_textureID);
-
-    /*glBindVertexArray(mesh->getVaoID());
-    glDrawElements(GL_TRIANGLES, mesh->getVertexCount(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);*/
 
     for (auto poly : poly_meshes)
     {
+        glBindTexture(GL_TEXTURE_2D, texture_hashmap[poly.textureID]);
+
         glBindVertexArray(poly.meshID->getVaoID());
         glDrawElements(GL_TRIANGLES, poly.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
@@ -244,7 +239,6 @@ void WorldSpawn::draw()
 void WorldSpawn::update(const float dt)
 {
     this->position  = glm::vec3(0, -.6f, 0);
-    //this->rotation  = sf::Vector3f(0, this->rotation.y + 0.015, this->rotation.z + 0.01);
     this->scale     = 20.0f;
 
     createTransformationMatrix();

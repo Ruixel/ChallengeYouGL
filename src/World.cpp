@@ -33,7 +33,7 @@ void World::initWorld(sf::RenderWindow* window)
         insertEntity(m_cube);
     }
 
-    WorldSpawn* ws = new WorldSpawn("dat/CGMarioPlat.cy", m_staticShader);
+    WorldSpawn* ws = new WorldSpawn("dat/FLOORTEXTURES.cy", m_staticShader);
     insertEntity(ws);
 }
 

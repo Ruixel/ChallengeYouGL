@@ -5,8 +5,20 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
 :   shader(sh)
 {
     // Load Textures
-    texture_hashmap.insert(std::pair<int, int>(1, Loader::loadTexture("dat/000d1e44.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(2, Loader::loadTexture("dat/stucco.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(1, Loader::loadTexture("dat/img/grass.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(2, Loader::loadTexture("dat/img/stucco.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(3, Loader::loadTexture("dat/img/bricks.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(4, Loader::loadTexture("dat/img/wood.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(5, Loader::loadTexture("dat/img/stone.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(6, Loader::loadTexture("dat/img/glass.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(7, Loader::loadTexture("dat/img/bark.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(8, Loader::loadTexture("dat/img/scifi.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(9, Loader::loadTexture("dat/img/glass.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(10, Loader::loadTexture("dat/img/egypt.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(11, Loader::loadTexture("dat/img/rock.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(12, Loader::loadTexture("dat/img/tile.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(13, Loader::loadTexture("dat/img/scifi.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(0, Loader::loadTexture("dat/img/color.jpg")));
 
     // Load file
     std::string level;
@@ -54,7 +66,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
 
                 ptr = str_end;
 
-                if (!std::isupper(obj_name[0]))
+                if (!std::isupper(obj_name[0]) && obj_name != "walls" && obj_name != "begin")
                 {
                     ptr += 2;
 
@@ -103,10 +115,12 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                             if (!waitForNewItem)
                             {
                                 // If floor, add level number to the properties
-                                properties->push_back(std::to_string(item_number));
+                                if (obj_name == "Floor")
+                                    properties->push_back(std::to_string(item_number));
 
                                 // Object complete, create entity
-                                createStruct(obj_name, properties);
+                                if (properties->size() != 0)
+                                    createStruct(obj_name, properties);
 
                                 // Delete property list and create a new one
                                 delete properties;
@@ -115,6 +129,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                                 // Avoid repetition (normally takes 3 loops until there's a new item)
                                 waitForNewItem = true;
                                 item_number++;
+
                                 std::cout << "New Item" << std::endl;
                             }
 
@@ -175,12 +190,12 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         f1.vertex[2]  = glm::vec3((stof(properties->at(4))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(5)) - 200)  / WORLD_SIZE);
         f1.vertex[3]  = glm::vec3((stof(properties->at(6))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(7)) - 200)  / WORLD_SIZE);
         f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
-        f1.textureID  = 1;
+        f1.textureID  = stoi(properties->at(8));
 
         f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
         f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
         f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
-        f2.textureID  = 2;
+        f2.textureID  = stoi(properties->at(10));
 
         polys.push_back(f1);
         polys.push_back(f2);
@@ -269,7 +284,7 @@ void WorldSpawn::draw()
 void WorldSpawn::update(const float dt)
 {
     this->position  = glm::vec3(0, -.6f, 0);
-    this->scale     = 20.0f;
+    this->scale     = 100.0f;
 
     createTransformationMatrix();
 }

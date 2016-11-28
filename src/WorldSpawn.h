@@ -13,8 +13,8 @@
 #include "OBJLoader.h"
 
 const float WORLD_SIZE    = 400 / 2;
-const float HEIGHT        = 0.2f;
-const float TEXTURE_SIZE  = 3;
+const float HEIGHT        = 0.05f;
+const float TEXTURE_SIZE  = 20.f;
 
 // OBJECTS
 struct polygon

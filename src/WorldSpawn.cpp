@@ -71,13 +71,14 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
 
                 } else {
                     int end_bracket = bracket;
+                    int item_number = 1;
                     bool waitForNewItem = false;
+
                     ptr += 3;
                     bracket++;
 
                     // PLACEHOLDER VARIABLES
                     int item_bracket = 3;
-                    std::vector<property_type> floor_types = {property_type::CY_QUAD, property_type::CY_TEXTURE, property_type::CY_BOOL, property_type::CY_TEXTURE};
                     std::vector<std::string>* properties = new std::vector<std::string>();
 
                     while (bracket > end_bracket && obj_name == "Floor")
@@ -94,6 +95,9 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                         {
                             if (!waitForNewItem)
                             {
+                                // If floor, add level number to the properties
+                                properties->push_back(std::to_string(item_number));
+
                                 // Object complete, add to cyLevel
                                 createStruct(obj_name, properties);
 
@@ -103,6 +107,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
 
                                 // Avoid repetition (normally takes 3 loops until there's a new item)
                                 waitForNewItem = true;
+                                item_number++;
                                 std::cout << "New Item" << std::endl;
                             }
 
@@ -147,29 +152,6 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
         ptr++;
     }
 
-    cyQuad  q1;
-    q1.v1 = glm::vec3((0   - 200)    / WORLD_SIZE, 0, (40 - 200)    / WORLD_SIZE);
-    q1.v2 = glm::vec3((40 - 200)     / WORLD_SIZE, 0, (40 - 200)    / WORLD_SIZE);
-    q1.v3 = glm::vec3((40 - 200)     / WORLD_SIZE, 0, (0   - 200)   / WORLD_SIZE);
-    q1.v4 = glm::vec3((0   - 200)    / WORLD_SIZE, 0, (0   - 200)   / WORLD_SIZE);
-
-    cyTexture t1;
-    t1.texture = 1;
-
-    cyFloor f1;
-    f1.coordinates   = q1;
-    f1.topSurface    = t1;
-    f1.bottomSurface = t1;
-
-    /*level_objs.level_floors.push_back(f1);
-    level_objs.level_floors.push_back(f1);
-    level_objs.level_floors.push_back(f1);
-    level_objs.level_floors.push_back(f1);
-    level_objs.level_floors.push_back(f1);
-    level_objs.level_floors.push_back(f1);
-    level_objs.level_floors.push_back(f1);
-    level_objs.level_floors.push_back(f1);*/
-
     // Generate Level Meshes
     this->generateWorldMesh();
 }
@@ -185,47 +167,28 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
 {
     if (obj_name == "Floor")
     {
-        /*cyQuad q1;
-        cyFloor f;
+        float f_height = stof(properties->at(11))*HEIGHT;
 
-        if (properties->at(9) == "2")
-            f.draw = false;
+        polygon f1, f2;
+        f1.vertex[0]  = glm::vec3((stof(properties->at(0))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(1)) - 200)  / WORLD_SIZE);
+        f1.vertex[1]  = glm::vec3((stof(properties->at(2))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(3)) - 200)  / WORLD_SIZE);
+        f1.vertex[2]  = glm::vec3((stof(properties->at(4))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(5)) - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((stof(properties->at(6))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(7)) - 200)  / WORLD_SIZE);
+        f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
+        f1.textureID  = 1;
 
-        q1.v1 = glm::vec3((stof(properties->at(0))   - 200)    / WORLD_SIZE, 0, (stof(properties->at(1)) - 200)    / WORLD_SIZE);
-        q1.v2 = glm::vec3((stof(properties->at(2)) - 200)     / WORLD_SIZE, 0, (stof(properties->at(3)) - 200)    / WORLD_SIZE);
-        q1.v3 = glm::vec3((stof(properties->at(4)) - 200)     / WORLD_SIZE, 0, (stof(properties->at(5))   - 200)   / WORLD_SIZE);
-        q1.v4 = glm::vec3((stof(properties->at(6))   - 200)    / WORLD_SIZE, 0, (stof(properties->at(7))   - 200)   / WORLD_SIZE);
+        f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
+        f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
+        f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
+        f2.textureID  = 1;
 
-        f.coordinates = q1;
-        level_objs.level_floors.push_back(f);*/
-
-        polygon f;
-        f.vertex[0]  = glm::vec3((stof(properties->at(0))   - 200)  / WORLD_SIZE, 0, (stof(properties->at(1)) - 200)  / WORLD_SIZE);
-        f.vertex[1]  = glm::vec3((stof(properties->at(2))   - 200)  / WORLD_SIZE, 0, (stof(properties->at(3)) - 200)  / WORLD_SIZE);
-        f.vertex[2]  = glm::vec3((stof(properties->at(4))   - 200)  / WORLD_SIZE, 0, (stof(properties->at(5)) - 200)  / WORLD_SIZE);
-        f.vertex[3]  = glm::vec3((stof(properties->at(6))   - 200)  / WORLD_SIZE, 0, (stof(properties->at(7)) - 200)  / WORLD_SIZE);
-        f.normal     = glm::cross(f.vertex[2] - f.vertex[1], f.vertex[3] - f.vertex[1]);
-        f.textureID  = 1;
-
-        polys.push_back(f);
+        polys.push_back(f1);
+        polys.push_back(f2);
     }
 }
 
 void WorldSpawn::generateWorldMesh()
 {
-    // FLOORS
-    uint16_t c = 0;
-    uint8_t f_level = 0;
-    for (auto f : level_objs.level_floors)
-    {
-        if (f.draw) {
-            generatePlatform(f.coordinates, c, f_level);
-            c += 4;
-        }
-
-        f_level++;
-    }
-
     for (auto poly : this->polys)
     {
         polygon_mesh p_m;
@@ -239,7 +202,11 @@ void WorldSpawn::generateWorldMesh()
         p.insert(p.end(), {poly.vertex[0].x, poly.vertex[0].y, poly.vertex[0].z});
 
         i = {0, 1, 3, 1, 2, 3};
-        t = {0, 0, 0, 0, 0, 0, 0, 0};
+
+        t.insert(t.end(), {poly.vertex[1].x*TEXTURE_SIZE, poly.vertex[1].z*TEXTURE_SIZE});
+        t.insert(t.end(), {poly.vertex[2].x*TEXTURE_SIZE, poly.vertex[2].z*TEXTURE_SIZE});
+        t.insert(t.end(), {poly.vertex[3].x*TEXTURE_SIZE, poly.vertex[3].z*TEXTURE_SIZE});
+        t.insert(t.end(), {poly.vertex[0].x*TEXTURE_SIZE, poly.vertex[0].z*TEXTURE_SIZE});
 
         for (int iterator = 0; iterator < 8; iterator++)
             n.insert(n.end(), {poly.normal.x, poly.normal.y, poly.normal.z});
@@ -252,57 +219,6 @@ void WorldSpawn::generateWorldMesh()
     this->m_textureID = Loader::loadTexture("dat/000d1e44.jpg");
 
     std::cout << "Vertex count: " << mesh->getVaoID() << std::endl;
-}
-
-void WorldSpawn::generatePlatform(cyQuad& q, int c, int f_level)
-{
-    // Vertices
-    vertices.insert(vertices.end(), {q.v2.x, f_level*HEIGHT, q.v2.z});
-    vertices.insert(vertices.end(), {q.v3.x, f_level*HEIGHT, q.v3.z});
-    vertices.insert(vertices.end(), {q.v4.x, f_level*HEIGHT, q.v4.z});
-    vertices.insert(vertices.end(), {q.v1.x, f_level*HEIGHT, q.v1.z});
-
-    // Triangles
-    indices.insert (indices.end(),  {c, c+1, c+3});
-    indices.insert (indices.end(),  {c+1, c+2, c+3});
-
-    // Texture Coordinates
-    t_Coords.insert(t_Coords.end(), {q.v2.x*3.0, q.v2.z*3.0});
-    t_Coords.insert(t_Coords.end(), {q.v3.x*3.0, q.v3.z*3.0});
-    t_Coords.insert(t_Coords.end(), {q.v4.x*3.0, q.v4.z*3.0});
-    t_Coords.insert(t_Coords.end(), {q.v1.x*3.0, q.v1.z*3.0});
-
-    // Normals
-    glm::vec3 normal = glm::cross(q.v2 - q.v1, q.v3 - q.v1);
-    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
-    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
-    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
-    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
-
-
-
-    // Vertices
-    vertices.insert(vertices.end(), {q.v1.x, f_level*HEIGHT, q.v1.z});
-    vertices.insert(vertices.end(), {q.v4.x, f_level*HEIGHT, q.v4.z});
-    vertices.insert(vertices.end(), {q.v3.x, f_level*HEIGHT, q.v3.z});
-    vertices.insert(vertices.end(), {q.v2.x, f_level*HEIGHT, q.v2.z});
-
-    // Triangles
-    indices.insert (indices.end(),  {c, c+1, c+3});
-    indices.insert (indices.end(),  {c+1, c+2, c+3});
-
-    // Texture Coordinates
-    t_Coords.insert(t_Coords.end(), {q.v1.x*3.0, q.v1.z*3.0});
-    t_Coords.insert(t_Coords.end(), {q.v4.x*3.0, q.v4.z*3.0});
-    t_Coords.insert(t_Coords.end(), {q.v3.x*3.0, q.v3.z*3.0});
-    t_Coords.insert(t_Coords.end(), {q.v2.x*3.0, q.v2.z*3.0});
-
-    // Normals
-    normal = glm::cross(q.v1 - q.v2, q.v4 - q.v2);
-    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
-    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
-    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
-    normals.insert (normals.end(), {normal.x, normal.y, normal.z});
 }
 
 void WorldSpawn::draw()

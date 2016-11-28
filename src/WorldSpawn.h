@@ -12,8 +12,9 @@
 #include "StaticShader.h"
 #include "OBJLoader.h"
 
-const float WORLD_SIZE = 400 / 2;
-const float HEIGHT     = 0.2f;
+const float WORLD_SIZE    = 400 / 2;
+const float HEIGHT        = 0.2f;
+const float TEXTURE_SIZE  = 3;
 
 // PRIMITIVES
 
@@ -75,8 +76,6 @@ private:
     //                  std::vector<std::string>* property_list);
 
     void createStruct(const std::string& obj_name, std::vector<std::string>* properties);
-
-    void generatePlatform(cyQuad& q, int c, int f_level);
 
     void generateWorldMesh();
     void renderWorld();

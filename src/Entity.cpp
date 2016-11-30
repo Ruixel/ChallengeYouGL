@@ -8,7 +8,9 @@ Entity::Entity(RawModel* entityMesh, int textureID)
 {}
 
 Entity::~Entity()
-{}
+{
+    delete mesh;
+}
 
 void Entity::createTransformationMatrix()
 {

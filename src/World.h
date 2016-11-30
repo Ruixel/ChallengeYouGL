@@ -21,13 +21,14 @@ private:
 
     sf::Font font_GoldenRatio;
     sf::Text text_MouseControl;
+    sf::Text text_FPS;
 
 public:
     World();
     ~World();
 
     void initWorld(sf::RenderWindow* window);
-    void updateWorld();
+    void updateWorld(float deltaTime);
     void renderWorld();
 
     void insertEntity(Entity* entity);

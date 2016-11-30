@@ -31,6 +31,8 @@ private:
 
     void updateWindow();
 
+    sf::Clock clock;
+
 public:
     MainGame();
     ~MainGame();

@@ -12,9 +12,10 @@ MainGame::MainGame()
 
 void MainGame::mainLoop()
 {
+    float lastTime, currentTime, deltaTime;
     while (this->window->isOpen())
     {
-        m_world.updateWorld();
+        m_world.updateWorld(deltaTime);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         glClearColor(2.f/255, 119.f/255, 189.f/255, 1.0f);
@@ -23,6 +24,9 @@ void MainGame::mainLoop()
 
         window->display();
         this->updateWindow();
+
+        currentTime = clock.restart().asSeconds();
+        deltaTime = currentTime - 0;
     }
 }
 
@@ -41,7 +45,7 @@ void MainGame::initWindow()
                               sf::Style::Default, settings);
 
     this->window->setFramerateLimit(FRAME_RATE);
-    this->window->setVerticalSyncEnabled(true);
+    this->window->setVerticalSyncEnabled(false);
 
     return;
 }

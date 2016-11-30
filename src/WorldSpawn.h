@@ -3,6 +3,7 @@
 
 #include "Entity.h"
 
+#include <algorithm>
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -28,6 +29,11 @@ struct polygon_mesh
 {
     RawModel*    meshID;
     GLuint       textureID;
+
+    bool operator < (const polygon_mesh& a) const
+    {
+        return textureID < a.textureID;
+    }
 };
 
 struct cyLevel
@@ -56,6 +62,8 @@ private:
     //                  std::vector<std::string>* property_list);
 
     void createStruct(const std::string& obj_name, std::vector<std::string>* properties);
+
+    bool compareByTexture(const polygon_mesh &a, const polygon_mesh &b);
 
     void generateWorldMesh();
     void renderWorld();

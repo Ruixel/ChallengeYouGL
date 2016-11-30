@@ -25,6 +25,13 @@ void World::initWorld(sf::RenderWindow* window)
     text_MouseControl.setColor(sf::Color(255, 184, 16, 255));
     text_MouseControl.setPosition(717, 5);
 
+    // FPS Text
+    text_FPS.setFont(font_GoldenRatio);
+    text_FPS.setString("FPS: 0");
+    text_FPS.setCharacterSize(18);
+    text_FPS.setColor(sf::Color(255, 184, 16, 255));
+    text_FPS.setPosition(5, 5);
+
     for (int i = 0; i < 20; i++)
     {
         Cube* m_cube = new Cube(m_staticShader);
@@ -33,11 +40,11 @@ void World::initWorld(sf::RenderWindow* window)
         insertEntity(m_cube);
     }
 
-    WorldSpawn* ws = new WorldSpawn("dat/FLOORTEXTURES.cy", m_staticShader);
+    WorldSpawn* ws = new WorldSpawn("dat/ITN64.cy", m_staticShader);
     insertEntity(ws);
 }
 
-void World::updateWorld()
+void World::updateWorld(float deltaTime)
 {
     sf::Event event;
     while (m_window->pollEvent(event))
@@ -63,6 +70,9 @@ void World::updateWorld()
         }
     }
 
+    float fps = 1.f / deltaTime;
+    text_FPS.setString("FPS: " + std::to_string(round(fps)));
+
     m_camera.update();
 
     for (auto m_entity : worldEntities)
@@ -87,6 +97,8 @@ void World::renderWorld()
 
     if (!m_camera.getToggle())
         m_window->draw(text_MouseControl);
+
+    m_window->draw(text_FPS);
 
     m_window->popGLStates();
 

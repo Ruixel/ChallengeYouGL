@@ -8,16 +8,16 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
     texture_hashmap.insert(std::pair<int, int>(1, Loader::loadTexture("dat/img/grass.jpg")));
     texture_hashmap.insert(std::pair<int, int>(2, Loader::loadTexture("dat/img/stucco.jpg")));
     texture_hashmap.insert(std::pair<int, int>(3, Loader::loadTexture("dat/img/bricks.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(4, Loader::loadTexture("dat/img/wood.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(5, Loader::loadTexture("dat/img/stone.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(6, Loader::loadTexture("dat/img/glass.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(7, Loader::loadTexture("dat/img/bark.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(8, Loader::loadTexture("dat/img/scifi.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(9, Loader::loadTexture("dat/img/glass.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(10, Loader::loadTexture("dat/img/egypt.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(11, Loader::loadTexture("dat/img/rock.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(12, Loader::loadTexture("dat/img/tile.jpg")));
-    texture_hashmap.insert(std::pair<int, int>(13, Loader::loadTexture("dat/img/scifi.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(4, Loader::loadTexture("dat/img/stone.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(5, Loader::loadTexture("dat/img/wood.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(6, Loader::loadTexture("dat/img/happy.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(7, Loader::loadTexture("dat/img/egypt.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(8, Loader::loadTexture("dat/img/glass.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(9, Loader::loadTexture("dat/img/bark.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(10, Loader::loadTexture("dat/img/scifi.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(11, Loader::loadTexture("dat/img/tile.jpg")));
+    //texture_hashmap.insert(std::pair<int, int>(12, Loader::loadTexture("dat/img/rock.jpg")));
+    texture_hashmap.insert(std::pair<int, int>(13, Loader::loadTexture("dat/img/rock.jpg")));
     texture_hashmap.insert(std::pair<int, int>(0, Loader::loadTexture("dat/img/color.jpg")));
 
     // Load file
@@ -206,23 +206,28 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         float p_height = stof(properties->at(5))*HEIGHT;
         int size       = stoi(properties->at(4));
 
-        int x_min      = stoi(properties->at(0)) - size*2;
-        int x_max      = stoi(properties->at(0)) + size*2;
-        int y_min      = stoi(properties->at(1)) - size*2;
-        int y_max      = stoi(properties->at(1)) + size*2;
+        int x_min      = stoi(properties->at(0)) - size*5;
+        int x_max      = stoi(properties->at(0)) + size*5;
+        int y_min      = stoi(properties->at(1)) - size*5;
+        int y_max      = stoi(properties->at(1)) + size*5;
+
+        int texID      = 0;
+        if ((properties->at(3))[0] != 'c')
+            texID = stoi(properties->at(3));
+
 
         polygon f1, f2;
-        f1.vertex[0]  = glm::vec3((x_min   - 200)  / WORLD_SIZE, p_height, (y_max - 200)  / WORLD_SIZE);
-        f1.vertex[1]  = glm::vec3((x_max   - 200)  / WORLD_SIZE, p_height, (y_max - 200)  / WORLD_SIZE);
-        f1.vertex[2]  = glm::vec3((x_max   - 200)  / WORLD_SIZE, p_height, (y_min - 200)  / WORLD_SIZE);
-        f1.vertex[3]  = glm::vec3((x_min   - 200)  / WORLD_SIZE, p_height, (y_min - 200)  / WORLD_SIZE);
+        f1.vertex[0]  = glm::vec3((x_min   - 200)  / WORLD_SIZE, p_height+(0.01*HEIGHT), (y_max - 200)  / WORLD_SIZE);
+        f1.vertex[1]  = glm::vec3((x_max   - 200)  / WORLD_SIZE, p_height+(0.01*HEIGHT), (y_max - 200)  / WORLD_SIZE);
+        f1.vertex[2]  = glm::vec3((x_max   - 200)  / WORLD_SIZE, p_height+(0.01*HEIGHT), (y_min - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((x_min   - 200)  / WORLD_SIZE, p_height+(0.01*HEIGHT), (y_min - 200)  / WORLD_SIZE);
         f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
-        f1.textureID  = 2;
+        f1.textureID  = texID;
 
         f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
         f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
         f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
-        f2.textureID  = 2;
+        f2.textureID  = texID;
 
         polys.push_back(f1);
         polys.push_back(f2);

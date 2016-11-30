@@ -1,7 +1,7 @@
 #ifndef WORLDSPAWN_H
 #define WORLDSPAWN_H
 
-#include <Entity.h>
+#include "Entity.h"
 
 #include <string>
 #include <fstream>

@@ -35,7 +35,7 @@ void MainGame::mainLoop()
 void MainGame::initWindow()
 {
     sf::ContextSettings settings;
-    settings.antialiasingLevel  = ANTI_ALIAS;
+    settings.antialiasingLevel  = 0;
     settings.stencilBits        = 8;
     settings.depthBits          = 24;
     settings.majorVersion       = 3;

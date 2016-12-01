@@ -214,9 +214,15 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
 
     if (obj_name == "Plat")
     {
-        float p_height = stof(properties->at(5))*HEIGHT;
+        float p_height = stof(properties->at(5))*HEIGHT + (stof(properties->at(4)) / 4)*HEIGHT;
+
         int size       = stoi(properties->at(2));
-        std::cout << size << std::endl;
+        switch (size)
+        {
+            case 3:  size = 4; break;
+            case 4:  size = 8; break;
+            default: size = size;
+        }
 
         int x_min      = stoi(properties->at(0)) - size*5;
         int x_max      = stoi(properties->at(0)) + size*5;

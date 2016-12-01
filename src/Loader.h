@@ -25,6 +25,10 @@ namespace Loader
     RawModel* loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
                         std::vector<GLfloat>& texCoords, std::vector<GLfloat>& normals);
 
+    RawModel* loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
+                        std::vector<GLfloat>& texCoords, std::vector<GLfloat>& normals,
+                        std::vector<GLfloat>& colors);
+
     int loadTexture(const GLchar* fileName);
 
     //std::vector<GLuint> vaos;

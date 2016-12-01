@@ -23,6 +23,7 @@ struct polygon
     glm::vec3    vertex[4];
     glm::vec3    normal;
     GLuint       textureID;
+    std::vector<GLfloat> colors = {255, 255, 255};
 };
 
 struct polygon_mesh
@@ -63,7 +64,7 @@ private:
 
     void createStruct(const std::string& obj_name, std::vector<std::string>* properties);
 
-    bool compareByTexture(const polygon_mesh &a, const polygon_mesh &b);
+    std::vector<GLfloat> extractColor(const std::string& data);
 
     void generateWorldMesh();
     void renderWorld();

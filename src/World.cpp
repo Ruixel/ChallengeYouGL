@@ -40,7 +40,7 @@ void World::initWorld(sf::RenderWindow* window)
         insertEntity(m_cube);
     }
 
-    WorldSpawn* ws = new WorldSpawn("dat/ITN64.cy", m_staticShader);
+    WorldSpawn* ws = new WorldSpawn("dat/mario.cy", m_staticShader);
     insertEntity(ws);
 }
 

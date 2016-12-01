@@ -2,13 +2,14 @@
 
 // Mesh Constructor
 RawModel::RawModel(int vaoID, int vertexCount, int vboVertexPositionsID,
-                   int vboTextureCoordinatesID, int vboIndicesID, int vboVertexNormalsID)
+                   int vboTextureCoordinatesID, int vboIndicesID, int vboVertexNormalsID, int vboColorsID)
 :   vaoID(vaoID)
 ,   vertexCount(vertexCount)
 ,   vboVertexPositionsID(vboVertexPositionsID)
 ,   vboTextureCoordinatesID(vboTextureCoordinatesID)
 ,   vboIndicesID(vboIndicesID)
 ,   vboVertexNormalsID(vboVertexNormalsID)
+,   vboColorsID(vboColorsID)
 {}
 
 // RawModel w/o Normal Vectors
@@ -30,8 +31,12 @@ RawModel::~RawModel()
     glDeleteBuffers(1, &vboVertexPositionsID);
     glDeleteBuffers(1, &vboTextureCoordinatesID);
     glDeleteBuffers(1, &vboIndicesID);
+
     if (vboVertexNormalsID != 0)
         glDeleteBuffers(1, &vboVertexNormalsID);
+
+    if (vboColorsID != 0)
+        glDeleteBuffers(1, &vboColorsID);
 }
 
 int RawModel::getVaoID()

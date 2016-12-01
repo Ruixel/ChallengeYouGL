@@ -13,10 +13,11 @@ private:
     const unsigned int vboTextureCoordinatesID = 0;
     const unsigned int vboIndicesID = 0;
     const unsigned int vboVertexNormalsID = 0;
+    const unsigned int vboColorsID = 0;
 
 public:
     RawModel(int vaoID, int vertexCount, int vboVertexPositionsID,
-             int vboTextureCoordinatesID, int vboIndicesID, int vboVertexNormalsID);
+             int vboTextureCoordinatesID, int vboIndicesID, int vboVertexNormalsID, int vboColorsID);
 
     RawModel(int vaoID, int vertexCount, int vboVertexPositionsID,
              int vboTextureCoordinatesID, int vboIndicesID);

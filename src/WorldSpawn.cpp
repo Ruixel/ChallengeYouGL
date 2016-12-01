@@ -130,7 +130,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                                 waitForNewItem = true;
                                 item_number++;
 
-                                std::cout << "New Item" << std::endl;
+                                //std::cout << "New Item" << std::endl;
                             }
 
                         } else {
@@ -158,7 +158,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                                 std::string value  = level.substr(ptr, value_end-ptr);
                                 ptr = value_end - 1;
 
-                                std::cout << value << std::endl;
+                                //std::cout << value << std::endl;
                                 properties->push_back(value);
                             }
                         }
@@ -182,7 +182,7 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
 {
     if (obj_name == "Floor")
     {
-        if (properties->at(9) == "1")
+        if (properties->at(9) == "2")
             return;
 
         float f_height = stof(properties->at(11))*HEIGHT;
@@ -215,7 +215,8 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
     if (obj_name == "Plat")
     {
         float p_height = stof(properties->at(5))*HEIGHT;
-        int size       = stoi(properties->at(4));
+        int size       = stoi(properties->at(2));
+        std::cout << size << std::endl;
 
         int x_min      = stoi(properties->at(0)) - size*5;
         int x_max      = stoi(properties->at(0)) + size*5;
@@ -223,8 +224,6 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         int y_max      = stoi(properties->at(1)) + size*5;
 
         int texID      = 0;
-        if ((properties->at(3))[0] != 'c')
-            texID = stoi(properties->at(3));
 
         polygon f1, f2;
         f1.vertex[0]  = glm::vec3((x_min   - 200)  / WORLD_SIZE, p_height+(0.01*HEIGHT), (y_max - 200)  / WORLD_SIZE);
@@ -232,16 +231,44 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         f1.vertex[2]  = glm::vec3((x_max   - 200)  / WORLD_SIZE, p_height+(0.01*HEIGHT), (y_min - 200)  / WORLD_SIZE);
         f1.vertex[3]  = glm::vec3((x_min   - 200)  / WORLD_SIZE, p_height+(0.01*HEIGHT), (y_min - 200)  / WORLD_SIZE);
         f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
-        f1.textureID  = texID;
+
+        if ((properties->at(3))[0] == 'c') {
+            f1.textureID = 0;
+            f1.colors    = extractColor(properties->at(3));
+            f2.colors    = f1.colors;
+        } else {
+            f1.textureID = (stoi(properties->at(3)));
+        }
 
         f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
         f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
         f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
-        f2.textureID  = texID;
+        f2.textureID  = f1.textureID;
 
         polys.push_back(f1);
         polys.push_back(f2);
     }
+}
+
+std::vector<GLfloat> WorldSpawn::extractColor(const std::string& data)
+{
+    int ptr = 7;
+    std::vector<GLfloat> color_vector;
+
+    size_t value_end = data.find(',', ptr);
+    color_vector.push_back(stof(data.substr(ptr, value_end-ptr)));
+    ptr = value_end + 2;
+
+    value_end = data.find(',', ptr);
+    color_vector.push_back(stof(data.substr(ptr, value_end-ptr)));
+    ptr = value_end + 2;
+
+    value_end = data.find(')', ptr);
+    color_vector.push_back(stof(data.substr(ptr, value_end-ptr)));
+
+    //std::cout << "Colors: " << color_vector[0] << " | " << color_vector[1] << " | " << color_vector[2] << std::endl;
+
+    return color_vector;
 }
 
 void WorldSpawn::generateWorldMesh()
@@ -250,7 +277,7 @@ void WorldSpawn::generateWorldMesh()
     {
         polygon_mesh p_m;
 
-        std::vector<GLfloat> p, t, n;
+        std::vector<GLfloat> p, t, n, c;
         std::vector<GLuint>  i;
 
         p.insert(p.end(), {poly.vertex[1].x, poly.vertex[1].y, poly.vertex[1].z});
@@ -265,11 +292,14 @@ void WorldSpawn::generateWorldMesh()
         t.insert(t.end(), {poly.vertex[3].x*TEXTURE_SIZE, poly.vertex[3].z*TEXTURE_SIZE});
         t.insert(t.end(), {poly.vertex[0].x*TEXTURE_SIZE, poly.vertex[0].z*TEXTURE_SIZE});
 
-        for (int iterator = 0; iterator < 8; iterator++)
+        for (int it = 0; it < 4; it++)
+            c.insert(c.end(), {poly.colors[0], poly.colors[1], poly.colors[2]});
+
+        for (int iterator = 0; iterator < 4; iterator++)
             n.insert(n.end(), {poly.normal.x, poly.normal.y, poly.normal.z});
 
         p_m.textureID = poly.textureID;
-        p_m.meshID    = Loader::loadToVAO(p, i, t, n);
+        p_m.meshID    = Loader::loadToVAO(p, i, t, n, c);
 
         poly_meshes.push_back(p_m);
     }
@@ -278,8 +308,6 @@ void WorldSpawn::generateWorldMesh()
 
     // Sort the polygons via texture
     std::sort(poly_meshes.begin(), poly_meshes.end());
-
-    std::cout << "Vertex count: " << mesh->getVaoID() << std::endl;
 }
 
 void WorldSpawn::draw()
@@ -291,11 +319,11 @@ void WorldSpawn::draw()
     GLuint previous_texture = -1;
     for (auto poly : poly_meshes)
     {
-        //if (poly.textureID != previous_texture)
-        //{
+        if (poly.textureID != previous_texture)
+        {
             glBindTexture(GL_TEXTURE_2D, texture_hashmap[poly.textureID]);
-           // previous_texture = poly.textureID;
-        //}
+            previous_texture = poly.textureID;
+        }
 
         glBindVertexArray(poly.meshID->getVaoID());
         glDrawElements(GL_TRIANGLES, poly.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);

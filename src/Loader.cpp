@@ -26,9 +26,27 @@ RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>
     GLuint vboVPos = storeDataInAttributeList(0, 3, positions);
     GLuint vboVTex = storeDataInAttributeList(1, 2, texCoords);
     GLuint vboVNrm = storeDataInAttributeList(2, 3, normals);
+    GLuint vboVCol = storeDataInAttributeList(3, 3, positions);
     unbindVAO();
 
-    return new RawModel(vaoID, indices.size(), vboVPos, vboVTex, vboInd, vboVNrm);
+    return new RawModel(vaoID, indices.size(), vboVPos, vboVTex, vboInd, vboVNrm, vboVCol);
+}
+
+RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
+                            std::vector<GLfloat>& texCoords, std::vector<GLfloat>& normals,
+                            std::vector<GLfloat>& colors)
+{
+    GLint vaoID = createVAO();
+
+    // VBOs
+    GLuint vboInd  = bindIndicesBuffer(indices);
+    GLuint vboVPos = storeDataInAttributeList(0, 3, positions);
+    GLuint vboVTex = storeDataInAttributeList(1, 2, texCoords);
+    GLuint vboVNrm = storeDataInAttributeList(2, 3, normals);
+    GLuint vboVCol = storeDataInAttributeList(3, 3, colors);
+    unbindVAO();
+
+    return new RawModel(vaoID, indices.size(), vboVPos, vboVTex, vboInd, vboVNrm, vboVCol);
 }
 
 GLint Loader::createVAO()

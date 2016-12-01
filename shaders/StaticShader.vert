@@ -28,7 +28,7 @@ void main()
     vec3 cameraDirection = normalize(toCameraVector);
 
     vec3 fixed_tex_color = vec3(tex_color.x / 255, tex_color.y / 255, tex_color.z / 255);
-    vec3 diffuse         = fixed_tex_color * light_Color * max(0.0, dot(normalDirection, lightDirection)) + vec3(0.3, 0.3, 0.3);
+    vec3 diffuse         = (light_Color * max(0.0, dot(normalDirection, lightDirection)) + vec3(0.3, 0.3, 0.3)) * fixed_tex_color;
 
     outColor    = vec4(diffuse, 1.0);
     pos         = position.xyz;

@@ -97,7 +97,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                     std::vector<std::string>* properties = new std::vector<std::string>();
                     int item_bracket = 3;
 
-                    if (obj_name == "Floor")
+                    if (obj_name == "Floor" or obj_name == "walls")
                         int item_bracket = 4;
 
                     while (bracket > end_bracket)
@@ -130,7 +130,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                                 waitForNewItem = true;
                                 item_number++;
 
-                                //std::cout << "New Item" << std::endl;
+                                std::cout << "New Item" << std::endl;
                             }
 
                         } else {
@@ -158,7 +158,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                                 std::string value  = level.substr(ptr, value_end-ptr);
                                 ptr = value_end - 1;
 
-                                //std::cout << value << std::endl;
+                                std::cout << value << std::endl;
                                 properties->push_back(value);
                             }
                         }
@@ -245,6 +245,33 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         } else {
             f1.textureID = (stoi(properties->at(3)));
         }
+
+        f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
+        f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
+        f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
+        f2.textureID  = f1.textureID;
+
+        polys.push_back(f1);
+        polys.push_back(f2);
+    }
+
+    if (obj_name == "walls")
+    {
+        float height_min = stof(properties->at(7))*HEIGHT;
+        float height_max = (stof(properties->at(7))+1)*HEIGHT;
+
+        int x_1 = stof(properties->at(2));
+        int x_2 = x_1 + stof(properties->at(0));
+        int y_1 = stof(properties->at(3));
+        int y_2 = y_1 + stof(properties->at(1));
+
+        polygon f1, f2;
+        f1.vertex[0]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
+        f1.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min, (y_1 - 200)  / WORLD_SIZE);
+        f1.vertex[2]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min, (y_2 - 200)  / WORLD_SIZE);
+        f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
+        f1.textureID  = 1;
 
         f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
         f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];

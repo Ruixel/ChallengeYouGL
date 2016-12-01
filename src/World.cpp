@@ -70,7 +70,12 @@ void World::updateWorld(float deltaTime)
     }
 
     float fps = 1.f / deltaTime;
-    text_FPS.setString("FPS: " + std::to_string(round(fps)));
+    static sf::Clock c;
+    if (c.getElapsedTime().asSeconds() > 0.4)
+    {
+        text_FPS.setString("FPS: " + std::to_string(round(fps)));
+        c.restart();
+    }
 
     m_camera.update();
 

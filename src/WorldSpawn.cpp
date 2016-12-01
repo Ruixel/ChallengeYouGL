@@ -27,7 +27,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
     level_string_buffer.exceptions(std::ifstream::badbit);
 
     // Variables & Iterators
-    int ptr = 0;
+    unsigned ptr = 0;
     int bracket = 0;
     std::string obj_type = "";
 

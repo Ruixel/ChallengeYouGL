@@ -6,7 +6,7 @@ MainGame::MainGame()
     initWindow();
     initGL();
 
-    m_world.initWorld(this->window);
+    m_world.initWorld(*this->window);
     mainLoop();
 }
 

@@ -4,9 +4,9 @@
 Camera::Camera()
 {}
 
-void Camera::init(sf::RenderWindow* window)
+void Camera::init(sf::RenderWindow& window)
 {
-    this->m_window = window;
+    this->m_window = &window;
     m_window->setMouseCursorVisible(false);
 }
 

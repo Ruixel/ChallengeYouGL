@@ -3,9 +3,9 @@
 World::World()
 {}
 
-void World::initWorld(sf::RenderWindow* window)
+void World::initWorld(sf::RenderWindow& window)
 {
-    this->m_window = window;
+    this->m_window = &window;
     this->m_camera.init(window);
     m_staticShader  = new StaticShader();
 
@@ -34,14 +34,13 @@ void World::initWorld(sf::RenderWindow* window)
 
     for (int i = 0; i < 20; i++)
     {
-        Cube* m_cube = new Cube(m_staticShader);
-        m_cube->setPosition(glm::vec3(0, 0, -5));
+        std::unique_ptr<Cube> cube = std::make_unique<Cube>(m_staticShader);
+        cube->setPosition(glm::vec3(0, 0, -5));
 
-        insertEntity(m_cube);
+        insertEntity(std::move(cube));
     }
 
-    WorldSpawn* ws = new WorldSpawn("dat/WALLTEST.cy", m_staticShader);
-    insertEntity(ws);
+    insertEntity(std::make_unique<WorldSpawn>("dat/WALLTEST.cy", m_staticShader));
 }
 
 void World::updateWorld(float deltaTime)
@@ -75,7 +74,7 @@ void World::updateWorld(float deltaTime)
 
     m_camera.update();
 
-    for (auto m_entity : worldEntities)
+    for (auto& m_entity : worldEntities)
     {
         m_entity->update(0.f);
     }
@@ -86,7 +85,7 @@ void World::renderWorld()
     m_staticShader->use();
     m_staticShader->loadViewMatrix(m_camera);
 
-    for (auto m_entity : worldEntities)
+    for (auto& m_entity : worldEntities)
     {
         m_entity->draw();
     }
@@ -107,14 +106,11 @@ void World::renderWorld()
 World::~World()
 {
     delete m_staticShader;
-
-    for (auto m_entity : worldEntities)
-        delete m_entity;
 }
 
 ////////////////////////
 
-void World::insertEntity(Entity* entity)
+void World::insertEntity(std::unique_ptr<Entity> entity)
 {
-    worldEntities.push_back(entity);
+    worldEntities.push_back(std::move(entity));
 }

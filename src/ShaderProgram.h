@@ -34,6 +34,7 @@ private:
 public:
     void load(const GLchar* vertexPath, const GLchar* fragmentPath);
     GLuint getProgramId() { return this->programID; }
+    ~ShaderProgram() = default;
 
     virtual void loadProjectionMatrix(const glm::mat4& matrix) = 0;
 

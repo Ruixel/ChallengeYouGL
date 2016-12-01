@@ -1,7 +1,7 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include <list>
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 #include "Entity.h"
@@ -13,7 +13,7 @@
 class World
 {
 private:
-    std::list<Entity*> worldEntities;
+    std::vector<std::unique_ptr<Entity>> worldEntities;
 
     Camera m_camera;
     StaticShader* m_staticShader;
@@ -27,11 +27,11 @@ public:
     World();
     ~World();
 
-    void initWorld(sf::RenderWindow* window);
+    void initWorld(sf::RenderWindow& window);
     void updateWorld(float deltaTime);
     void renderWorld();
 
-    void insertEntity(Entity* entity);
+    void insertEntity(std::unique_ptr<Entity> entity);
 };
 
 #endif // WORLD_H

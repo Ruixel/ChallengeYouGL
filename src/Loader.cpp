@@ -1,6 +1,6 @@
 #include "Loader.h"
 
-RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
+std::unique_ptr<RawModel> Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
                             std::vector<GLfloat>& texCoords)
 {
     GLint vaoID = createVAO();
@@ -13,10 +13,10 @@ RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>
 
     std::cout << "Don't use this please" << std::endl;
 
-    return new RawModel(vaoID, indices.size(), vboVPos, vboVTex, vboInd);
+    return std::make_unique<RawModel>(vaoID, indices.size(), vboVPos, vboVTex, vboInd);
 }
 
-RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
+std::unique_ptr<RawModel> Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
                             std::vector<GLfloat>& texCoords, std::vector<GLfloat>& normals)
 {
     GLint vaoID = createVAO();
@@ -29,10 +29,10 @@ RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>
     GLuint vboVCol = storeDataInAttributeList(3, 3, positions);
     unbindVAO();
 
-    return new RawModel(vaoID, indices.size(), vboVPos, vboVTex, vboInd, vboVNrm, vboVCol);
+    return std::make_unique<RawModel>(vaoID, indices.size(), vboVPos, vboVTex, vboInd, vboVNrm, vboVCol);
 }
 
-RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
+std::unique_ptr<RawModel> Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
                             std::vector<GLfloat>& texCoords, std::vector<GLfloat>& normals,
                             std::vector<GLfloat>& colors)
 {
@@ -46,7 +46,7 @@ RawModel* Loader::loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>
     GLuint vboVCol = storeDataInAttributeList(3, 3, colors);
     unbindVAO();
 
-    return new RawModel(vaoID, indices.size(), vboVPos, vboVTex, vboInd, vboVNrm, vboVCol);
+    return std::make_unique<RawModel>(vaoID, indices.size(), vboVPos, vboVTex, vboInd, vboVNrm, vboVCol);
 }
 
 GLint Loader::createVAO()

@@ -14,7 +14,7 @@ class Entity
 {
 protected:
     // Entity Properties TBA
-    RawModel*       mesh;
+    std::unique_ptr<RawModel>   mesh;
     int             m_textureID = 0;
 
     // Positional Properties
@@ -31,8 +31,7 @@ protected:
 
 public:
     Entity();
-    Entity(RawModel* entityMesh, int textureID);
-    virtual ~Entity();
+    Entity(std::unique_ptr<RawModel> entityMesh, int textureID);
 
     virtual void update(const float dt)  = 0;
     virtual void draw() = 0;

@@ -334,7 +334,7 @@ void WorldSpawn::generateWorldMesh()
         p_m.textureID = poly.textureID;
         p_m.meshID    = Loader::loadToVAO(p, i, t, n, c);
 
-        poly_meshes.push_back(p_m);
+        poly_meshes.push_back(std::move(p_m));
     }
 
     //this->mesh = Loader::loadToVAO(vertices, indices, t_Coords, normals);
@@ -350,7 +350,7 @@ void WorldSpawn::draw()
     glActiveTexture(GL_TEXTURE0);
 
     GLuint previous_texture = -1;
-    for (auto poly : poly_meshes)
+    for (auto& poly : poly_meshes)
     {
         if (poly.textureID != previous_texture)
         {

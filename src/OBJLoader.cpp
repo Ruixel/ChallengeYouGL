@@ -2,7 +2,7 @@
 
 using namespace std;
 
-RawModel* Loader::loadObjModel(const GLchar* fileName)
+std::unique_ptr<RawModel> Loader::loadObjModel(const GLchar* fileName)
 {
     // OBJ File Vectors
     std::vector<vector3f> vertices, normals;
@@ -96,8 +96,7 @@ RawModel* Loader::loadObjModel(const GLchar* fileName)
 
     }
 
-    RawModel* model = Loader::loadToVAO(a_vertices, a_indices, a_texCoords, a_normals);
-    return model;
+    return Loader::loadToVAO(a_vertices, a_indices, a_texCoords, a_normals);
 }
 
 template<typename T>

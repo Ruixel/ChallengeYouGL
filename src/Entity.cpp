@@ -2,15 +2,10 @@
 
 Entity::Entity()    {}    // No mesh
 
-Entity::Entity(RawModel* entityMesh, int textureID)
-:   mesh(entityMesh)
-,   m_textureID(textureID)
+Entity::Entity(std::unique_ptr<RawModel> entityMesh, int textureID)
+:   mesh        (std::move(entityMesh))
+,   m_textureID (textureID)
 {}
-
-Entity::~Entity()
-{
-    delete mesh;
-}
 
 void Entity::createTransformationMatrix()
 {

@@ -28,7 +28,7 @@ namespace Loader
 
     void insertIntoStringVector(std::vector<std::string>* vec, std::istringstream* ss);
 
-    RawModel* loadObjModel(const GLchar* fileName);
+    std::unique_ptr<RawModel> loadObjModel(const GLchar* fileName);
 };
 
 #endif // OBJLOADER_H

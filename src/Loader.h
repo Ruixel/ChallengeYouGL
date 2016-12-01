@@ -19,13 +19,13 @@ namespace Loader
 
     GLuint bindIndicesBuffer(std::vector<GLuint>& indices);
 
-    RawModel* loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
+    std::unique_ptr<RawModel> loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
                         std::vector<GLfloat>& texCoords);
 
-    RawModel* loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
+    std::unique_ptr<RawModel> loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
                         std::vector<GLfloat>& texCoords, std::vector<GLfloat>& normals);
 
-    RawModel* loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
+    std::unique_ptr<RawModel> loadToVAO(std::vector<GLfloat>& positions, std::vector<GLuint>& indices,
                         std::vector<GLfloat>& texCoords, std::vector<GLfloat>& normals,
                         std::vector<GLfloat>& colors);
 

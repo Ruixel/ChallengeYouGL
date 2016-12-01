@@ -30,7 +30,7 @@ struct polygon
 
 struct polygon_mesh
 {
-    RawModel*    meshID;
+    std::unique_ptr<RawModel>    meshID;
     GLuint       textureID;
 
     bool operator < (const polygon_mesh& a) const

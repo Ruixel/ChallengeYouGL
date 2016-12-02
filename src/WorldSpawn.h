@@ -8,6 +8,9 @@
 #include <fstream>
 #include <iostream>
 #include <array>
+#include <math.h>
+
+#define PI 3.14159265
 
 #include "Loader.h"
 #include "StaticShader.h"
@@ -17,15 +20,16 @@ const float WORLD_SIZE    = 400 / 2;
 const float HEIGHT        = 0.05f;
 const float TEXTURE_SIZE  = 20.f;
 
-
-
 // OBJECTS
 struct polygon
 {
-    glm::vec3    vertex[4];
-    glm::vec3    normal;
-    GLuint       textureID;
+    glm::vec3   vertex[4];
+    glm::vec3   normal;
+    GLuint      textureID;
     std::vector<GLfloat> colors = {255, 255, 255};
+
+    bool    vertical = false;
+    float   angle;
 };
 
 struct polygon_mesh

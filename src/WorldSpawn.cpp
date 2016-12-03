@@ -258,8 +258,29 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
     if (obj_name == "walls")
     {
         polygon f1, f2;
-        float height_min = stof(properties->at(7))*HEIGHT;
-        float height_max = (stof(properties->at(7))+1)*HEIGHT;
+        float height = stof(properties->at(7));
+        float height_max, height_min;
+
+        std::cout << "Z_IND: " << stoi(properties->at(6)) << std::endl;
+
+        switch(stoi(properties->at(6)))
+        {
+            case 2:  height_max = height + 3/4.f;  height_min = height; break;
+            case 3:  height_max = height + 2/4.f;  height_min = height; break;
+            case 4:  height_max = height + 1/4.f;  height_min = height; break;
+
+            case 5:  height_max = height + 2/4.f;  height_min = height + 1/4.f; break;
+            case 6:  height_max = height + 3/4.f;  height_min = height + 2/4.f; break;
+            case 7:  height_max = height + 4/4.f;  height_min = height + 3/4.f; break;
+
+            case 8:  height_max = height + 4/4.f;  height_min = height + 2/4.f; break;
+            case 9:  height_max = height + 4/4.f;  height_min = height + 1/4.f; break;
+            case 0:  height_max = height + 3/4.f;  height_min = height + 1/4.f; break;
+
+            default: height_max = height + 4/4.f;  height_min = height; break;
+        }
+
+        height_max *= HEIGHT; height_min *= HEIGHT;
 
         int x_1 = stof(properties->at(2));
         int x_2 = x_1 + stof(properties->at(0));
@@ -267,9 +288,8 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         int y_2 = y_1 + stof(properties->at(1));
 
         f1.vertical    = true;
-        //f1.angle       = atan2(x_2 - x_1, y_2 - y_1);
-        f1.v_length       = sqrt(pow(x_2-x_1, 2) + pow(y_2-y_1, 2));
-        //std::cout << "Length: " << f1.angle << std::endl;
+        //f1.angle     = atan2(x_2 - x_1, y_2 - y_1);
+        f1.v_length    = sqrt(pow(x_2-x_1, 2) + pow(y_2-y_1, 2));
         f1.v_x = x_1;
 
         f1.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
@@ -366,10 +386,10 @@ void WorldSpawn::generateWorldMesh()
             x_2d = (x_2d - 200) / WORLD_SIZE;
             poly.v_x = (poly.v_x - 200) / WORLD_SIZE;
 
-            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE, poly.vertex[1].y*TEXTURE_SIZE});
-            t.insert(t.end(), {x_2d*TEXTURE_SIZE, poly.vertex[1].y*TEXTURE_SIZE});
-            t.insert(t.end(), {x_2d*TEXTURE_SIZE, poly.vertex[0].y*TEXTURE_SIZE});
-            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE, poly.vertex[0].y*TEXTURE_SIZE});
+            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE * 4, poly.vertex[1].y*TEXTURE_SIZE * 4});
+            t.insert(t.end(), {x_2d*TEXTURE_SIZE     * 4, poly.vertex[1].y*TEXTURE_SIZE * 4});
+            t.insert(t.end(), {x_2d*TEXTURE_SIZE     * 4, poly.vertex[0].y*TEXTURE_SIZE * 4});
+            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE * 4, poly.vertex[0].y*TEXTURE_SIZE * 4});
         }
         for (int it = 0; it < 4; it++)
             c.insert(c.end(), {poly.colors[0], poly.colors[1], poly.colors[2]});

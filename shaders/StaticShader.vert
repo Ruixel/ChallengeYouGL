@@ -13,7 +13,7 @@ out vec3 pos;
 out vec4 outColor;
 
 // Variables
-vec3 light_Position = vec3(-100.0, 400.0, -1.0);
+vec3 light_Position = vec3(100.0, 400.0, -1.0);
 vec3 light_Color   = vec3(0.7, 0.7, 0.7);
 
 void main()

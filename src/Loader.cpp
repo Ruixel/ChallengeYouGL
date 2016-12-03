@@ -109,6 +109,8 @@ int Loader::loadTexture(const GLchar* fileName)
         return -1;
     }
 
+    img_data.flipVertically();
+
     GLuint textureID;
     glGenTextures(1, &textureID);
     //this->textures.push_back(textureID);

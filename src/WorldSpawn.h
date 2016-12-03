@@ -29,7 +29,7 @@ struct polygon
     std::vector<GLfloat> colors = {255, 255, 255};
 
     bool    vertical = false;
-    float   angle;
+    float   v_length, v_x, v_y;
 };
 
 struct polygon_mesh

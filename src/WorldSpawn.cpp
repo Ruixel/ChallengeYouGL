@@ -268,13 +268,14 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
 
         f1.vertical    = true;
         //f1.angle       = atan2(x_2 - x_1, y_2 - y_1);
-        f1.angle       = sqrt(pow(x_2-x_1, 2) + pow(y_2-y_1, 2));
-        std::cout << "Length: " << f1.angle << std::endl;
+        f1.v_length       = sqrt(pow(x_2-x_1, 2) + pow(y_2-y_1, 2));
+        //std::cout << "Length: " << f1.angle << std::endl;
+        f1.v_x = x_1;
 
-        f1.vertex[0]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min, (y_1 - 200)  / WORLD_SIZE);
         f1.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
         f1.vertex[2]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
         f1.vertex[3]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min, (y_2 - 200)  / WORLD_SIZE);
+        f1.vertex[0]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min, (y_1 - 200)  / WORLD_SIZE);
         f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
         f1.textureID  = 1;
 
@@ -290,7 +291,8 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
         f2.textureID  = f1.textureID;
         f2.vertical   = true;
-        f2.angle      = f1.angle;
+        f2.v_length   = f1.v_length;
+        f2.v_x        = x_1;
 
         if ((properties->at(5))[0] == 'c') {
             f2.textureID = 0;
@@ -355,11 +357,19 @@ void WorldSpawn::generateWorldMesh()
             t.insert(t.end(), {(poly.vertex[0].x + 0.2)*TEXTURE_SIZE  , (poly.vertex[0].z + 0.2)*TEXTURE_SIZE });
             t.insert(t.end(), {poly.vertex[2].x*TEXTURE_SIZE  , poly.vertex[2].z*TEXTURE_SIZE });
             t.insert(t.end(), {(poly.vertex[2].x + 0.2)*TEXTURE_SIZE, (poly.vertex[2].z+ 0.2 )*TEXTURE_SIZE});*/
-
-            t.insert(t.end(), {cos(poly.angle)*poly.vertex[0].x*TEXTURE_SIZE + sin(poly.angle)*poly.vertex[0].y*TEXTURE_SIZE, sin(poly.angle)*poly.vertex[0].z*TEXTURE_SIZE + cos(poly.angle)*poly.vertex[0].y*TEXTURE_SIZE});
+            /*t.insert(t.end(), {cos(poly.angle)*poly.vertex[0].x*TEXTURE_SIZE + sin(poly.angle)*poly.vertex[0].y*TEXTURE_SIZE, sin(poly.angle)*poly.vertex[0].z*TEXTURE_SIZE + cos(poly.angle)*poly.vertex[0].y*TEXTURE_SIZE});
             t.insert(t.end(), {cos(poly.angle)*poly.vertex[1].x*TEXTURE_SIZE + sin(poly.angle)*poly.vertex[1].y*TEXTURE_SIZE, sin(poly.angle)*poly.vertex[1].z*TEXTURE_SIZE + cos(poly.angle)*poly.vertex[1].y*TEXTURE_SIZE});
             t.insert(t.end(), {cos(poly.angle)*poly.vertex[2].x*TEXTURE_SIZE + sin(poly.angle)*poly.vertex[2].y*TEXTURE_SIZE, sin(poly.angle)*poly.vertex[2].z*TEXTURE_SIZE + cos(poly.angle)*poly.vertex[2].y*TEXTURE_SIZE});
-            t.insert(t.end(), {cos(poly.angle)*poly.vertex[3].x*TEXTURE_SIZE + sin(poly.angle)*poly.vertex[3].y*TEXTURE_SIZE, sin(poly.angle)*poly.vertex[3].z*TEXTURE_SIZE + cos(poly.angle)*poly.vertex[3].y*TEXTURE_SIZE});
+            t.insert(t.end(), {cos(poly.angle)*poly.vertex[3].x*TEXTURE_SIZE + sin(poly.angle)*poly.vertex[3].y*TEXTURE_SIZE, sin(poly.angle)*poly.vertex[3].z*TEXTURE_SIZE + cos(poly.angle)*poly.vertex[3].y*TEXTURE_SIZE});*/
+
+            float x_2d = poly.v_x + poly.v_length;
+            x_2d = (x_2d - 200) / WORLD_SIZE;
+            poly.v_x = (poly.v_x - 200) / WORLD_SIZE;
+
+            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE, poly.vertex[1].y*TEXTURE_SIZE});
+            t.insert(t.end(), {x_2d*TEXTURE_SIZE, poly.vertex[1].y*TEXTURE_SIZE});
+            t.insert(t.end(), {x_2d*TEXTURE_SIZE, poly.vertex[0].y*TEXTURE_SIZE});
+            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE, poly.vertex[0].y*TEXTURE_SIZE});
         }
         for (int it = 0; it < 4; it++)
             c.insert(c.end(), {poly.colors[0], poly.colors[1], poly.colors[2]});

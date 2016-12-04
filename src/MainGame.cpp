@@ -12,7 +12,9 @@ MainGame::MainGame()
 
 void MainGame::mainLoop()
 {
-    float lastTime, currentTime, deltaTime;
+    auto currentTime    = 0.0f;
+    auto deltaTime      = 0.0f;
+
     while (this->window->isOpen())
     {
         m_world.updateWorld(deltaTime);

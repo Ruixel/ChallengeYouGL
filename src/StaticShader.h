@@ -21,6 +21,7 @@ private:
 
 public:
     StaticShader();
+    ~StaticShader() = default;
 
     void loadTransformationMatrix(const glm::mat4& matrix);
     void loadProjectionMatrix(const glm::mat4& projectionMatrix);

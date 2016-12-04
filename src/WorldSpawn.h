@@ -10,8 +10,6 @@
 #include <array>
 #include <math.h>
 
-#define PI 3.14159265
-
 #include "Loader.h"
 #include "StaticShader.h"
 #include "OBJLoader.h"

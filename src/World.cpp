@@ -40,7 +40,7 @@ void World::initWorld(sf::RenderWindow& window)
         insertEntity(std::move(cube));
     }
 
-    insertEntity(std::make_unique<WorldSpawn>("dat/WALLTEST.cy", m_staticShader));
+    insertEntity(std::make_unique<WorldSpawn>("dat/TEXTURES.cy", m_staticShader));
 }
 
 void World::updateWorld(float deltaTime)

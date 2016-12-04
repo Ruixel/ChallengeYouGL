@@ -13,6 +13,7 @@
 #include "Loader.h"
 #include "StaticShader.h"
 #include "OBJLoader.h"
+#include "LevelTextures.h"
 
 const float WORLD_SIZE    = 400 / 2;
 const float HEIGHT        = 0.05f;
@@ -23,7 +24,7 @@ struct polygon
 {
     glm::vec3   vertex[4];
     glm::vec3   normal;
-    GLuint      textureID;
+    texture_id  textureID;
     std::vector<GLfloat> colors = {255, 255, 255};
 
     bool    vertical = false;
@@ -32,8 +33,8 @@ struct polygon
 
 struct polygon_mesh
 {
-    std::unique_ptr<RawModel>    meshID;
-    GLuint       textureID;
+    std::unique_ptr<RawModel>   meshID;
+    texture_id                  textureID;
 
     bool operator < (const polygon_mesh& a) const
     {
@@ -50,9 +51,6 @@ struct cyLevel
 class WorldSpawn : public Entity
 {
 private:
-    std::vector<GLfloat> vertices, t_Coords, normals;
-    std::vector<GLuint>  indices;
-
     std::vector<polygon> polys;
     std::vector<polygon_mesh> poly_meshes;
 
@@ -60,11 +58,9 @@ private:
 
     cyLevel level_objs;
 
-    StaticShader* shader;
+    LevelTextures level_textures;
 
-    //template <typename OS>
-    //void createStruct(OS* object_struct, std::vector<property_type>& value_types,
-    //                  std::vector<std::string>* property_list);
+    StaticShader* shader;
 
     void createStruct(const std::string& obj_name, std::vector<std::string>* properties);
 

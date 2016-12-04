@@ -1,4 +1,4 @@
 #ChallengeYouGL
 
-In a hole there lived a manlet. His name? Kevin.
-
+Port of the ChallengeYou online 3D game by Kevin Manley. 
+Original available at ChallengeYou.com

@@ -22,14 +22,14 @@ void World::initWorld(sf::RenderWindow& window)
     text_MouseControl.setFont(font_GoldenRatio);
     text_MouseControl.setString("MOUSE CONTROL OFF - PRESS 'T'");
     text_MouseControl.setCharacterSize(18);
-    text_MouseControl.setColor(sf::Color(255, 184, 16, 255));
+    text_MouseControl.setFillColor(sf::Color(255, 184, 16, 255));
     text_MouseControl.setPosition(717, 5);
 
     // FPS Text
     text_FPS.setFont(font_GoldenRatio);
     text_FPS.setString("FPS: 0");
     text_FPS.setCharacterSize(18);
-    text_FPS.setColor(sf::Color(255, 184, 16, 255));
+    text_FPS.setFillColor(sf::Color(255, 184, 16, 255));
     text_FPS.setPosition(5, 5);
 
     for (int i = 0; i < 20; i++)

@@ -295,7 +295,7 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         }
 
         f1.vertical    = true;
-        f1.v_length    = sqrt(pow(width.x, 2) + pow(width.y, 2));
+        f1.v_length    = sqrt(pow(length.x, 2) + pow(length.y, 2));
 
         f1.vertex[1]  = glm::vec3((x_1 + length.x            - 200)  / WORLD_SIZE, max_height, (y_1                      - 200)  / WORLD_SIZE);
         f1.vertex[2]  = glm::vec3((x_1 + width.x + length.x  - 200)  / WORLD_SIZE, max_height, (y_1 + width.y            - 200)  / WORLD_SIZE);
@@ -392,6 +392,69 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         polys.push_back(f1);
         polys.push_back(f2);
     }
+
+    if (obj_name == "TriWall")
+    {
+        polygon f1, f2;
+        float height = stof(properties->at(5));
+        float height_max = height       *HEIGHT;
+        float height_min = (height + 1) *HEIGHT;
+
+        int x_1 = stof(properties->at(0));
+        int y_1 = stof(properties->at(1));
+        int x_2, y_2;
+
+        int dir = stoi(properties->at(4));
+        switch (dir)
+        {
+            case 1: x_2 = x_1;  y_2 = y_1 + 20;     break;
+            case 2: x_2 = x_1;  y_2 = y_1 - 20;     break;
+            case 3: x_2 = x_1 + 20;  y_2 = y_1;     break;
+            case 4: x_2 = x_1 - 20;  y_2 = y_1;     break;
+
+            case 5: x_2 = x_1 + 15;  y_2 = y_1 - 15;     break;
+            case 6: x_2 = x_1 + 15;  y_2 = y_1 + 15;     break;
+            case 7: x_2 = x_1 - 15;  y_2 = y_1 + 15;     break;
+            case 8: x_2 = x_1 - 15;  y_2 = y_1 - 15;     break;
+        }
+
+        if (stoi(properties->at(2)) == 1) {
+            f1.triwall = 1; f2.triwall = 2;
+        } else {
+            f1.triwall = 3; f2.triwall = 4;
+        }
+
+        f1.vertical    = true;
+        f1.v_length    = sqrt(pow(x_2-x_1, 2) + pow(y_2-y_1, 2));
+        f1.v_x = x_1;
+
+        f1.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
+        f1.vertex[2]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min, (y_2 - 200)  / WORLD_SIZE);
+        f1.vertex[0]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min, (y_1 - 200)  / WORLD_SIZE);
+        f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
+
+        if ((properties->at(3))[0] == 'c') {
+            f1.textureID = CY_COLOR;
+            f1.colors    = extractColor(properties->at(3));
+            f2.colors    = f1.colors;
+        } else {
+            f1.textureID = level_textures.getWallTexture(stoi(properties->at(3)));
+        }
+
+        f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
+        f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
+        f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
+        f2.textureID  = f1.textureID;
+        f2.vertical   = true;
+        f2.v_length   = f1.v_length;
+        f2.v_x        = x_1;
+
+        f2.textureID = f1.textureID;
+
+        polys.push_back(f1);
+        polys.push_back(f2);
+    }
 }
 
 std::vector<GLfloat> WorldSpawn::extractColor(const std::string& data)
@@ -429,7 +492,20 @@ void WorldSpawn::generateWorldMesh()
         p.insert(p.end(), {poly.vertex[3].x, poly.vertex[3].y, poly.vertex[3].z});
         p.insert(p.end(), {poly.vertex[0].x, poly.vertex[0].y, poly.vertex[0].z});
 
+        // INDICES
         i = {0, 1, 3, 1, 2, 3};
+
+        if (poly.triwall == 1)
+            i = {0, 1, 3};
+
+        if (poly.triwall == 2)
+            i = {0, 1, 2};
+
+        if (poly.triwall == 3)
+            i = {1, 2, 3};
+
+        if (poly.triwall == 4)
+            i = {0, 2, 3};
 
         if (!poly.vertical) {
             sf::Vector2f tSize = level_textures.getTextureSize(poly.textureID);

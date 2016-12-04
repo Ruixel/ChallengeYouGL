@@ -31,6 +31,7 @@ struct polygon
     float   v_length, v_x, v_y;
 
     bool    is_ramp  = false;
+    int     triwall  = 0;
 };
 
 struct polygon_mesh

@@ -30,7 +30,8 @@ enum texture_id
 class LevelTextures
 {
 private:
-    std::map<texture_id, int> texture_hashmap;
+    std::map<texture_id, int>          texture_hashmap;
+    std::map<texture_id, sf::Vector2f> texture_size;
 
     void loadTextures();
 
@@ -39,6 +40,8 @@ public:
 
     texture_id getPlatformTexture(int id);
     texture_id getWallTexture(int id);
+
+    const sf::Vector2f& getTextureSize(texture_id id);
 
     void bindTexture(texture_id id);
 };

@@ -17,7 +17,26 @@ void LevelTextures::loadTextures()
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_ROCK,    Loader::loadTexture("dat/img/rock.jpg")));
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_BARS,    Loader::loadTexture("dat/img/bars.png")));
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_PARQUET, Loader::loadTexture("dat/img/parquet.jpg")));
+    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_BOOKS,   Loader::loadTexture("dat/img/bookshelf.jpg")));
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_COLOR,   Loader::loadTexture("dat/img/color.jpg")));
+
+    // Texture Sizes
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_GRASS,   {1.f, 1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_STUCCO,  {1.f, 1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_BRICK,   {2.5f, 2.666f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_STONE,   {1.f, 1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_WOOD,    {1.f, 1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_HAPPY,   {4.f, 4.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_EGYPT,   {1.f, 2.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_GLASS,   {1.f, 1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_BARK,    {1.f, 1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_SCIFI,   {1.f, -1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_TILE,    {4.f, 5.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_BARS,    {3.5f, 1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_BOOKS,   {1.f, 1.333f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_ROCK,    {1.f, 1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_PARQUET, {1.f, 1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_COLOR,   {1.f, 1.f}));
 }
 
 LevelTextures::LevelTextures()
@@ -70,6 +89,11 @@ texture_id LevelTextures::getWallTexture(int id)
 
         default: return CY_COLOR;
     }
+}
+
+const sf::Vector2f& LevelTextures::getTextureSize(texture_id id)
+{
+    return texture_size[id];
 }
 
 void LevelTextures::bindTexture(texture_id texID)

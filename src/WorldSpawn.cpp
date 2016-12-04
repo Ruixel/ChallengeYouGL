@@ -344,20 +344,24 @@ void WorldSpawn::generateWorldMesh()
         i = {0, 1, 3, 1, 2, 3};
 
         if (!poly.vertical) {
-            t.insert(t.end(), {poly.vertex[1].x*TEXTURE_SIZE, poly.vertex[1].z*TEXTURE_SIZE});
-            t.insert(t.end(), {poly.vertex[2].x*TEXTURE_SIZE, poly.vertex[2].z*TEXTURE_SIZE});
-            t.insert(t.end(), {poly.vertex[3].x*TEXTURE_SIZE, poly.vertex[3].z*TEXTURE_SIZE});
-            t.insert(t.end(), {poly.vertex[0].x*TEXTURE_SIZE, poly.vertex[0].z*TEXTURE_SIZE});
+            sf::Vector2f tSize = level_textures.getTextureSize(poly.textureID);
+
+            t.insert(t.end(), {poly.vertex[1].x*TEXTURE_SIZE * tSize.x, poly.vertex[1].z*TEXTURE_SIZE * tSize.y});
+            t.insert(t.end(), {poly.vertex[2].x*TEXTURE_SIZE * tSize.x, poly.vertex[2].z*TEXTURE_SIZE * tSize.y});
+            t.insert(t.end(), {poly.vertex[3].x*TEXTURE_SIZE * tSize.x, poly.vertex[3].z*TEXTURE_SIZE * tSize.y});
+            t.insert(t.end(), {poly.vertex[0].x*TEXTURE_SIZE * tSize.x, poly.vertex[0].z*TEXTURE_SIZE * tSize.y});
 
         } else {
+            sf::Vector2f tSize = level_textures.getTextureSize(poly.textureID);
+
             float x_2d = poly.v_x + poly.v_length;
             x_2d = (x_2d - 200) / WORLD_SIZE;
             poly.v_x = (poly.v_x - 200) / WORLD_SIZE;
 
-            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE * 4, poly.vertex[1].y*TEXTURE_SIZE * 4});
-            t.insert(t.end(), {x_2d*TEXTURE_SIZE     * 4, poly.vertex[1].y*TEXTURE_SIZE * 4});
-            t.insert(t.end(), {x_2d*TEXTURE_SIZE     * 4, poly.vertex[0].y*TEXTURE_SIZE * 4});
-            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE * 4, poly.vertex[0].y*TEXTURE_SIZE * 4});
+            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE * tSize.x, poly.vertex[1].y*TEXTURE_SIZE * tSize.y});
+            t.insert(t.end(), {x_2d*TEXTURE_SIZE     * tSize.x, poly.vertex[1].y*TEXTURE_SIZE * tSize.y});
+            t.insert(t.end(), {x_2d*TEXTURE_SIZE     * tSize.x, poly.vertex[0].y*TEXTURE_SIZE * tSize.y});
+            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE * tSize.x, poly.vertex[0].y*TEXTURE_SIZE * tSize.y});
         }
 
         for (int it = 0; it < 4; it++)

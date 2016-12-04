@@ -36,7 +36,7 @@ void LevelTextures::loadTextures()
     texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_BOOKS,   {1.f, 1.333f}));
     texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_ROCK,    {1.f, 1.f}));
     texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_PARQUET, {1.f, 1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_COLOR,   {1.f, 1.f}));
+    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_COLOR,   {2.f, 2.f}));
 }
 
 LevelTextures::LevelTextures()

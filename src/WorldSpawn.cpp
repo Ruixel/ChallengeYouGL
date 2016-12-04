@@ -237,6 +237,60 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         polys.push_back(f2);
     }
 
+    if (obj_name == "Ramp")
+    {
+        float min_height = stof(properties->at(4))*HEIGHT;
+        float max_height = (stof(properties->at(4))+1)*HEIGHT;
+
+        int x_1          = stoi(properties->at(0));
+        int y_1          = stoi(properties->at(1));
+
+        sf::Vector2f length, width;
+        int direction    = stoi(properties->at(2));
+        switch (direction)
+        {
+            // Vertical & Horizontal Ramps
+            case 1: width  = {10, 0};
+                    length = {0, 20};
+                    break;
+            case 2: width  = {10, 0};
+                    length = {0, -20};
+                    break;
+            case 3: width  = {20, -20};
+                    length = {10, 0};
+                    break;
+            case 4: width  = {0, 20};
+                    length = {10, 0};
+                    break;
+        }
+
+        std::cout << "hey0" << std::endl;
+
+        polygon f1, f2;
+        f1.vertex[1]  = glm::vec3((x_1 + length.x            - 200)  / WORLD_SIZE, max_height, (y_1                      - 200)  / WORLD_SIZE);
+        f1.vertex[2]  = glm::vec3((x_1 + width.x + length.x  - 200)  / WORLD_SIZE, max_height, (y_1 + width.y            - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((x_1 + width.x             - 200)  / WORLD_SIZE, min_height, (y_1 + width.y + length.y - 200)  / WORLD_SIZE);
+        f1.vertex[0]  = glm::vec3((x_1                       - 200)  / WORLD_SIZE, min_height, (y_1 + length.y           - 200)  / WORLD_SIZE);
+        f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
+
+        /*if ((properties->at(3))[0] == 'c') {
+            f1.textureID = CY_COLOR;
+            f1.colors    = extractColor(properties->at(3));
+            f2.colors    = f1.colors;
+        } else {
+            f1.textureID = level_textures.getPlatformTexture(stoi(properties->at(3)));
+        }*/
+        f1.textureID = CY_WOOD;
+
+        f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
+        f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
+        f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
+        f2.textureID  = f1.textureID;
+
+        polys.push_back(f1);
+        polys.push_back(f2);
+    }
+
     if (obj_name == "walls")
     {
         polygon f1, f2;

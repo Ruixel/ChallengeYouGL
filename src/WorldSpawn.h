@@ -29,6 +29,8 @@ struct polygon
 
     bool    vertical = false;
     float   v_length, v_x, v_y;
+
+    bool    is_ramp  = false;
 };
 
 struct polygon_mesh

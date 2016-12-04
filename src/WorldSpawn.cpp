@@ -239,6 +239,8 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
 
     if (obj_name == "Ramp")
     {
+        polygon f1, f2;
+
         float min_height = stof(properties->at(4))*HEIGHT;
         float max_height = (stof(properties->at(4))+1)*HEIGHT;
 
@@ -252,40 +254,72 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
             // Vertical & Horizontal Ramps
             case 1: width  = {10, 0};
                     length = {0, 20};
+                    x_1    -= 5;
                     break;
             case 2: width  = {10, 0};
                     length = {0, -20};
+                    x_1    -= 5;
                     break;
-            case 3: width  = {20, -20};
-                    length = {10, 0};
+            case 3: width  = {0, 10};
+                    length = {-20, 0};
+                    x_1    += 20;
+                    y_1    -= 5;
                     break;
-            case 4: width  = {0, 20};
-                    length = {10, 0};
+            case 4: width  = {0, 10};
+                    length = {20, 0};
+                    x_1    -= 20;
+                    y_1    -= 5;
+                    break;
+
+            // Diagonal Ramps
+            case 5: width  = {10, -10};
+                    length = {-15, 15};
+                    x_1    += 10;
+                    y_1    += 5;
+                    break;
+            case 6: width  = {10, 10};
+                    length = {-15, -15};
+                    x_1    += 10;
+                    y_1    -= 5;
+                    break;
+            case 7: width  = {-10, 10};
+                    length = {15, -15};
+                    x_1    -= 10;
+                    y_1    -= 5;
+                    break;
+            case 8: width  = {10, 10};
+                    length = {15, 15};
+                    x_1    -= 20;
+                    y_1    -= 5;
                     break;
         }
 
-        std::cout << "hey0" << std::endl;
+        f1.vertical    = true;
+        f1.v_length    = sqrt(pow(width.x, 2) + pow(width.y, 2));
 
-        polygon f1, f2;
         f1.vertex[1]  = glm::vec3((x_1 + length.x            - 200)  / WORLD_SIZE, max_height, (y_1                      - 200)  / WORLD_SIZE);
         f1.vertex[2]  = glm::vec3((x_1 + width.x + length.x  - 200)  / WORLD_SIZE, max_height, (y_1 + width.y            - 200)  / WORLD_SIZE);
         f1.vertex[3]  = glm::vec3((x_1 + width.x             - 200)  / WORLD_SIZE, min_height, (y_1 + width.y + length.y - 200)  / WORLD_SIZE);
         f1.vertex[0]  = glm::vec3((x_1                       - 200)  / WORLD_SIZE, min_height, (y_1 + length.y           - 200)  / WORLD_SIZE);
         f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
 
-        /*if ((properties->at(3))[0] == 'c') {
+        if ((properties->at(3))[0] == 'c') {
             f1.textureID = CY_COLOR;
             f1.colors    = extractColor(properties->at(3));
             f2.colors    = f1.colors;
         } else {
             f1.textureID = level_textures.getPlatformTexture(stoi(properties->at(3)));
-        }*/
-        f1.textureID = CY_WOOD;
+        }
+
+        f1.is_ramp = true;
+        f2.is_ramp = true;
 
         f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
         f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
         f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
         f2.textureID  = f1.textureID;
+        f2.vertical   = true;
+        f2.v_length   = f1.v_length;
 
         polys.push_back(f1);
         polys.push_back(f2);
@@ -411,6 +445,11 @@ void WorldSpawn::generateWorldMesh()
             float x_2d = poly.v_x + poly.v_length;
             x_2d = (x_2d - 200) / WORLD_SIZE;
             poly.v_x = (poly.v_x - 200) / WORLD_SIZE;
+
+            if (poly.is_ramp)
+            {
+                tSize.x *= .8f; tSize.y *= 1.6f;
+            }
 
             t.insert(t.end(), {poly.v_x*TEXTURE_SIZE * tSize.x, poly.vertex[1].y*TEXTURE_SIZE * tSize.y});
             t.insert(t.end(), {x_2d*TEXTURE_SIZE     * tSize.x, poly.vertex[1].y*TEXTURE_SIZE * tSize.y});

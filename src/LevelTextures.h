@@ -15,14 +15,16 @@ enum texture_id
     CY_WOOD                     = 5,
     CY_HAPPY                    = 6,
     CY_EGYPT                    = 7,
-    CY_GLASS                    = 8,
     CY_BARK                     = 9,
     CY_SCIFI                    = 10,
     CY_TILE                     = 11,
     CY_ROCK                     = 13,
     CY_PARQUET                  = 14,
-    CY_BARS                     = 16,
     CY_BOOKS                    = 17,
+
+    // Translucent Textures
+    CY_BARS                     = 100,
+    CY_GLASS                    = 101,
 
     CY_UNASSIGNED               = 256
 };

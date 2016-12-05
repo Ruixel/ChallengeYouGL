@@ -10,7 +10,6 @@ void LevelTextures::loadTextures()
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_WOOD,    Loader::loadTexture("dat/img/wood.jpg")));
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_HAPPY,   Loader::loadTexture("dat/img/happy.jpg")));
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_EGYPT,   Loader::loadTexture("dat/img/egypt.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_GLASS,   Loader::loadTexture("dat/img/glass.jpg")));
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_BARK,    Loader::loadTexture("dat/img/bark.jpg")));
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_SCIFI,   Loader::loadTexture("dat/img/scifi.jpg")));
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_TILE,    Loader::loadTexture("dat/img/tile.jpg")));
@@ -19,6 +18,7 @@ void LevelTextures::loadTextures()
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_PARQUET, Loader::loadTexture("dat/img/parquet.jpg")));
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_BOOKS,   Loader::loadTexture("dat/img/bookshelf.jpg")));
     texture_hashmap.insert(std::make_pair<texture_id, int>(CY_COLOR,   Loader::loadTexture("dat/img/color.jpg")));
+    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_GLASS,   Loader::loadTexture("dat/img/glass_alpha.png")));
 
     // Texture Sizes
     texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_GRASS,   {1.f, 1.f}));

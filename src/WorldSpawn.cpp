@@ -82,7 +82,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader& sh)
                     int item_bracket = 3;
 
                     if (obj_name == "Floor" or obj_name == "walls")
-                        item_bracket = 4;
+                        int item_bracket = 4;
 
                     while (bracket > end_bracket)
                     {

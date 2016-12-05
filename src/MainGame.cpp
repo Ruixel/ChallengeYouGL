@@ -6,7 +6,9 @@ MainGame::MainGame()
     initWindow();
     initGL();
 
-    m_world.initWorld(*this->window);
+    m_world = std::make_unique<World>();
+
+    m_world->initWorld(*this->window);
     mainLoop();
 }
 
@@ -17,12 +19,12 @@ void MainGame::mainLoop()
 
     while (this->window->isOpen())
     {
-        m_world.updateWorld(deltaTime);
+        m_world->updateWorld(deltaTime);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         glClearColor(2.f/255, 119.f/255, 189.f/255, 1.0f);
 
-        m_world.renderWorld();
+        m_world->renderWorld();
 
         window->display();
         this->updateWindow();

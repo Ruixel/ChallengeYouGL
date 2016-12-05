@@ -7,12 +7,11 @@ void World::initWorld(sf::RenderWindow& window)
 {
     this->m_window = &window;
     this->m_camera.init(window);
-    m_staticShader  = new StaticShader();
 
-    m_staticShader->use();
+    m_staticShader.use();
     glm::mat4 pMatrix = m_camera.generateProjectionMatrix(1.6f);
-    m_staticShader->loadProjectionMatrix(pMatrix);
-    m_staticShader->stop();
+    m_staticShader.loadProjectionMatrix(pMatrix);
+    m_staticShader.stop();
 
     // Preload fonts
     if (!font_GoldenRatio.loadFromFile("dat/GoldenRatio.otf"))
@@ -34,13 +33,13 @@ void World::initWorld(sf::RenderWindow& window)
 
     for (int i = 0; i < 20; i++)
     {
-        std::unique_ptr<Cube> cube = std::make_unique<Cube>(m_staticShader);
+        std::unique_ptr<Cube> cube = std::make_unique<Cube>(&m_staticShader);
         cube->setPosition(glm::vec3(0, 0, -5));
 
         insertEntity(std::move(cube));
     }
 
-    insertEntity(std::make_unique<WorldSpawn>("dat/stress test.cy", m_staticShader));
+    insertEntity(std::make_unique<WorldSpawn>("dat/stress test.cy", &m_staticShader));
 }
 
 void World::updateWorld(float deltaTime)
@@ -87,15 +86,15 @@ void World::updateWorld(float deltaTime)
 
 void World::renderWorld()
 {
-    m_staticShader->use();
-    m_staticShader->loadViewMatrix(m_camera);
+    m_staticShader.use();
+    m_staticShader.loadViewMatrix(m_camera);
 
     for (auto& m_entity : worldEntities)
     {
         m_entity->draw();
     }
 
-    m_staticShader->stop();
+    m_staticShader.stop();
 
     m_window->pushGLStates();
 
@@ -106,11 +105,6 @@ void World::renderWorld()
 
     m_window->popGLStates();
 
-}
-
-World::~World()
-{
-    delete m_staticShader;
 }
 
 ////////////////////////

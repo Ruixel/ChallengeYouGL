@@ -24,7 +24,7 @@ private:
 
     sf::RenderWindow* window;
 
-    World m_world;
+    std::unique_ptr<World> m_world;
 
     bool initGL();
     void initWindow();

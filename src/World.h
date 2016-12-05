@@ -16,7 +16,7 @@ private:
     std::vector<std::unique_ptr<Entity>> worldEntities;
 
     Camera m_camera;
-    StaticShader* m_staticShader;
+    StaticShader m_staticShader;
     sf::RenderWindow* m_window;
 
     sf::Font font_GoldenRatio;
@@ -25,7 +25,6 @@ private:
 
 public:
     World();
-    ~World();
 
     void initWorld(sf::RenderWindow& window);
     void updateWorld(float deltaTime);

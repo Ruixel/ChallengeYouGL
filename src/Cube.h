@@ -17,7 +17,7 @@ private:
     StaticShader* shader;
 
 public:
-    Cube(StaticShader* sh);
+    Cube(StaticShader& sh);
 
     void draw();
     void update(const float dt);

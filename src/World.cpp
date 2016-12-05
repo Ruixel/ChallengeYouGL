@@ -33,13 +33,13 @@ void World::initWorld(sf::RenderWindow& window)
 
     for (int i = 0; i < 20; i++)
     {
-        std::unique_ptr<Cube> cube = std::make_unique<Cube>(&m_staticShader);
+        std::unique_ptr<Cube> cube = std::make_unique<Cube>(m_staticShader);
         cube->setPosition(glm::vec3(0, 0, -5));
 
         insertEntity(std::move(cube));
     }
 
-    insertEntity(std::make_unique<WorldSpawn>("dat/stress test.cy", &m_staticShader));
+    insertEntity(std::make_unique<WorldSpawn>("dat/stress test.cy", m_staticShader));
 }
 
 void World::updateWorld(float deltaTime)

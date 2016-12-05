@@ -1,8 +1,8 @@
 #include "WorldSpawn.h"
 
-WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
+WorldSpawn::WorldSpawn(const char* levelPath, StaticShader& sh)
 //:   Entity(Loader::loadToVAO(v, i, t, v), Loader::loadTexture("iceman.jpg"))
-:   shader(sh)
+:   shader(&sh)
 {
     // Load file
     std::string level;
@@ -82,7 +82,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader* sh)
                     int item_bracket = 3;
 
                     if (obj_name == "Floor" or obj_name == "walls")
-                        int item_bracket = 4;
+                        item_bracket = 4;
 
                     while (bracket > end_bracket)
                     {

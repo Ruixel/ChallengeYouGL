@@ -85,7 +85,7 @@ private:
     void renderWorld();
 
 public:
-    WorldSpawn(const char* levelPath, StaticShader* sh);
+    WorldSpawn(const char* levelPath, StaticShader& sh);
 
     void draw();
     void update(const float dt);

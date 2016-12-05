@@ -331,7 +331,7 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         float height = stof(properties->at(7));
         float height_max, height_min;
 
-        std::cout << "Z_IND: " << stoi(properties->at(6)) << std::endl;
+        //std::cout << "Z_IND: " << stoi(properties->at(6)) << std::endl;
 
         switch(stoi(properties->at(6)))
         {
@@ -484,36 +484,36 @@ void WorldSpawn::generateWorldMesh()
     {
         polygon_mesh p_m;
 
-        std::vector<GLfloat> p, t, n, c;
-        std::vector<GLuint>  i;
+        //std::vector<GLfloat> p, t, n, c;
+        //std::vector<GLuint>  i;
 
-        p.insert(p.end(), {poly.vertex[1].x, poly.vertex[1].y, poly.vertex[1].z});
-        p.insert(p.end(), {poly.vertex[2].x, poly.vertex[2].y, poly.vertex[2].z});
-        p.insert(p.end(), {poly.vertex[3].x, poly.vertex[3].y, poly.vertex[3].z});
-        p.insert(p.end(), {poly.vertex[0].x, poly.vertex[0].y, poly.vertex[0].z});
+        p_m.p.insert(p_m.p.end(), {poly.vertex[1].x, poly.vertex[1].y, poly.vertex[1].z});
+        p_m.p.insert(p_m.p.end(), {poly.vertex[2].x, poly.vertex[2].y, poly.vertex[2].z});
+        p_m.p.insert(p_m.p.end(), {poly.vertex[3].x, poly.vertex[3].y, poly.vertex[3].z});
+        p_m.p.insert(p_m.p.end(), {poly.vertex[0].x, poly.vertex[0].y, poly.vertex[0].z});
 
         // INDICES
-        i = {0, 1, 3, 1, 2, 3};
+        p_m.i = {0, 1, 3, 1, 2, 3};
 
         if (poly.triwall == 1)
-            i = {0, 1, 3};
+            p_m.i = {0, 1, 3};
 
         if (poly.triwall == 2)
-            i = {0, 1, 2};
+            p_m.i = {0, 1, 2};
 
         if (poly.triwall == 3)
-            i = {1, 2, 3};
+            p_m.i = {1, 2, 3};
 
         if (poly.triwall == 4)
-            i = {0, 2, 3};
+            p_m.i = {0, 2, 3};
 
         if (!poly.vertical) {
             sf::Vector2f tSize = level_textures.getTextureSize(poly.textureID);
 
-            t.insert(t.end(), {poly.vertex[1].x*TEXTURE_SIZE * tSize.x, poly.vertex[1].z*TEXTURE_SIZE * tSize.y});
-            t.insert(t.end(), {poly.vertex[2].x*TEXTURE_SIZE * tSize.x, poly.vertex[2].z*TEXTURE_SIZE * tSize.y});
-            t.insert(t.end(), {poly.vertex[3].x*TEXTURE_SIZE * tSize.x, poly.vertex[3].z*TEXTURE_SIZE * tSize.y});
-            t.insert(t.end(), {poly.vertex[0].x*TEXTURE_SIZE * tSize.x, poly.vertex[0].z*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {poly.vertex[1].x*TEXTURE_SIZE * tSize.x, poly.vertex[1].z*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {poly.vertex[2].x*TEXTURE_SIZE * tSize.x, poly.vertex[2].z*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {poly.vertex[3].x*TEXTURE_SIZE * tSize.x, poly.vertex[3].z*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {poly.vertex[0].x*TEXTURE_SIZE * tSize.x, poly.vertex[0].z*TEXTURE_SIZE * tSize.y});
 
         } else {
             sf::Vector2f tSize = level_textures.getTextureSize(poly.textureID);
@@ -527,20 +527,21 @@ void WorldSpawn::generateWorldMesh()
                 tSize.x *= .8f; tSize.y *= 1.6f;
             }
 
-            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE * tSize.x, poly.vertex[1].y*TEXTURE_SIZE * tSize.y});
-            t.insert(t.end(), {x_2d*TEXTURE_SIZE     * tSize.x, poly.vertex[1].y*TEXTURE_SIZE * tSize.y});
-            t.insert(t.end(), {x_2d*TEXTURE_SIZE     * tSize.x, poly.vertex[0].y*TEXTURE_SIZE * tSize.y});
-            t.insert(t.end(), {poly.v_x*TEXTURE_SIZE * tSize.x, poly.vertex[0].y*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {poly.v_x*TEXTURE_SIZE * tSize.x, poly.vertex[1].y*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {x_2d*TEXTURE_SIZE     * tSize.x, poly.vertex[1].y*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {x_2d*TEXTURE_SIZE     * tSize.x, poly.vertex[0].y*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {poly.v_x*TEXTURE_SIZE * tSize.x, poly.vertex[0].y*TEXTURE_SIZE * tSize.y});
         }
 
         for (int it = 0; it < 4; it++)
-            c.insert(c.end(), {poly.colors[0], poly.colors[1], poly.colors[2]});
+            p_m.c.insert(p_m.c.end(), {poly.colors[0], poly.colors[1], poly.colors[2]});
 
-        for (int iterator = 0; iterator < 4; iterator++)
-            n.insert(n.end(), {poly.normal.x, poly.normal.y, poly.normal.z});
+        for (int it = 0; it < 4; it++)
+            p_m.n.insert(p_m.n.end(), {poly.normal.x, poly.normal.y, poly.normal.z});
 
         p_m.textureID = poly.textureID;
-        p_m.meshID    = Loader::loadToVAO(p, i, t, n, c);
+        //p_m.p = p; p_m.i = i; p_m.c = c; p_m.n = n; p_m.t = t;
+        //p_m.meshID    = Loader::loadToVAO(p, i, t, n, c);
 
         poly_meshes.push_back(std::move(p_m));
     }
@@ -549,6 +550,46 @@ void WorldSpawn::generateWorldMesh()
 
     // Sort the polygons via texture
     std::sort(poly_meshes.begin(), poly_meshes.end());
+
+    // Place static primitives into a single VAO to reduce CPU overhead
+    texture_id previous_texture = CY_UNASSIGNED;
+    static_world_chunk* world_chunk;
+    int i_counter = 0;
+    std::vector<GLfloat> p, t, n, c;
+    std::vector<GLuint>  i;
+    for (auto& poly : poly_meshes)
+    {
+        if ((poly.textureID != previous_texture) && (previous_texture != CY_UNASSIGNED))
+        {
+            world_chunk->meshID    = Loader::loadToVAO(p, i, t, n, c);
+            world_chunk->textureID = previous_texture;
+            s_w_chunks.push_back(std::move(*world_chunk));
+
+            delete world_chunk;
+            world_chunk = new static_world_chunk;
+            i_counter = 0;
+
+            p.clear(); t.clear(); n.clear(); c.clear(); i.clear();
+
+            world_chunk->textureID = poly.textureID;
+            previous_texture = poly.textureID;
+
+        } else {
+            world_chunk = new static_world_chunk;
+            previous_texture = poly.textureID;
+        }
+
+        n.insert(n.end(), poly.n.begin(), poly.n.end());
+        c.insert(c.end(), poly.c.begin(), poly.c.end());
+        p.insert(p.end(), poly.p.begin(), poly.p.end());
+        t.insert(t.end(), poly.t.begin(), poly.t.end());
+
+        for (GLuint index : poly.i)
+            i.push_back(index + i_counter);
+
+        i_counter += 4;
+    }
+    delete world_chunk;
 }
 
 void WorldSpawn::draw()
@@ -558,9 +599,9 @@ void WorldSpawn::draw()
     glActiveTexture(GL_TEXTURE0);
 
     texture_id previous_texture = CY_UNASSIGNED;
-    for (auto& poly : poly_meshes)
+    for (auto& chunk : s_w_chunks)
     {
-        if (poly.textureID != previous_texture)
+        /*if (poly.textureID != previous_texture)
         {
             level_textures.bindTexture(poly.textureID);
             previous_texture = poly.textureID;
@@ -568,6 +609,11 @@ void WorldSpawn::draw()
 
         glBindVertexArray(poly.meshID->getVaoID());
         glDrawElements(GL_TRIANGLES, poly.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);*/
+
+        level_textures.bindTexture(chunk.textureID);
+        glBindVertexArray(chunk.meshID->getVaoID());
+        glDrawElements(GL_TRIANGLES, chunk.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 

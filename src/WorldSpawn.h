@@ -36,13 +36,24 @@ struct polygon
 
 struct polygon_mesh
 {
-    std::unique_ptr<RawModel>   meshID;
+    //std::unique_ptr<RawModel>   meshID;
+
+    std::vector<GLfloat> p, t, n, c;
+    std::vector<GLuint>  i;
+
     texture_id                  textureID;
 
     bool operator < (const polygon_mesh& a) const
     {
         return textureID < a.textureID;
     }
+};
+
+// Temporary Optimization
+struct static_world_chunk
+{
+    std::unique_ptr<RawModel>   meshID;
+    texture_id                  textureID;
 };
 
 struct cyLevel
@@ -54,8 +65,9 @@ struct cyLevel
 class WorldSpawn : public Entity
 {
 private:
-    std::vector<polygon> polys;
-    std::vector<polygon_mesh> poly_meshes;
+    std::vector<polygon>            polys;
+    std::vector<polygon_mesh>       poly_meshes;
+    std::vector<static_world_chunk> s_w_chunks;
 
     std::map<int, int> texture_hashmap;
 

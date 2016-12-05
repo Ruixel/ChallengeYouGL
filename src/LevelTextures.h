@@ -23,7 +23,7 @@ enum texture_id
     CY_BOOKS                    = 17,
 
     // Translucent Textures
-    CY_BARS                     = 100,
+    CY_BARS                     = 102,
     CY_GLASS                    = 101,
 
     CY_UNASSIGNED               = 256

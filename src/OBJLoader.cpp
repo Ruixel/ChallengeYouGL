@@ -112,7 +112,7 @@ void Loader::insertIntoFloatVector(std::vector<T>* vec, std::istringstream* ss,
         *ss >> x[0] >> x[1] >> x[2];
 
     T tArray;
-    for(int i = 0; i<arraySize; i++)
+    for(unsigned i = 0; i<arraySize; i++)
         tArray[i] = stof(x[i]);
     vec->push_back(tArray);
 

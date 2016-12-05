@@ -37,7 +37,7 @@ namespace bag
                         break;
             }
 
-            throw std::runtime_error("OpenGL error of type: " + error);
+            //throw std::runtime_error("OpenGL error of type: " + error);
         }
     }
 }

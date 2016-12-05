@@ -3,40 +3,40 @@
 void LevelTextures::loadTextures()
 {
     // Load textures into heap memory
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_GRASS,   Loader::loadTexture("dat/img/grass.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_STUCCO,  Loader::loadTexture("dat/img/stucco.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_BRICK,   Loader::loadTexture("dat/img/bricks.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_STONE,   Loader::loadTexture("dat/img/stone.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_WOOD,    Loader::loadTexture("dat/img/wood.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_HAPPY,   Loader::loadTexture("dat/img/happy.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_EGYPT,   Loader::loadTexture("dat/img/egypt.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_GLASS,   Loader::loadTexture("dat/img/glass.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_BARK,    Loader::loadTexture("dat/img/bark.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_SCIFI,   Loader::loadTexture("dat/img/scifi.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_TILE,    Loader::loadTexture("dat/img/tile.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_ROCK,    Loader::loadTexture("dat/img/rock.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_BARS,    Loader::loadTexture("dat/img/bars.png")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_PARQUET, Loader::loadTexture("dat/img/parquet.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_BOOKS,   Loader::loadTexture("dat/img/bookshelf.jpg")));
-    texture_hashmap.insert(std::make_pair<texture_id, int>(CY_COLOR,   Loader::loadTexture("dat/img/color.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_GRASS,   Loader::loadTexture("dat/img/grass.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_STUCCO,  Loader::loadTexture("dat/img/stucco.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_BRICK,   Loader::loadTexture("dat/img/bricks.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_STONE,   Loader::loadTexture("dat/img/stone.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_WOOD,    Loader::loadTexture("dat/img/wood.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_HAPPY,   Loader::loadTexture("dat/img/happy.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_EGYPT,   Loader::loadTexture("dat/img/egypt.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_GLASS,   Loader::loadTexture("dat/img/glass.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_BARK,    Loader::loadTexture("dat/img/bark.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_SCIFI,   Loader::loadTexture("dat/img/scifi.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_TILE,    Loader::loadTexture("dat/img/tile.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_ROCK,    Loader::loadTexture("dat/img/rock.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_BARS,    Loader::loadTexture("dat/img/bars.png")));
+    texture_hashmap.insert(std::make_pair(CY_PARQUET, Loader::loadTexture("dat/img/parquet.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_BOOKS,   Loader::loadTexture("dat/img/bookshelf.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_COLOR,   Loader::loadTexture("dat/img/color.jpg")));
 
     // Texture Sizes
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_GRASS,   {1.f, 1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_STUCCO,  {1.f, 1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_BRICK,   {2.5f, 2.666f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_STONE,   {1.f, 1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_WOOD,    {1.f, 1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_HAPPY,   {4.f, 4.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_EGYPT,   {1.f, 2.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_GLASS,   {1.f, 1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_BARK,    {1.f, 1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_SCIFI,   {1.f, -1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_TILE,    {4.f, 5.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_BARS,    {3.5f, 1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_BOOKS,   {1.f, 1.333f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_ROCK,    {1.f, 1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_PARQUET, {1.f, 1.f}));
-    texture_size.insert(std::make_pair<texture_id, sf::Vector2f>(CY_COLOR,   {2.f, 2.f}));
+    texture_size.insert(std::make_pair(CY_GRASS,   sf::Vector2f{1.f, 1.f}));
+    texture_size.insert(std::make_pair(CY_STUCCO,  sf::Vector2f{1.f, 1.f}));
+    texture_size.insert(std::make_pair(CY_BRICK,   sf::Vector2f{2.5f, 2.666f}));
+    texture_size.insert(std::make_pair(CY_STONE,   sf::Vector2f{1.f, 1.f}));
+    texture_size.insert(std::make_pair(CY_WOOD,    sf::Vector2f{1.f, 1.f}));
+    texture_size.insert(std::make_pair(CY_HAPPY,   sf::Vector2f{4.f, 4.f}));
+    texture_size.insert(std::make_pair(CY_EGYPT,   sf::Vector2f{1.f, 2.f}));
+    texture_size.insert(std::make_pair(CY_GLASS,   sf::Vector2f{1.f, 1.f}));
+    texture_size.insert(std::make_pair(CY_BARK,    sf::Vector2f{1.f, 1.f}));
+    texture_size.insert(std::make_pair(CY_SCIFI,   sf::Vector2f{1.f, -1.f}));
+    texture_size.insert(std::make_pair(CY_TILE,    sf::Vector2f{4.f, 5.f}));
+    texture_size.insert(std::make_pair(CY_BARS,    sf::Vector2f{3.5f, 1.f}));
+    texture_size.insert(std::make_pair(CY_BOOKS,   sf::Vector2f{1.f, 1.333f}));
+    texture_size.insert(std::make_pair(CY_ROCK,    sf::Vector2f{1.f, 1.f}));
+    texture_size.insert(std::make_pair(CY_PARQUET, sf::Vector2f{1.f, 1.f}));
+    texture_size.insert(std::make_pair(CY_COLOR,   sf::Vector2f{2.f, 2.f}));
 }
 
 LevelTextures::LevelTextures()

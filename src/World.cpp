@@ -39,7 +39,7 @@ void World::initWorld(sf::RenderWindow& window)
         insertEntity(std::move(cube));
     }
 
-    insertEntity(std::make_unique<WorldSpawn>("dat/SkiResort.cy", m_staticShader));
+    insertEntity(std::make_unique<WorldSpawn>("dat/SkiResort.cy", m_staticShader, &m_camera));
 }
 
 void World::updateWorld(float deltaTime)

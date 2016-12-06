@@ -1,8 +1,9 @@
 #include "WorldSpawn.h"
 
-WorldSpawn::WorldSpawn(const char* levelPath, StaticShader& sh)
+WorldSpawn::WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera)
 //:   Entity(Loader::loadToVAO(v, i, t, v), Loader::loadTexture("iceman.jpg"))
 :   shader(&sh)
+,   m_camera(camera)
 {
     // Load file
     std::string level;
@@ -627,7 +628,32 @@ void WorldSpawn::draw()
         glBindVertexArray(0);
     }
 
+    // Sort translucent polygons
+    std::map<float, translucent_polygon*> sorted_trans_polys;
+    for (GLuint i = 0; i < trans_polys.size(); i++)
+    {
+        float distance = sqrt(pow(m_camera->getPosition().x - trans_polys[i].midpoint.x, 2) +
+                              pow(m_camera->getPosition().z - trans_polys[i].midpoint.z, 2));
+
+        sorted_trans_polys[distance] = &trans_polys[i];
+    }
+
     previous_texture = CY_UNASSIGNED;
+    for (std::map<float, translucent_polygon*>::reverse_iterator it = sorted_trans_polys.rbegin();
+         it != sorted_trans_polys.rend(); ++it)
+    {
+        if (it->second->textureID != previous_texture)
+        {
+            level_textures.bindTexture(it->second->textureID);
+            previous_texture = it->second->textureID;
+        }
+
+        glBindVertexArray(it->second->meshID->getVaoID());
+        glDrawElements(GL_TRIANGLES, it->second->meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    }
+
+    /*previous_texture = CY_UNASSIGNED;
     for (auto& poly : trans_polys)
     {
         if (poly.textureID != previous_texture)
@@ -639,7 +665,7 @@ void WorldSpawn::draw()
         glBindVertexArray(poly.meshID->getVaoID());
         glDrawElements(GL_TRIANGLES, poly.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
-    }
+    }*/
 }
 
 void WorldSpawn::update(const float dt)

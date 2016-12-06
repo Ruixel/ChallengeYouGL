@@ -10,6 +10,7 @@
 #include <array>
 #include <math.h>
 
+#include "Camera.h"
 #include "Loader.h"
 #include "StaticShader.h"
 #include "OBJLoader.h"
@@ -75,8 +76,9 @@ class WorldSpawn : public Entity
 private:
     std::vector<polygon>             polys;
     std::vector<polygon_mesh>        poly_meshes;
-    std::vector<translucent_polygon> trans_polys;
     std::vector<static_world_chunk>  s_w_chunks;
+
+    std::vector<translucent_polygon>            trans_polys;
 
     std::map<int, int> texture_hashmap;
 
@@ -85,6 +87,7 @@ private:
     LevelTextures level_textures;
 
     StaticShader* shader;
+    Camera* m_camera;
 
     void createStruct(const std::string& obj_name, std::vector<std::string>* properties);
 
@@ -94,7 +97,7 @@ private:
     void renderWorld();
 
 public:
-    WorldSpawn(const char* levelPath, StaticShader& sh);
+    WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera);
 
     void draw();
     void update(const float dt);

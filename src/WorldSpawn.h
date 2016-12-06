@@ -49,6 +49,14 @@ struct polygon_mesh
     }
 };
 
+struct translucent_polygon
+{
+    std::unique_ptr<RawModel>   meshID;
+    texture_id                  textureID;
+
+    glm::vec3 midpoint;
+};
+
 // Temporary Optimization
 struct static_world_chunk
 {
@@ -65,9 +73,10 @@ struct cyLevel
 class WorldSpawn : public Entity
 {
 private:
-    std::vector<polygon>            polys;
-    std::vector<polygon_mesh>       poly_meshes;
-    std::vector<static_world_chunk> s_w_chunks;
+    std::vector<polygon>             polys;
+    std::vector<polygon_mesh>        poly_meshes;
+    std::vector<translucent_polygon> trans_polys;
+    std::vector<static_world_chunk>  s_w_chunks;
 
     std::map<int, int> texture_hashmap;
 

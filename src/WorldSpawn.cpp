@@ -574,6 +574,9 @@ void WorldSpawn::generateWorldMesh()
             world_chunk->textureID = poly.textureID;
             previous_texture = poly.textureID;
 
+            if (poly.textureID >= 100)
+                break;
+
         } else {
             world_chunk = new static_world_chunk;
             previous_texture = poly.textureID;
@@ -588,8 +591,24 @@ void WorldSpawn::generateWorldMesh()
             i.push_back(index + i_counter);
 
         i_counter += 4;
+
     }
     delete world_chunk;
+
+    // Unfortunately we can't combine translucent objects so we need to create a hashmap of them
+    for (auto& poly : poly_meshes)
+    {
+        translucent_polygon t_p;
+
+        t_p.midpoint  = glm::vec3((poly.p[0] + poly.p[6])/2,
+                                  (poly.p[1] + poly.p[7])/2,
+                                  (poly.p[2] + poly.p[8])/2);
+
+        t_p.meshID    = Loader::loadToVAO(poly.p, poly.i, poly.t, poly.n, poly.c);
+        t_p.textureID = poly.textureID;
+
+        trans_polys.push_back(std::move(t_p));
+    }
 }
 
 void WorldSpawn::draw()
@@ -601,7 +620,17 @@ void WorldSpawn::draw()
     texture_id previous_texture = CY_UNASSIGNED;
     for (auto& chunk : s_w_chunks)
     {
-        /*if (poly.textureID != previous_texture)
+        level_textures.bindTexture(chunk.textureID);
+
+        glBindVertexArray(chunk.meshID->getVaoID());
+        glDrawElements(GL_TRIANGLES, chunk.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+    }
+
+    previous_texture = CY_UNASSIGNED;
+    for (auto& poly : trans_polys)
+    {
+        if (poly.textureID != previous_texture)
         {
             level_textures.bindTexture(poly.textureID);
             previous_texture = poly.textureID;
@@ -609,14 +638,8 @@ void WorldSpawn::draw()
 
         glBindVertexArray(poly.meshID->getVaoID());
         glDrawElements(GL_TRIANGLES, poly.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);*/
-
-        level_textures.bindTexture(chunk.textureID);
-        glBindVertexArray(chunk.meshID->getVaoID());
-        glDrawElements(GL_TRIANGLES, chunk.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
-
 }
 
 void WorldSpawn::update(const float dt)

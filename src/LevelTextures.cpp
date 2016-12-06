@@ -10,7 +10,7 @@ void LevelTextures::loadTextures()
     texture_hashmap.insert(std::make_pair(CY_WOOD,    Loader::loadTexture("dat/img/wood.jpg")));
     texture_hashmap.insert(std::make_pair(CY_HAPPY,   Loader::loadTexture("dat/img/happy.jpg")));
     texture_hashmap.insert(std::make_pair(CY_EGYPT,   Loader::loadTexture("dat/img/egypt.jpg")));
-    texture_hashmap.insert(std::make_pair(CY_GLASS,   Loader::loadTexture("dat/img/glass.jpg")));
+    texture_hashmap.insert(std::make_pair(CY_GLASS,   Loader::loadTexture("dat/img/glass_alpha.png")));
     texture_hashmap.insert(std::make_pair(CY_BARK,    Loader::loadTexture("dat/img/bark.jpg")));
     texture_hashmap.insert(std::make_pair(CY_SCIFI,   Loader::loadTexture("dat/img/scifi.jpg")));
     texture_hashmap.insert(std::make_pair(CY_TILE,    Loader::loadTexture("dat/img/tile.jpg")));

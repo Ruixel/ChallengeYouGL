@@ -238,6 +238,49 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         polys.push_back(f2);
     }
 
+    if (obj_name == "DiaPlat")
+    {
+        float p_height = stof(properties->at(5))*HEIGHT + ((stof(properties->at(4)) - 1.f) / 4)*HEIGHT;
+
+        int size       = stoi(properties->at(2));
+        switch (size)
+        {
+            case 3:  size = 4; break;
+            case 4:  size = 8; break;
+            default: size = size;
+        }
+
+        size *= 5;
+
+        int x_min      = stoi(properties->at(0)) - size;
+        int x_max      = stoi(properties->at(0)) + size;
+        int y_min      = stoi(properties->at(1)) - size;
+        int y_max      = stoi(properties->at(1)) + size;
+
+        polygon f1, f2;
+        f1.vertex[0]  = glm::vec3((x_min+size - 200)  / WORLD_SIZE, p_height+(0.001*HEIGHT), (y_max      - 200)  / WORLD_SIZE);
+        f1.vertex[1]  = glm::vec3((x_max      - 200)  / WORLD_SIZE, p_height+(0.001*HEIGHT), (y_max-size - 200)  / WORLD_SIZE);
+        f1.vertex[2]  = glm::vec3((x_max-size - 200)  / WORLD_SIZE, p_height+(0.001*HEIGHT), (y_min      - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((x_min      - 200)  / WORLD_SIZE, p_height+(0.001*HEIGHT), (y_min+size - 200)  / WORLD_SIZE);
+        f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
+
+        if ((properties->at(3))[0] == 'c') {
+            f1.textureID = CY_COLOR;
+            f1.colors    = extractColor(properties->at(3));
+            f2.colors    = f1.colors;
+        } else {
+            f1.textureID = level_textures.getPlatformTexture(stoi(properties->at(3)));
+        }
+
+        f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
+        f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
+        f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
+        f2.textureID  = f1.textureID;
+
+        polys.push_back(f1);
+        polys.push_back(f2);
+    }
+
     if (obj_name == "TriPlat")
     {
         float p_height = stof(properties->at(6))*HEIGHT + ((stof(properties->at(5)) - 1.f) / 4)*HEIGHT;

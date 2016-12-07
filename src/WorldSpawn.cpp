@@ -567,16 +567,16 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         f4.v_x        = x_1;
 
         // HORIZONTAL PLATS
-        f5.vertex[0]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_2 - 200)  / WORLD_SIZE);
-        f5.vertex[1]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_2 - 200)  / WORLD_SIZE);
-        f5.vertex[2]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_1 - 200)  / WORLD_SIZE);
-        f5.vertex[3]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_1 - 200)  / WORLD_SIZE);
+        f5.vertex[0]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_2 - 200)  / WORLD_SIZE);
+        f5.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_2 - 200)  / WORLD_SIZE);
+        f5.vertex[2]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_1 - 200)  / WORLD_SIZE);
+        f5.vertex[3]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_1 - 200)  / WORLD_SIZE);
         f5.normal     = glm::cross(f5.vertex[2] - f5.vertex[1], f5.vertex[3] - f5.vertex[1]);
 
-        f6.vertex[0]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
-        f6.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
-        f6.vertex[2]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
-        f6.vertex[3]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
+        f6.vertex[0]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max-(0.001*HEIGHT), (y_1 - 200)  / WORLD_SIZE);
+        f6.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max-(0.001*HEIGHT), (y_1 - 200)  / WORLD_SIZE);
+        f6.vertex[2]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max-(0.001*HEIGHT), (y_2 - 200)  / WORLD_SIZE);
+        f6.vertex[3]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max-(0.001*HEIGHT), (y_2 - 200)  / WORLD_SIZE);
         f6.normal     = glm::cross(f6.vertex[2] - f6.vertex[1], f6.vertex[3] - f6.vertex[1]);
 
         // Texture all polygons at once

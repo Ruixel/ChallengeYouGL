@@ -172,26 +172,30 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
 
         float f_height = stof(properties->at(11))*HEIGHT;
 
-        texture_id texID1 = CY_COLOR;
-        if ((properties->at(8))[0] != 'c')
-            texID1 = level_textures.getPlatformTexture(stoi(properties->at(8)));
-
-        texture_id texID2 = CY_COLOR;
-        if ((properties->at(10))[0] != 'c')
-            texID2 = level_textures.getPlatformTexture(stoi(properties->at(10)));
-
         polygon f1, f2;
         f1.vertex[0]  = glm::vec3((stof(properties->at(0))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(1)) - 200)  / WORLD_SIZE);
         f1.vertex[1]  = glm::vec3((stof(properties->at(2))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(3)) - 200)  / WORLD_SIZE);
         f1.vertex[2]  = glm::vec3((stof(properties->at(4))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(5)) - 200)  / WORLD_SIZE);
         f1.vertex[3]  = glm::vec3((stof(properties->at(6))   - 200)  / WORLD_SIZE, f_height, (stof(properties->at(7)) - 200)  / WORLD_SIZE);
         f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
-        f1.textureID  = texID1;
+
+        if ((properties->at(8))[0] == 'c') {
+            f1.textureID = CY_COLOR;
+            f1.colors    = extractColor(properties->at(8));
+        } else {
+            f1.textureID = level_textures.getPlatformTexture(stoi(properties->at(8)));
+        }
 
         f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
         f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
         f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
-        f2.textureID  = texID2;
+
+        if ((properties->at(10))[0] == 'c') {
+            f2.textureID = CY_COLOR;
+            f2.colors    = extractColor(properties->at(10));
+        } else {
+            f2.textureID = level_textures.getPlatformTexture(stoi(properties->at(10)));
+        }
 
         polys.push_back(f1);
         polys.push_back(f2);
@@ -537,7 +541,7 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
         f1.vertical   = true;
         f1.v_length   = size * 2;
-        f1.v_x        = x_1;
+        f1.v_x        = 0.91f;
 
         f2.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
         f2.vertex[2]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
@@ -546,7 +550,7 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
         f2.vertical   = true;
         f2.v_length   = size * 2;
-        f2.v_x        = x_1;
+        f2.v_x        = 0.91f;
 
         f3.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
         f3.vertex[2]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
@@ -555,7 +559,7 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         f3.normal     = glm::cross(f3.vertex[2] - f3.vertex[1], f3.vertex[3] - f3.vertex[1]);
         f3.vertical   = true;
         f3.v_length   = size * 2;
-        f3.v_x        = x_1;
+        f3.v_x        = 0.91f;
 
         f4.vertex[1]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
         f4.vertex[2]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
@@ -564,7 +568,7 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         f4.normal     = glm::cross(f4.vertex[2] - f4.vertex[1], f4.vertex[3] - f4.vertex[1]);
         f4.vertical   = true;
         f4.v_length   = size * 2;
-        f4.v_x        = x_1;
+        f4.v_x        = 0.91f;
 
         // HORIZONTAL PLATS
         f5.vertex[0]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_2 - 200)  / WORLD_SIZE);
@@ -780,9 +784,6 @@ void WorldSpawn::generateWorldMesh()
             world_chunk->textureID = poly.textureID;
             previous_texture = poly.textureID;
 
-            if (poly.textureID >= 100)
-                break;
-
         } else {
             world_chunk = new static_world_chunk;
             previous_texture = poly.textureID;
@@ -802,7 +803,7 @@ void WorldSpawn::generateWorldMesh()
     delete world_chunk;
 
     // Unfortunately we can't combine translucent objects so we need to create a hashmap of them
-    for (auto& poly : poly_meshes)
+    /*for (auto& poly : poly_meshes)
     {
         translucent_polygon t_p;
 
@@ -814,7 +815,7 @@ void WorldSpawn::generateWorldMesh()
         t_p.textureID = poly.textureID;
 
         trans_polys.push_back(std::move(t_p));
-    }
+    }*/
 }
 
 void WorldSpawn::draw()
@@ -834,7 +835,7 @@ void WorldSpawn::draw()
     }
 
 
-    previous_texture = CY_UNASSIGNED;
+    /*previous_texture = CY_UNASSIGNED;
     for (auto& poly : trans_polys)
     {
         if (poly.textureID != previous_texture)
@@ -846,7 +847,7 @@ void WorldSpawn::draw()
         glBindVertexArray(poly.meshID->getVaoID());
         glDrawElements(GL_TRIANGLES, poly.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
-    }
+    }*/
 }
 
 void WorldSpawn::update(const float dt)

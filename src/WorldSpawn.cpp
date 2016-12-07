@@ -238,6 +238,56 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         polys.push_back(f2);
     }
 
+    if (obj_name == "TriPlat")
+    {
+        float p_height = stof(properties->at(6))*HEIGHT + ((stof(properties->at(5)) - 1.f) / 4)*HEIGHT;
+
+        int size       = stoi(properties->at(2));
+        switch (size)
+        {
+            case 3:  size = 4; break;
+            case 4:  size = 8; break;
+            default: size = size;
+        }
+
+        int x_min      = stoi(properties->at(0)) - size*5;
+        int x_max      = stoi(properties->at(0)) + size*5;
+        int y_min      = stoi(properties->at(1)) - size*5;
+        int y_max      = stoi(properties->at(1)) + size*5;
+
+        polygon f1, f2;
+        f1.vertex[0]  = glm::vec3((x_min   - 200)  / WORLD_SIZE, p_height+(0.001*HEIGHT), (y_max - 200)  / WORLD_SIZE);
+        f1.vertex[1]  = glm::vec3((x_max   - 200)  / WORLD_SIZE, p_height+(0.001*HEIGHT), (y_max - 200)  / WORLD_SIZE);
+        f1.vertex[2]  = glm::vec3((x_max   - 200)  / WORLD_SIZE, p_height+(0.001*HEIGHT), (y_min - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((x_min   - 200)  / WORLD_SIZE, p_height+(0.001*HEIGHT), (y_min - 200)  / WORLD_SIZE);
+        f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
+
+        int tri = stoi(properties->at(4));
+        switch(tri)
+        {
+            case 1: f1.triwall = 1; f2.triwall = 2; break;
+            case 2: f1.triwall = 3; f2.triwall = 4; break;
+            case 3: f1.triwall = 2; f2.triwall = 1; break;
+            case 4: f1.triwall = 4; f2.triwall = 3; break;
+        }
+
+        if ((properties->at(3))[0] == 'c') {
+            f1.textureID = CY_COLOR;
+            f1.colors    = extractColor(properties->at(3));
+            f2.colors    = f1.colors;
+        } else {
+            f1.textureID = level_textures.getPlatformTexture(stoi(properties->at(3)));
+        }
+
+        f2.vertex[0]  = f1.vertex[3]; f2.vertex[1]  = f1.vertex[2];
+        f2.vertex[2]  = f1.vertex[1]; f2.vertex[3]  = f1.vertex[0];
+        f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
+        f2.textureID  = f1.textureID;
+
+        polys.push_back(f1);
+        polys.push_back(f2);
+    }
+
     if (obj_name == "Ramp")
     {
         polygon f1, f2;
@@ -628,32 +678,8 @@ void WorldSpawn::draw()
         glBindVertexArray(0);
     }
 
-    // Sort translucent polygons
-    std::map<float, translucent_polygon*> sorted_trans_polys;
-    for (GLuint i = 0; i < trans_polys.size(); i++)
-    {
-        float distance = sqrt(pow(m_camera->getPosition().x - trans_polys[i].midpoint.x, 2) +
-                              pow(m_camera->getPosition().z - trans_polys[i].midpoint.z, 2));
-
-        sorted_trans_polys[distance] = &trans_polys[i];
-    }
 
     previous_texture = CY_UNASSIGNED;
-    for (std::map<float, translucent_polygon*>::reverse_iterator it = sorted_trans_polys.rbegin();
-         it != sorted_trans_polys.rend(); ++it)
-    {
-        if (it->second->textureID != previous_texture)
-        {
-            level_textures.bindTexture(it->second->textureID);
-            previous_texture = it->second->textureID;
-        }
-
-        glBindVertexArray(it->second->meshID->getVaoID());
-        glDrawElements(GL_TRIANGLES, it->second->meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
-    }
-
-    /*previous_texture = CY_UNASSIGNED;
     for (auto& poly : trans_polys)
     {
         if (poly.textureID != previous_texture)
@@ -665,7 +691,7 @@ void WorldSpawn::draw()
         glBindVertexArray(poly.meshID->getVaoID());
         glDrawElements(GL_TRIANGLES, poly.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
-    }*/
+    }
 }
 
 void WorldSpawn::update(const float dt)

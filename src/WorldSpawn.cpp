@@ -800,6 +800,10 @@ void WorldSpawn::generateWorldMesh()
         i_counter += 4;
 
     }
+
+    world_chunk->meshID    = Loader::loadToVAO(p, i, t, n, c);
+    world_chunk->textureID = previous_texture;
+    s_w_chunks.push_back(std::move(*world_chunk));
     delete world_chunk;
 
     // Unfortunately we can't combine translucent objects so we need to create a hashmap of them

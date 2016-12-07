@@ -487,6 +487,118 @@ void WorldSpawn::createStruct(const std::string& obj_name, std::vector<std::stri
         polys.push_back(f2);
     }
 
+    if (obj_name == "Pillar")
+    {
+        polygon f1, f2, f3, f4, f5, f6;
+        float height = stof(properties->at(6));
+        float height_max, height_min;
+
+        switch(stoi(properties->at(5)))
+        {
+            case 2:  height_max = height + 3/4.f;  height_min = height; break;
+            case 3:  height_max = height + 2/4.f;  height_min = height; break;
+            case 4:  height_max = height + 1/4.f;  height_min = height; break;
+
+            case 5:  height_max = height + 2/4.f;  height_min = height + 1/4.f; break;
+            case 6:  height_max = height + 3/4.f;  height_min = height + 2/4.f; break;
+            case 7:  height_max = height + 4/4.f;  height_min = height + 3/4.f; break;
+
+            case 8:  height_max = height + 4/4.f;  height_min = height + 2/4.f; break;
+            case 9:  height_max = height + 4/4.f;  height_min = height + 1/4.f; break;
+            case 10: height_max = height + 3/4.f;  height_min = height + 1/4.f; break;
+
+            default: height_max = height + 4/4.f;  height_min = height; break;
+        }
+
+        height_max *= HEIGHT; height_min *= HEIGHT;
+
+        float size = stof(properties->at(4));
+        switch ((int)size)
+        {
+            case 1: size = 0.25f; break;
+            case 2: size = 0.50f; break;
+            case 3: size = 1.00f; break;
+            case 4: size = 1.50f; break;
+            case 5: size = 2.00f; break;
+        }
+
+        int x = stof(properties->at(0));
+        int y = stof(properties->at(1));
+        float x_1 = x - size;
+        float x_2 = x + size;
+        float y_1 = y - size;
+        float y_2 = y + size;
+
+        // VERTICAL WALLS
+        f1.vertex[1]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
+        f1.vertex[2]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min, (y_2 - 200)  / WORLD_SIZE);
+        f1.vertex[0]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min, (y_1 - 200)  / WORLD_SIZE);
+        f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
+        f1.vertical   = true;
+        f1.v_length   = size * 2;
+        f1.v_x        = x_1;
+
+        f2.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
+        f2.vertex[2]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
+        f2.vertex[3]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min, (y_1 - 200)  / WORLD_SIZE);
+        f2.vertex[0]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min, (y_2 - 200)  / WORLD_SIZE);
+        f2.normal     = glm::cross(f2.vertex[2] - f2.vertex[1], f2.vertex[3] - f2.vertex[1]);
+        f2.vertical   = true;
+        f2.v_length   = size * 2;
+        f2.v_x        = x_1;
+
+        f3.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
+        f3.vertex[2]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
+        f3.vertex[3]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min, (y_1 - 200)  / WORLD_SIZE);
+        f3.vertex[0]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min, (y_1 - 200)  / WORLD_SIZE);
+        f3.normal     = glm::cross(f3.vertex[2] - f3.vertex[1], f3.vertex[3] - f3.vertex[1]);
+        f3.vertical   = true;
+        f3.v_length   = size * 2;
+        f3.v_x        = x_1;
+
+        f4.vertex[1]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
+        f4.vertex[2]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
+        f4.vertex[3]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min, (y_2 - 200)  / WORLD_SIZE);
+        f4.vertex[0]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min, (y_2 - 200)  / WORLD_SIZE);
+        f4.normal     = glm::cross(f4.vertex[2] - f4.vertex[1], f4.vertex[3] - f4.vertex[1]);
+        f4.vertical   = true;
+        f4.v_length   = size * 2;
+        f4.v_x        = x_1;
+
+        // HORIZONTAL PLATS
+        f5.vertex[0]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_2 - 200)  / WORLD_SIZE);
+        f5.vertex[1]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_2 - 200)  / WORLD_SIZE);
+        f5.vertex[2]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_1 - 200)  / WORLD_SIZE);
+        f5.vertex[3]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_min+(0.001*HEIGHT), (y_1 - 200)  / WORLD_SIZE);
+        f5.normal     = glm::cross(f5.vertex[2] - f5.vertex[1], f5.vertex[3] - f5.vertex[1]);
+
+        f6.vertex[0]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
+        f6.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_1 - 200)  / WORLD_SIZE);
+        f6.vertex[2]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
+        f6.vertex[3]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, height_max, (y_2 - 200)  / WORLD_SIZE);
+        f6.normal     = glm::cross(f6.vertex[2] - f6.vertex[1], f6.vertex[3] - f6.vertex[1]);
+
+        // Texture all polygons at once
+        if ((properties->at(3))[0] == 'c') {
+            f1.textureID = CY_COLOR; f2.textureID = CY_COLOR;
+            f3.textureID = CY_COLOR; f4.textureID = CY_COLOR;
+            f5.textureID = CY_COLOR; f6.textureID = CY_COLOR;
+
+            f1.colors = extractColor(properties->at(3));
+            f2.colors = f1.colors;   f3.colors = f1.colors;   f4.colors = f1.colors;
+            f5.colors = f1.colors;   f6.colors = f1.colors;
+        } else {
+            f1.textureID = level_textures.getWallTexture(stoi(properties->at(3)));
+            f2.textureID = f1.textureID;    f3.textureID = f1.textureID;    f4.textureID = f1.textureID;
+            f5.textureID = f1.textureID;    f6.textureID = f1.textureID;
+        }
+
+        polys.push_back(f1); polys.push_back(f2);
+        polys.push_back(f3); polys.push_back(f4);
+        polys.push_back(f5); polys.push_back(f6);
+    }
+
     if (obj_name == "TriWall")
     {
         polygon f1, f2;

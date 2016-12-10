@@ -42,6 +42,62 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
         addHorizontalQuad(x_min, y_max, x_max, y_max, x_max, y_min, x_min, y_min, p_height, 0, ptos(3), polys);
         addHorizontalQuad(x_min, y_min, x_max, y_min, x_max, y_max, x_min, y_max, p_height, 0, ptos(3), polys);
     }
+
+    if (obj_name == "DiaPlat")
+    {
+        float p_height = ptof(5) + ((ptoi(4) - 1.f) / 4);
+
+        int size       = ptoi(2);
+        switch (size)
+        {
+            case 3:  size = 4; break;
+            case 4:  size = 8; break;
+            default: size = size;
+        }
+
+        size *= 5;
+
+        int x_min      = stoi(properties->at(0)) - size;
+        int x_max      = stoi(properties->at(0)) + size;
+        int y_min      = stoi(properties->at(1)) - size;
+        int y_max      = stoi(properties->at(1)) + size;
+
+        addHorizontalQuad(x_min+size, y_max, x_max, y_max-size, x_max-size, y_min, x_min, y_min+size, p_height, 0, ptos(3), polys);
+        addHorizontalQuad(x_min, y_min+size, x_max-size, y_min, x_max, y_max-size, x_min+size, y_max, p_height, 0, ptos(3), polys);
+    }
+
+    if (obj_name == "TriPlat")
+    {
+        float p_height = ptof(6) + ((ptoi(5) - 1.f) / 4);
+
+        int size       = ptoi(2);
+        switch (size)
+        {
+            case 3:  size = 4; break;
+            case 4:  size = 8; break;
+            default: size = size;
+        }
+
+        size *= 5;
+
+        int first_tri, second_tri;
+        switch(ptoi(4))
+        {
+            case 1: first_tri = 1; second_tri = 2; break;
+            case 2: first_tri = 3; second_tri = 4; break;
+            case 3: first_tri = 2; second_tri = 1; break;
+            case 4: first_tri = 4; second_tri = 3; break;
+        }
+
+        int x_min      = ptoi(0) - size;
+        int x_max      = ptoi(0) + size;
+        int y_min      = ptoi(1) - size;
+        int y_max      = ptoi(1) + size;
+
+        addHorizontalQuad(x_min, y_max, x_max, y_max, x_max, y_min, x_min, y_min, p_height, first_tri,  ptos(3), polys);
+        addHorizontalQuad(x_min, y_min, x_max, y_min, x_max, y_max, x_min, y_max, p_height, second_tri, ptos(3), polys);
+
+    }
 }
 
 void CYLevelLoader::addFloor(float x1, float y1, float x2, float y2, float x3, float y3,
@@ -65,6 +121,7 @@ void CYLevelLoader::addHorizontalQuad(float x1, float y1, float x2, float y2, fl
     f1.vertex[2]  = glm::vec3((x3   - 200)  / WORLD_SIZE, o_height+(0.001*HEIGHT), (y3 - 200)  / WORLD_SIZE);
     f1.vertex[3]  = glm::vec3((x4   - 200)  / WORLD_SIZE, o_height+(0.001*HEIGHT), (y4 - 200)  / WORLD_SIZE);
     f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
+    f1.triwall    = tri;
 
     if (texture[0] == 'c') {
         f1.textureID = CY_COLOR;

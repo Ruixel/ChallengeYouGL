@@ -4,7 +4,6 @@ using namespace CYLevelLoader;
 
 namespace CYLevelLoader
 {
-    LevelTextures* level_textures = new LevelTextures();
     std::vector<std::string>* properties = new std::vector<std::string>();
 }
 
@@ -187,131 +186,92 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
         addVerticalQuad(x_1, y_1, x_2, y_2, height_min, height_max, 0, true, ptos(4), polys);
         addVerticalQuad(x_1, y_1, x_2, y_2, height_min, height_max, 0, false, ptos(5), polys);
     }
-}
 
-void CYLevelLoader::addFloor(float x1, float y1, float x2, float y2, float x3, float y3,
-                              float x4, float y4, int level, const std::string& texture1, const std::string& texture2,
-                              std::vector<polygon>* polys)
-{
-    addHorizontalQuad(x1, y1, x2, y2, x3, y3, x4, y4, level, 0, texture1, polys);
-    addHorizontalQuad(x4, y4, x3, y3, x2, y2, x1, y1, level, 0, texture2, polys);
-}
+    if (obj_name == "TriWall")
+    {
+        float height_min = ptof(5);
+        float height_max = height_min + 1.f;
 
-void CYLevelLoader::addHorizontalQuad(float x1, float y1, float x2, float y2, float x3, float y3,
-                          float x4, float y4, float o_height, int tri,
-                          const std::string& texture, std::vector<polygon>* polys)
-{
-    // Quick scaling
-    o_height *= HEIGHT;
 
-    polygon f1;
-    f1.vertex[0]  = glm::vec3((x1   - 200)  / WORLD_SIZE, o_height, (y1 - 200)  / WORLD_SIZE);
-    f1.vertex[1]  = glm::vec3((x2   - 200)  / WORLD_SIZE, o_height, (y2 - 200)  / WORLD_SIZE);
-    f1.vertex[2]  = glm::vec3((x3   - 200)  / WORLD_SIZE, o_height, (y3 - 200)  / WORLD_SIZE);
-    f1.vertex[3]  = glm::vec3((x4   - 200)  / WORLD_SIZE, o_height, (y4 - 200)  / WORLD_SIZE);
-    f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
-    f1.triwall    = tri;
+        float x_1 = ptof(0);
+        float y_1 = ptof(1);
+        float x_2, y_2;
 
-    if (texture[0] == 'c') {
-        f1.textureID = CY_COLOR;
-        f1.colors    = CYLevelLoader::extractColor(texture);
-    } else {
-        f1.textureID = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture));
-    }
-    polys->push_back(f1);
-}
+        int dir = ptoi(4);
+        switch (dir)
+        {
+            case 1: x_2 = x_1;  y_2 = y_1 + 20;     break;
+            case 2: x_2 = x_1;  y_2 = y_1 - 20;     break;
+            case 3: x_2 = x_1 + 20;  y_2 = y_1;     break;
+            case 4: x_2 = x_1 - 20;  y_2 = y_1;     break;
 
-void CYLevelLoader::addRamp(float x, float y, sf::Vector2f width, sf::Vector2f length,
-                            float min_height, float max_height, bool upsidedown,
-                            const std::string& texture, std::vector<polygon>* polys)
-{
-    // Quick scaling
-    min_height *= HEIGHT;
-    max_height *= HEIGHT;
+            case 5: x_2 = x_1 + 15;  y_2 = y_1 - 15;     break;
+            case 6: x_2 = x_1 + 15;  y_2 = y_1 + 15;     break;
+            case 7: x_2 = x_1 - 15;  y_2 = y_1 + 15;     break;
+            case 8: x_2 = x_1 - 15;  y_2 = y_1 - 15;     break;
+        }
 
-    polygon f1;
-
-    if (!upsidedown) {
-        f1.vertex[1]  = glm::vec3((x + length.x            - 200)  / WORLD_SIZE, max_height, (y                      - 200)  / WORLD_SIZE);
-        f1.vertex[2]  = glm::vec3((x + width.x + length.x  - 200)  / WORLD_SIZE, max_height, (y + width.y            - 200)  / WORLD_SIZE);
-        f1.vertex[3]  = glm::vec3((x + width.x             - 200)  / WORLD_SIZE, min_height, (y + width.y + length.y - 200)  / WORLD_SIZE);
-        f1.vertex[0]  = glm::vec3((x                       - 200)  / WORLD_SIZE, min_height, (y + length.y           - 200)  / WORLD_SIZE);
-    } else {
-        f1.vertex[2]  = glm::vec3((x + length.x            - 200)  / WORLD_SIZE, max_height, (y                      - 200)  / WORLD_SIZE);
-        f1.vertex[1]  = glm::vec3((x + width.x + length.x  - 200)  / WORLD_SIZE, max_height, (y + width.y            - 200)  / WORLD_SIZE);
-        f1.vertex[0]  = glm::vec3((x + width.x             - 200)  / WORLD_SIZE, min_height, (y + width.y + length.y - 200)  / WORLD_SIZE);
-        f1.vertex[3]  = glm::vec3((x                       - 200)  / WORLD_SIZE, min_height, (y + length.y           - 200)  / WORLD_SIZE);
+        if (ptoi(2) == 1)
+        {
+            addVerticalQuad(x_1, y_1, x_2, y_2, height_min, height_max, 4, true, ptos(3), polys);
+            addVerticalQuad(x_1, y_1, x_2, y_2, height_min, height_max, 3, false, ptos(3), polys);
+        } else {
+            addVerticalQuad(x_1, y_1, x_2, y_2, height_min, height_max, 2, true, ptos(3), polys);
+            addVerticalQuad(x_1, y_1, x_2, y_2, height_min, height_max, 1, false, ptos(3), polys);
+        }
     }
 
-    f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
-    f1.vertical   = true;
-    f1.v_length   = sqrt(pow(width.x, 2) + pow(width.y, 2));
-    f1.v_x        = 2;
-    f1.is_ramp    = true;
+    if (obj_name == "Pillar")
+    {
+        float height = ptof(6);
+        float height_max, height_min;
 
-    if (texture[0] == 'c') {
-        f1.textureID = CY_COLOR;
-        f1.colors    = CYLevelLoader::extractColor(texture);
-    } else {
-        f1.textureID = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture));
+        switch(ptoi(5))
+        {
+            case 2:  height_max = height + 3/4.f;  height_min = height; break;
+            case 3:  height_max = height + 2/4.f;  height_min = height; break;
+            case 4:  height_max = height + 1/4.f;  height_min = height; break;
+
+            case 5:  height_max = height + 2/4.f;  height_min = height + 1/4.f; break;
+            case 6:  height_max = height + 3/4.f;  height_min = height + 2/4.f; break;
+            case 7:  height_max = height + 4/4.f;  height_min = height + 3/4.f; break;
+
+            case 8:  height_max = height + 4/4.f;  height_min = height + 2/4.f; break;
+            case 9:  height_max = height + 4/4.f;  height_min = height + 1/4.f; break;
+            case 10: height_max = height + 3/4.f;  height_min = height + 1/4.f; break;
+
+            default: height_max = height + 4/4.f;  height_min = height; break;
+        }
+
+        height_max -= 0.001f;
+        height_min += 0.001f;
+
+        float size = ptof(4);
+        switch ((int)size)
+        {
+            case 1: size = 0.25f; break;
+            case 2: size = 0.50f; break;
+            case 3: size = 1.00f; break;
+            case 4: size = 1.50f; break;
+            case 5: size = 2.00f; break;
+        }
+
+        float x = ptof(0);
+        float y = ptof(1);
+        float x_1 = x - size;
+        float x_2 = x + size;
+        float y_1 = y - size;
+        float y_2 = y + size;
+
+        // WALLS
+        addVerticalQuad(x_2, y_1, x_2, y_2, height_min, height_max, 0, true, ptos(3), polys);
+        addVerticalQuad(x_1, y_2, x_1, y_1, height_min, height_max, 0, true, ptos(3), polys);
+        addVerticalQuad(x_1, y_1, x_2, y_1, height_min, height_max, 0, true, ptos(3), polys);
+        addVerticalQuad(x_2, y_2, x_1, y_2, height_min, height_max, 0, true, ptos(3), polys);
+
+        // Top & Bottom
+        addHorizontalQuad(x_2, y_2, x_1, y_2, x_1, y_1, x_2, y_1, height_min , 0, ptos(3), polys);
+        addHorizontalQuad(x_2, y_1, x_1, y_1, x_1, y_2, x_2, y_2, height_max, 0, ptos(3), polys);
     }
-    polys->push_back(f1);
 }
 
-// VERTICAL QUADRILATERAL
-void CYLevelLoader::addVerticalQuad(float x_1, float y_1, float x_2, float y_2, float min_height,
-                                    float max_height, int tri, bool front_side, const std::string& texture,
-                                    std::vector<polygon>* polys)
-{
-    max_height *= HEIGHT; min_height *= HEIGHT;
-
-    polygon f1;
-    f1.vertical    = true;
-    f1.v_length    = sqrt(pow(y_2-y_1, 2) + pow(x_2-x_1, 2));
-    //std::cout << "x length: " << x_2-x_1 << ", y length: " << y_2-y_1 << std::endl;
-    //std::cout << "Length: " << f1.v_length << std::endl;
-    f1.v_x         = x_2;
-
-    if (front_side) {
-        f1.vertex[1]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, max_height, (y_1 - 200)  / WORLD_SIZE);
-        f1.vertex[2]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, max_height, (y_2 - 200)  / WORLD_SIZE);
-        f1.vertex[3]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, min_height, (y_2 - 200)  / WORLD_SIZE);
-        f1.vertex[0]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, min_height, (y_1 - 200)  / WORLD_SIZE);
-    } else {
-        f1.vertex[2]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, max_height, (y_1 - 200)  / WORLD_SIZE);
-        f1.vertex[1]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, max_height, (y_2 - 200)  / WORLD_SIZE);
-        f1.vertex[0]  = glm::vec3((x_2   - 200)  / WORLD_SIZE, min_height, (y_2 - 200)  / WORLD_SIZE);
-        f1.vertex[3]  = glm::vec3((x_1   - 200)  / WORLD_SIZE, min_height, (y_1 - 200)  / WORLD_SIZE);
-    }
-    f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
-
-    if (texture[0] == 'c') {
-        f1.textureID = CY_COLOR;
-        f1.colors    = extractColor(texture);
-    } else {
-        f1.textureID = CYLevelLoader::level_textures->getWallTexture(stoi(texture));
-    }
-
-    polys->push_back(std::move(f1));
-}
-
-std::vector<GLfloat> CYLevelLoader::extractColor(const std::string& data)
-{
-    int ptr = 7;
-    std::vector<GLfloat> color_vector;
-
-    size_t value_end = data.find(',', ptr);
-    color_vector.push_back(stof(data.substr(ptr, value_end-ptr)));
-    ptr = value_end + 2;
-
-    value_end = data.find(',', ptr);
-    color_vector.push_back(stof(data.substr(ptr, value_end-ptr)));
-    ptr = value_end + 2;
-
-    value_end = data.find(')', ptr);
-    color_vector.push_back(stof(data.substr(ptr, value_end-ptr)));
-
-    //std::cout << "Colors: " << color_vector[0] << " | " << color_vector[1] << " | " << color_vector[2] << std::endl;
-
-    return color_vector;
-}

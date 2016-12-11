@@ -96,7 +96,65 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
 
         addHorizontalQuad(x_min, y_max, x_max, y_max, x_max, y_min, x_min, y_min, p_height, first_tri,  ptos(3), polys);
         addHorizontalQuad(x_min, y_min, x_max, y_min, x_max, y_max, x_min, y_max, p_height, second_tri, ptos(3), polys);
+    }
 
+    if (obj_name == "Ramp")
+    {
+        float min_height = ptof(4);
+        float max_height = (ptof(4)+1);
+
+        int x_1          = ptof(0);
+        int y_1          = ptof(1);
+
+        sf::Vector2f length, width;
+        int direction    = ptoi(2);
+        switch (direction)
+        {
+            // Vertical & Horizontal Ramps
+            case 1: width  = {10, 0};
+                    length = {0, 20};
+                    x_1    -= 5;
+                    break;
+            case 2: width  = {10, 0};
+                    length = {0, -20};
+                    x_1    -= 5;
+                    break;
+            case 3: width  = {0, 10};
+                    length = {-20, 0};
+                    x_1    += 20;
+                    y_1    -= 5;
+                    break;
+            case 4: width  = {0, 10};
+                    length = {20, 0};
+                    x_1    -= 20;
+                    y_1    -= 5;
+                    break;
+
+            // Diagonal Ramps
+            case 5: width  = {10, -10};
+                    length = {-15, 15};
+                    x_1    += 10;
+                    y_1    += 5;
+                    break;
+            case 6: width  = {10, 10};
+                    length = {-15, -15};
+                    x_1    += 10;
+                    y_1    -= 5;
+                    break;
+            case 7: width  = {-10, 10};
+                    length = {15, -15};
+                    x_1    -= 10;
+                    y_1    -= 5;
+                    break;
+            case 8: width  = {10, 10};
+                    length = {15, 15};
+                    x_1    -= 20;
+                    y_1    -= 5;
+                    break;
+        }
+
+        addRamp(x_1, y_1, width, length, min_height, max_height, false, ptos(3), polys);
+        addRamp(x_1, y_1, width, length, min_height, max_height, true, ptos(3), polys);
     }
 }
 
@@ -122,6 +180,43 @@ void CYLevelLoader::addHorizontalQuad(float x1, float y1, float x2, float y2, fl
     f1.vertex[3]  = glm::vec3((x4   - 200)  / WORLD_SIZE, o_height+(0.001*HEIGHT), (y4 - 200)  / WORLD_SIZE);
     f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
     f1.triwall    = tri;
+
+    if (texture[0] == 'c') {
+        f1.textureID = CY_COLOR;
+        f1.colors    = CYLevelLoader::extractColor(texture);
+    } else {
+        f1.textureID = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture));
+    }
+    polys->push_back(f1);
+}
+
+void CYLevelLoader::addRamp(float x, float y, sf::Vector2f width, sf::Vector2f length,
+                            float min_height, float max_height, bool upsidedown,
+                            const std::string& texture, std::vector<polygon>* polys)
+{
+    // Quick scaling
+    min_height *= HEIGHT;
+    max_height *= HEIGHT;
+
+    polygon f1;
+
+    if (!upsidedown) {
+        f1.vertex[1]  = glm::vec3((x + length.x            - 200)  / WORLD_SIZE, max_height, (y                      - 200)  / WORLD_SIZE);
+        f1.vertex[2]  = glm::vec3((x + width.x + length.x  - 200)  / WORLD_SIZE, max_height, (y + width.y            - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((x + width.x             - 200)  / WORLD_SIZE, min_height, (y + width.y + length.y - 200)  / WORLD_SIZE);
+        f1.vertex[0]  = glm::vec3((x                       - 200)  / WORLD_SIZE, min_height, (y + length.y           - 200)  / WORLD_SIZE);
+    } else {
+        f1.vertex[2]  = glm::vec3((x + length.x            - 200)  / WORLD_SIZE, max_height, (y                      - 200)  / WORLD_SIZE);
+        f1.vertex[1]  = glm::vec3((x + width.x + length.x  - 200)  / WORLD_SIZE, max_height, (y + width.y            - 200)  / WORLD_SIZE);
+        f1.vertex[0]  = glm::vec3((x + width.x             - 200)  / WORLD_SIZE, min_height, (y + width.y + length.y - 200)  / WORLD_SIZE);
+        f1.vertex[3]  = glm::vec3((x                       - 200)  / WORLD_SIZE, min_height, (y + length.y           - 200)  / WORLD_SIZE);
+    }
+
+    f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
+    f1.vertical   = true;
+    f1.v_length   = 0;
+    f1.v_x        = 2;
+    f1.is_ramp    = true;
 
     if (texture[0] == 'c') {
         f1.textureID = CY_COLOR;

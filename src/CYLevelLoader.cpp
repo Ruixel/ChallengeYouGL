@@ -226,7 +226,7 @@ std::vector<polygon_mesh> CYLevelLoader::convertPolygonsIntoMeshInfo(const std::
 
             if (poly.is_ramp)
             {
-                tSize.x *= .8f; tSize.y *= 1.6f;
+                tSize.x *= .05f; tSize.y *= 1.6f;
             }
 
             p_m.t.insert(p_m.t.end(), {start_x*TEXTURE_SIZE * tSize.x, poly.vertex[1].y*TEXTURE_SIZE * tSize.y});

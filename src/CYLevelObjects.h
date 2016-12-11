@@ -49,8 +49,9 @@ namespace CYLevelLoader
     void addPillar(float x, float y, bool angled, int level, int z_idx, int size,
                    const std::string& texture, std::vector<polygon>* polys);
 
-    void addRamp(float x, float y, int angle, int level, std::string& texture,
-                 std::vector<polygon>* polys);
+    void addRamp(float x, float y, sf::Vector2f width, sf::Vector2f length,
+                 float min_height, float max_height, bool upsidedown,
+                 const std::string& texture, std::vector<polygon>* polys);
 
     void addVerticalQuad(float x1, float y1, float x_size, float y_size, int level,
                          int z_idx, int tri, std::string& texture,

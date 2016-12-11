@@ -53,9 +53,9 @@ namespace CYLevelLoader
                  float min_height, float max_height, bool upsidedown,
                  const std::string& texture, std::vector<polygon>* polys);
 
-    void addVerticalQuad(float x1, float y1, float x_size, float y_size, int level,
-                         int z_idx, int tri, std::string& texture,
-                         std::vector<polygon>* polys);
+    void addVerticalQuad(float x1, float y1, float x2, float y2, float min_height,
+                         float max_height, int tri, bool front_side,
+                         const std::string& texture, std::vector<polygon>* polys);
 
     // Extract Color Property
     std::vector<GLfloat> extractColor(const std::string& data);

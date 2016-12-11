@@ -220,13 +220,16 @@ std::vector<polygon_mesh> CYLevelLoader::convertPolygonsIntoMeshInfo(const std::
         } else {
             sf::Vector2f tSize = CYLevelLoader::level_textures->getTextureSize(poly.textureID);
 
-            float x_2d = poly.v_x + poly.v_length;
+            float x_2d, start_x;
+            x_2d = poly.v_length;
             x_2d = (x_2d - 200) / WORLD_SIZE;
-            int start_x = (poly.v_x - 200) / WORLD_SIZE;
+            start_x = (0 - 200) / WORLD_SIZE;
+
+            std::cout << "Length2: " << poly.v_length << std::endl;
 
             if (poly.is_ramp)
             {
-                tSize.x *= .05f; tSize.y *= 1.6f;
+                tSize.x *= 1.f; tSize.y *= 1.6f;
             }
 
             p_m.t.insert(p_m.t.end(), {start_x*TEXTURE_SIZE * tSize.x, poly.vertex[1].y*TEXTURE_SIZE * tSize.y});

@@ -11,6 +11,8 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
                                   std::vector<polygon>* polys)
 {
     properties = obj_properties;
+    int vector_size = properties->size();
+
     if (obj_name == "Floor")
     {
         if (properties->at(9) == "2")
@@ -23,23 +25,15 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
 
     if (obj_name == "Plat")
     {
-        float p_height = ptoi(5) + ((ptoi(4) - 1.f) / 4) + 0.001f;
-
-        int size       = ptoi(2);
-        switch (size)
+        switch(vector_size)
         {
-            case 3:  size = 4; break;
-            case 4:  size = 8; break;
-            default: size = size;
+        case 4:
+            createPlat(ptof(0), ptof(1), ptoi(2), ptoi(3), 1, "5", polys);
+            break;
+        case 6:
+            createPlat(ptof(0), ptof(1), ptoi(2), ptoi(5), ptoi(4), ptos(3), polys);
+            break;
         }
-
-        int x_min      = ptof(0) - size*5;
-        int x_max      = ptof(0) + size*5;
-        int y_min      = ptof(1) - size*5;
-        int y_max      = ptof(1) + size*5;
-
-        addHorizontalQuad(x_min, y_max, x_max, y_max, x_max, y_min, x_min, y_min, p_height, 0, ptos(3), polys);
-        addHorizontalQuad(x_min, y_min, x_max, y_min, x_max, y_max, x_min, y_max, p_height, 0, ptos(3), polys);
     }
 
     if (obj_name == "DiaPlat")
@@ -99,92 +93,28 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
 
     if (obj_name == "Ramp")
     {
-        float min_height = ptof(4);
-        float max_height = (ptof(4)+1);
-
-        int x_1          = ptof(0);
-        int y_1          = ptof(1);
-
-        sf::Vector2f length, width;
-        int direction    = ptoi(2);
-        switch (direction)
+        switch(vector_size)
         {
-            // Vertical & Horizontal Ramps
-            case 1: width  = {10, 0};
-                    length = {0, 20};
-                    x_1    -= 5;
-                    break;
-            case 2: width  = {10, 0};
-                    length = {0, -20};
-                    x_1    -= 5;
-                    break;
-            case 3: width  = {0, 10};
-                    length = {-20, 0};
-                    x_1    += 20;
-                    y_1    -= 5;
-                    break;
-            case 4: width  = {0, 10};
-                    length = {20, 0};
-                    x_1    -= 20;
-                    y_1    -= 5;
-                    break;
-
-            // Diagonal Ramps
-            case 5: width  = {10, -10};
-                    length = {-15, 15};
-                    x_1    += 10;
-                    y_1    += 5;
-                    break;
-            case 6: width  = {10, 10};
-                    length = {-15, -15};
-                    x_1    += 10;
-                    y_1    -= 5;
-                    break;
-            case 7: width  = {-10, 10};
-                    length = {15, -15};
-                    x_1    -= 10;
-                    y_1    -= 5;
-                    break;
-            case 8: width  = {10, 10};
-                    length = {15, 15};
-                    x_1    -= 20;
-                    y_1    -= 5;
-                    break;
+        case 4:
+            createRamp(ptof(0), ptof(1), ptoi(2), ptoi(3), "5", polys);
+            break;
+        case 5:
+            createRamp(ptof(0), ptof(1), ptoi(2), ptoi(4), ptos(3), polys);
+            break;
         }
-
-        addRamp(x_1, y_1, width, length, min_height, max_height, false, ptos(3), polys);
-        addRamp(x_1, y_1, width, length, min_height, max_height, true, ptos(3), polys);
     }
 
     if (obj_name == "walls")
     {
-        float height = ptof(7);
-        float height_max, height_min;
-
-        switch(stoi(properties->at(6)))
+        switch(vector_size)
         {
-            case 2:  height_max = height + 3/4.f;  height_min = height; break;
-            case 3:  height_max = height + 2/4.f;  height_min = height; break;
-            case 4:  height_max = height + 1/4.f;  height_min = height; break;
-
-            case 5:  height_max = height + 2/4.f;  height_min = height + 1/4.f; break;
-            case 6:  height_max = height + 3/4.f;  height_min = height + 2/4.f; break;
-            case 7:  height_max = height + 4/4.f;  height_min = height + 3/4.f; break;
-
-            case 8:  height_max = height + 4/4.f;  height_min = height + 2/4.f; break;
-            case 9:  height_max = height + 4/4.f;  height_min = height + 1/4.f; break;
-            case 10: height_max = height + 3/4.f;  height_min = height + 1/4.f; break;
-
-            default: height_max = height + 4/4.f;  height_min = height; break;
+        case 7:
+            createWall(ptof(0), ptof(1), ptof(2), ptof(3), ptoi(6), 1, ptos(4), ptos(5), polys);
+            break;
+        case 8:
+            createWall(ptof(0), ptof(1), ptof(2), ptof(3), ptoi(7), ptoi(6), ptos(4), ptos(5), polys);
+            break;
         }
-
-        float x_1 = ptof(2);
-        float x_2 = x_1 + ptof(0);
-        float y_1 = ptof(3);
-        float y_2 = y_1 + ptof(1);
-
-        addVerticalQuad(x_1, y_1, x_2, y_2, height_min, height_max, 0, true, ptos(4), polys);
-        addVerticalQuad(x_1, y_1, x_2, y_2, height_min, height_max, 0, false, ptos(5), polys);
     }
 
     if (obj_name == "TriWall")
@@ -223,55 +153,175 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
 
     if (obj_name == "Pillar")
     {
-        float height = ptof(6);
-        float height_max, height_min;
-
-        switch(ptoi(5))
+        switch(vector_size)
         {
-            case 2:  height_max = height + 3/4.f;  height_min = height; break;
-            case 3:  height_max = height + 2/4.f;  height_min = height; break;
-            case 4:  height_max = height + 1/4.f;  height_min = height; break;
-
-            case 5:  height_max = height + 2/4.f;  height_min = height + 1/4.f; break;
-            case 6:  height_max = height + 3/4.f;  height_min = height + 2/4.f; break;
-            case 7:  height_max = height + 4/4.f;  height_min = height + 3/4.f; break;
-
-            case 8:  height_max = height + 4/4.f;  height_min = height + 2/4.f; break;
-            case 9:  height_max = height + 4/4.f;  height_min = height + 1/4.f; break;
-            case 10: height_max = height + 3/4.f;  height_min = height + 1/4.f; break;
-
-            default: height_max = height + 4/4.f;  height_min = height; break;
+        case 4:
+            createPillar(ptof(0), ptof(1), 1, 1, ptoi(3), 1, ptos(2), polys);
+            break;
+        case 7:
+            createPillar(ptof(0), ptof(1), 1, ptoi(4), ptoi(6), ptoi(5), ptos(3), polys);
+            break;
         }
-
-        height_max -= 0.001f;
-        height_min += 0.001f;
-
-        float size = ptof(4);
-        switch ((int)size)
-        {
-            case 1: size = 0.25f; break;
-            case 2: size = 0.50f; break;
-            case 3: size = 1.00f; break;
-            case 4: size = 1.50f; break;
-            case 5: size = 2.00f; break;
-        }
-
-        float x = ptof(0);
-        float y = ptof(1);
-        float x_1 = x - size;
-        float x_2 = x + size;
-        float y_1 = y - size;
-        float y_2 = y + size;
-
-        // WALLS
-        addVerticalQuad(x_2, y_1, x_2, y_2, height_min, height_max, 0, true, ptos(3), polys);
-        addVerticalQuad(x_1, y_2, x_1, y_1, height_min, height_max, 0, true, ptos(3), polys);
-        addVerticalQuad(x_1, y_1, x_2, y_1, height_min, height_max, 0, true, ptos(3), polys);
-        addVerticalQuad(x_2, y_2, x_1, y_2, height_min, height_max, 0, true, ptos(3), polys);
-
-        // Top & Bottom
-        addHorizontalQuad(x_2, y_2, x_1, y_2, x_1, y_1, x_2, y_1, height_min , 0, ptos(3), polys);
-        addHorizontalQuad(x_2, y_1, x_1, y_1, x_1, y_2, x_2, y_2, height_max, 0, ptos(3), polys);
     }
 }
 
+void CYLevelLoader::createWall(float x_size, float y_size, float x, float y, int level, int z_idx,
+                    const std::string& texture1, const std::string& texture2,
+                    std::vector<polygon>* polys)
+{
+    float height = level;
+    float height_max, height_min;
+
+    switch(z_idx)
+    {
+        case 2:  height_max = height + 3/4.f;  height_min = height; break;
+        case 3:  height_max = height + 2/4.f;  height_min = height; break;
+        case 4:  height_max = height + 1/4.f;  height_min = height; break;
+
+        case 5:  height_max = height + 2/4.f;  height_min = height + 1/4.f; break;
+        case 6:  height_max = height + 3/4.f;  height_min = height + 2/4.f; break;
+        case 7:  height_max = height + 4/4.f;  height_min = height + 3/4.f; break;
+
+        case 8:  height_max = height + 4/4.f;  height_min = height + 2/4.f; break;
+        case 9:  height_max = height + 4/4.f;  height_min = height + 1/4.f; break;
+        case 10: height_max = height + 3/4.f;  height_min = height + 1/4.f; break;
+
+        default: height_max = height + 4/4.f;  height_min = height; break;
+    }
+
+    float x_1 = x;
+    float x_2 = x_1 + x_size;
+    float y_1 = y;
+    float y_2 = y_1 + y_size;
+
+    addVerticalQuad(x_1, y_1, x_2, y_2, height_min, height_max, 0, true, texture1, polys);
+    addVerticalQuad(x_1, y_1, x_2, y_2, height_min, height_max, 0, false, texture2, polys);
+}
+
+void CYLevelLoader::createPlat(float x, float y, int size, int level, int z_idx,
+                               const std::string& texture, std::vector<polygon>* polys)
+{
+    float p_height = level + ((z_idx - 1.f) / 4) + 0.001f;
+
+    switch (size)
+    {
+        case 3:  size = 4; break;
+        case 4:  size = 8; break;
+        default: size = size;
+    }
+
+    int x_min      = ptof(0) - size*5;
+    int x_max      = ptof(0) + size*5;
+    int y_min      = ptof(1) - size*5;
+    int y_max      = ptof(1) + size*5;
+
+    addHorizontalQuad(x_min, y_max, x_max, y_max, x_max, y_min, x_min, y_min, p_height, 0, texture, polys);
+    addHorizontalQuad(x_min, y_min, x_max, y_min, x_max, y_max, x_min, y_max, p_height, 0, texture, polys);
+}
+
+void CYLevelLoader::createPillar(float x, float y, int angled, float size, int level, int z_idx,
+                                 const std::string& texture, std::vector<polygon>* polys)
+{
+    float height = level;
+    float height_max, height_min;
+
+    switch(z_idx)
+    {
+        case 2:  height_max = height + 3/4.f;  height_min = height; break;
+        case 3:  height_max = height + 2/4.f;  height_min = height; break;
+        case 4:  height_max = height + 1/4.f;  height_min = height; break;
+
+        case 5:  height_max = height + 2/4.f;  height_min = height + 1/4.f; break;
+        case 6:  height_max = height + 3/4.f;  height_min = height + 2/4.f; break;
+        case 7:  height_max = height + 4/4.f;  height_min = height + 3/4.f; break;
+
+        case 8:  height_max = height + 4/4.f;  height_min = height + 2/4.f; break;
+        case 9:  height_max = height + 4/4.f;  height_min = height + 1/4.f; break;
+        case 10: height_max = height + 3/4.f;  height_min = height + 1/4.f; break;
+
+        default: height_max = height + 4/4.f;  height_min = height; break;
+    }
+
+    switch ((int)size)
+    {
+        case 1: size = 0.25f; break;
+        case 2: size = 0.50f; break;
+        case 3: size = 1.00f; break;
+        case 4: size = 1.50f; break;
+        case 5: size = 2.00f; break;
+    }
+
+    float x_1 = x - size;
+    float x_2 = x + size;
+    float y_1 = y - size;
+    float y_2 = y + size;
+
+    // WALLS
+    addVerticalQuad(x_2, y_1, x_2, y_2, height_min, height_max, 0, true, texture, polys);
+    addVerticalQuad(x_1, y_2, x_1, y_1, height_min, height_max, 0, true, texture, polys);
+    addVerticalQuad(x_1, y_1, x_2, y_1, height_min, height_max, 0, true, texture, polys);
+    addVerticalQuad(x_2, y_2, x_1, y_2, height_min, height_max, 0, true, texture, polys);
+
+    // Top & Bottom
+    addHorizontalQuad(x_2, y_2, x_1, y_2, x_1, y_1, x_2, y_1, height_min+0.002f, 0, texture, polys);
+    addHorizontalQuad(x_2, y_1, x_1, y_1, x_1, y_2, x_2, y_2, height_max-0.001f, 0, texture, polys);
+}
+
+void CYLevelLoader::createRamp(float x, float y, int direction, int level,
+                               const std::string& texture, std::vector<polygon>* polys)
+{
+    float min_height = level;
+    float max_height = (level+1);
+
+    float x_1          = x;
+    float y_1          = y;
+
+    sf::Vector2f length, width;
+    switch (direction)
+    {
+        // Vertical & Horizontal Ramps
+        case 1: width  = {10, 0};
+                length = {0, 20};
+                x_1    -= 5;
+                break;
+        case 2: width  = {10, 0};
+                length = {0, -20};
+                x_1    -= 5;
+                break;
+        case 3: width  = {0, 10};
+                length = {-20, 0};
+                x_1    += 20;
+                y_1    -= 5;
+                break;
+        case 4: width  = {0, 10};
+                length = {20, 0};
+                x_1    -= 20;
+                y_1    -= 5;
+                break;
+
+        // Diagonal Ramps
+        case 5: width  = {10, -10};
+                length = {-15, 15};
+                x_1    += 10;
+                y_1    += 5;
+                break;
+        case 6: width  = {10, 10};
+                length = {-15, -15};
+                x_1    += 10;
+                y_1    -= 5;
+                break;
+        case 7: width  = {-10, 10};
+                length = {15, -15};
+                x_1    -= 10;
+                y_1    -= 5;
+                break;
+        case 8: width  = {10, 10};
+                length = {15, 15};
+                x_1    -= 20;
+                y_1    -= 5;
+                break;
+    }
+
+    addRamp(x_1, y_1, width, length, min_height, max_height, false, texture, polys);
+    addRamp(x_1, y_1, width, length, min_height, max_height, true,  texture, polys);
+}

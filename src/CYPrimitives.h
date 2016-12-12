@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "poly2tri/poly2tri.h"
 #include "LevelTextures.h"
 
 namespace CYLevelLoader

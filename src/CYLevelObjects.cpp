@@ -30,6 +30,9 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
         case 4:
             createPlat(ptof(0), ptof(1), ptoi(2), ptoi(3), 1, "5", polys);
             break;
+        case 5:
+            createPlat(ptof(0), ptof(1), ptoi(2), ptoi(4), 1, ptos(3), polys);
+            break;
         case 6:
             createPlat(ptof(0), ptof(1), ptoi(2), ptoi(5), ptoi(4), ptos(3), polys);
             break;

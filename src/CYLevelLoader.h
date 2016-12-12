@@ -9,8 +9,9 @@
 #include <array>
 #include <math.h>
 
-#include "Loader.h"
+#include <SFML/Network.hpp>
 
+#include "Loader.h"
 #include "CYLevelObjects.h"
 
 namespace CYLevelLoader

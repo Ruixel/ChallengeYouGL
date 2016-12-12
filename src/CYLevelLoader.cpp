@@ -37,6 +37,48 @@ cyLevel CYLevelLoader::loadFromFile(const char* levelPath)
     return game_level;
 }
 
+cyLevel CYLevelLoader::loadFromWebsite(int gameNumber)
+{
+    // Load file
+    std::string level;
+
+    // Setup connection
+    sf::Http http;
+    http.setHost("http://www.challengeyou.com/");
+    std::cout << "Initialising connection to www.challengeyou.com" << std::endl;
+
+    // Setup request
+    sf::Http::Request request;
+    request.setMethod(sf::Http::Request::Get);
+    std::string uri = "ChallengeFiles/Maze/Maze" + std::to_string(gameNumber);
+    request.setUri(uri);
+    std::cout << "Sending request to game number #" << gameNumber << std::endl;
+
+    // Send GET Request
+    sf::Http::Response response = http.sendRequest(request);
+
+    // Check if it's a success
+    if (response.getStatus() != 200)
+    {
+        std::cout << "FAILED, exited with status: " << response.getStatus() << std::endl;
+    }
+
+    // Copy contents into level string
+    level = response.getBody();
+
+    cyLevel game_level;
+
+    std::vector<polygon> polys = CYLevelLoader::loadContentsIntoChunks(level, game_level);
+    std::vector<polygon_mesh> poly_meshes = CYLevelLoader::convertPolygonsIntoMeshInfo(polys);
+
+    // Sort the polygons via texture
+    std::sort(poly_meshes.begin(), poly_meshes.end());
+
+    game_level.chunks = generateWorldMeshes(poly_meshes);
+
+    return game_level;
+}
+
 std::vector<polygon> CYLevelLoader::loadContentsIntoChunks(const std::string& level, cyLevel& level_objs)
 {
     // Object to be returned

@@ -6,7 +6,8 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera)
 ,   m_camera(camera)
 {
     CYLevelLoader::level_textures = &this->level_textures;
-    level_objs = CYLevelLoader::loadFromFile(levelPath);
+    //level_objs = CYLevelLoader::loadFromFile(levelPath);
+    level_objs = CYLevelLoader::loadFromWebsite(163190);
 }
 
 void WorldSpawn::draw()

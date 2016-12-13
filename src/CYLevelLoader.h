@@ -52,9 +52,9 @@ namespace CYLevelLoader
     cyLevel loadFromWebsite(int gameNumber);
     cyLevel loadFromFile(const char* levelPath);
 
-    std::vector<polygon> loadContentsIntoChunks(const std::string& level, cyLevel& level_objs);
+    objVector loadContentsIntoChunks(const std::string& level, cyLevel& level_objs);
 
-    std::vector<polygon_mesh> convertPolygonsIntoMeshInfo(const std::vector<polygon>& polys);
+    std::vector<polygon_mesh> convertPolygonsIntoMeshInfo(objVector& obj_v);
     std::vector<static_world_chunk> generateWorldMeshes(std::vector<polygon_mesh>& poly_meshes);
 };
 

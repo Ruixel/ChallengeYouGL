@@ -8,8 +8,9 @@ namespace CYLevelLoader
 }
 
 void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::string>* obj_properties,
-                                  std::vector<polygon>* polys)
+                                 objVector* obj_v)
 {
+    std::vector<polygon>* polys = obj_v->polys;
     properties = obj_properties;
     int vector_size = properties->size();
 

@@ -26,8 +26,8 @@ cyLevel CYLevelLoader::loadFromFile(const char* levelPath)
 
     cyLevel game_level;
 
-    std::vector<polygon> polys = CYLevelLoader::loadContentsIntoChunks(level, game_level);
-    std::vector<polygon_mesh> poly_meshes = CYLevelLoader::convertPolygonsIntoMeshInfo(polys);
+    objVector obj_v = CYLevelLoader::loadContentsIntoChunks(level, game_level);
+    std::vector<polygon_mesh> poly_meshes = CYLevelLoader::convertPolygonsIntoMeshInfo(obj_v);
 
     // Sort the polygons via texture
     std::sort(poly_meshes.begin(), poly_meshes.end());
@@ -68,8 +68,8 @@ cyLevel CYLevelLoader::loadFromWebsite(int gameNumber)
 
     cyLevel game_level;
 
-    std::vector<polygon> polys = CYLevelLoader::loadContentsIntoChunks(level, game_level);
-    std::vector<polygon_mesh> poly_meshes = CYLevelLoader::convertPolygonsIntoMeshInfo(polys);
+    objVector obj_v = CYLevelLoader::loadContentsIntoChunks(level, game_level);
+    std::vector<polygon_mesh> poly_meshes = CYLevelLoader::convertPolygonsIntoMeshInfo(obj_v);
 
     // Sort the polygons via texture
     std::sort(poly_meshes.begin(), poly_meshes.end());
@@ -79,10 +79,15 @@ cyLevel CYLevelLoader::loadFromWebsite(int gameNumber)
     return game_level;
 }
 
-std::vector<polygon> CYLevelLoader::loadContentsIntoChunks(const std::string& level, cyLevel& level_objs)
+objVector CYLevelLoader::loadContentsIntoChunks(const std::string& level, cyLevel& level_objs)
 {
     // Object to be returned
-    std::vector<polygon> polys;
+    objVector obj_v;
+
+    // Initialise points
+    obj_v.polys  = new std::vector<polygon>();
+    obj_v.floors = new std::vector<p2t_quad>();
+    obj_v.holes  = new std::vector<p2t_quad>();
 
     // Variables & Iterators
     unsigned ptr = 0;
@@ -164,7 +169,7 @@ std::vector<polygon> CYLevelLoader::loadContentsIntoChunks(const std::string& le
 
                                 // Object complete, create entity
                                 if (properties->size() != 0)
-                                    addNewObject(obj_name, properties, &polys);
+                                    addNewObject(obj_name, properties, &obj_v);
 
                                 // Delete property list and create a new one
                                 delete properties;
@@ -218,13 +223,13 @@ std::vector<polygon> CYLevelLoader::loadContentsIntoChunks(const std::string& le
         ptr++;
     }
 
-    return polys;
+    return obj_v;
 }
-std::vector<polygon_mesh> CYLevelLoader::convertPolygonsIntoMeshInfo(const std::vector<polygon>& polys)
+std::vector<polygon_mesh> CYLevelLoader::convertPolygonsIntoMeshInfo(objVector& obj_v)
 {
     std::vector<polygon_mesh> poly_meshes;
 
-    for (auto& poly : polys)
+    for (auto& poly : *obj_v.polys)
     {
         polygon_mesh p_m;
 

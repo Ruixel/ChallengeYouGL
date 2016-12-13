@@ -11,7 +11,7 @@ namespace CYLevelLoader
 {
     // Create new Object with certain amount of properties
     void addNewObject(const std::string& obj_name, std::vector<std::string>* obj_properties,
-                      std::vector<polygon>* polys);
+                      objVector* obj_v);
 
     // Properties list
     extern std::vector<std::string>* properties;
@@ -33,6 +33,9 @@ namespace CYLevelLoader
     // Ramp: [[x, y], [direction, texture], level]
     void createRamp(float x, float y, int direction, int level,
                     const std::string& texture, std::vector<polygon>* polys);
+
+    // Hole: [[x, y], [size], level]
+    void createHole(float x, float y, int size, int level, std::vector<polygon>* polys);
 };
 
 // Quick conversions

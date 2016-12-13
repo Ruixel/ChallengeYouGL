@@ -18,6 +18,11 @@ namespace CYLevelLoader
     // Level Textures
     extern LevelTextures* level_textures;
 
+    struct p2t_quad {
+        std::vector<p2t::Point*> quad;
+        int level;
+    };
+
     // Polygon struct w/ properties
     struct polygon
     {
@@ -31,6 +36,13 @@ namespace CYLevelLoader
 
         bool    is_ramp  = false;
         int     triwall  = 0;
+    };
+
+    struct objVector
+    {
+        std::vector<polygon>*  polys;
+        std::vector<p2t_quad>* floors;
+        std::vector<p2t_quad>* holes;
     };
 
     // Primitive Objects

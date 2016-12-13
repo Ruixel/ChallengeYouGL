@@ -32,14 +32,6 @@ void CYLevelLoader::addFloor(float x1, float y1, float x2, float y2, float x3, f
     hole.push_back(new p2t::Point(20, 20));
     cdt->AddHole(hole);
 
-    std::vector<p2t::Point*> hole2;
-    hole2.push_back(new p2t::Point(120, 40));
-    hole2.push_back(new p2t::Point(140, 40));
-    hole2.push_back(new p2t::Point(140, 20));
-    hole2.push_back(new p2t::Point(120, 20));
-    cdt->AddHole(hole2);
-
-
     // Triangulate
     cdt->Triangulate();
     triangles = cdt->GetTriangles();
@@ -154,7 +146,7 @@ void CYLevelLoader::addVerticalQuad(float x_1, float y_1, float x_2, float y_2, 
         f1.textureID = CYLevelLoader::level_textures->getWallTexture(stoi(texture));
     }
 
-    polys->push_back(std::move(f1));
+    polys->push_back(f1);
 }
 
 std::vector<GLfloat> CYLevelLoader::extractColor(const std::string& data)

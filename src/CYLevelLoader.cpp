@@ -86,7 +86,7 @@ objVector CYLevelLoader::loadContentsIntoChunks(const std::string& level, cyLeve
 
     // Initialise points
     obj_v.polys  = new std::vector<polygon>();
-    obj_v.floors = new std::vector<p2t_quad>();
+    obj_v.floors = new std::vector<p2t_ground>();
     obj_v.holes  = new std::vector<p2t_quad>();
 
     // Variables & Iterators
@@ -228,6 +228,46 @@ objVector CYLevelLoader::loadContentsIntoChunks(const std::string& level, cyLeve
 std::vector<polygon_mesh> CYLevelLoader::convertPolygonsIntoMeshInfo(objVector& obj_v)
 {
     std::vector<polygon_mesh> poly_meshes;
+
+    for (auto& ground : *obj_v.floors)
+    {
+        std::vector<p2t::Triangle*> triangles;
+        p2t::CDT* cdt = new p2t::CDT(ground);
+
+        // TODO: Add holes
+
+        cdt->Triangulate();
+        triangles = cdt->GetTriangles();
+
+        for (int i = 0; i < triangles.size(); i++)
+        {
+            polygon_mesh p_m;
+
+            p2t::Triangle& t = *triangles[i];
+            p2t::Point&   p1 = *t.GetPoint(0);
+            p2t::Point&   p2 = *t.GetPoint(1);
+            p2t::Point&   p3 = *t.GetPoint(2);
+
+            p_m.i = {0, 1, 2};
+
+            float height   = ground.level * HEIGHT;
+            glm::vec3 pos1 = glm::vec3((p1.x - 200)  / WORLD_SIZE, height, (p1.y - 200)  / WORLD_SIZE);
+            glm::vec3 pos2 = glm::vec3((p2.x - 200)  / WORLD_SIZE, height, (p2.y - 200)  / WORLD_SIZE);
+            glm::vec3 pos3 = glm::vec3((p3.x - 200)  / WORLD_SIZE, height, (p3.y - 200)  / WORLD_SIZE);
+
+            p_m.p.insert(p_m.p.end(), {poly.vertex[1].x, poly.vertex[1].y, poly.vertex[1].z});
+            p_m.p.insert(p_m.p.end(), {poly.vertex[2].x, poly.vertex[2].y, poly.vertex[2].z});
+            p_m.p.insert(p_m.p.end(), {poly.vertex[0].x, poly.vertex[0].y, poly.vertex[0].z});
+
+            sf::Vector2f tSize = CYLevelLoader::level_textures->getTextureSize(poly.textureID);
+
+            p_m.t.insert(p_m.t.end(), {poly.vertex[1].x*TEXTURE_SIZE * tSize.x, poly.vertex[1].z*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {poly.vertex[2].x*TEXTURE_SIZE * tSize.x, poly.vertex[2].z*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {poly.vertex[0].x*TEXTURE_SIZE * tSize.x, poly.vertex[0].z*TEXTURE_SIZE * tSize.y});
+
+        }
+
+    }
 
     for (auto& poly : *obj_v.polys)
     {

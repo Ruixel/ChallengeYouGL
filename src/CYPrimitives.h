@@ -18,6 +18,16 @@ namespace CYLevelLoader
     // Level Textures
     extern LevelTextures* level_textures;
 
+    struct p2t_ground {
+        std::vector<p2t::Point*> quad;
+        int level;
+        texture_id floorTexture;
+        std::vector<GLfloat> floorColors = {255, 255, 255};
+
+        texture_id ceilingTexture;
+        std::vector<GLfloat> ceilingColors = {255, 255, 255};
+    };
+
     struct p2t_quad {
         std::vector<p2t::Point*> quad;
         int level;
@@ -41,14 +51,14 @@ namespace CYLevelLoader
     struct objVector
     {
         std::vector<polygon>*  polys;
-        std::vector<p2t_quad>* floors;
+        std::vector<p2t_ground>* floors;
         std::vector<p2t_quad>* holes;
     };
 
     // Primitive Objects
     void addFloor(float x1, float y1, float x2, float y2, float x3, float y3,
                   float x4, float y4, int level, const std::string& texture1,
-                  const std::string& texture2, std::vector<polygon>* polys);
+                  const std::string& texture2, std::vector<p2t_ground>* floors);
 
     void addHorizontalQuad(float x1, float y1, float x2, float y2, float x3, float y3,
                           float x4, float y4, float o_height, int tri,

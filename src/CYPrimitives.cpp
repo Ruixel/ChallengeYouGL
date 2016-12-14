@@ -9,8 +9,9 @@ namespace CYLevelLoader
 
 void CYLevelLoader::addFloor(float x1, float y1, float x2, float y2, float x3, float y3,
                              float x4, float y4, int level, const std::string& texture1, const std::string& texture2,
-                             std::vector<polygon>* polys)
+                             std::vector<p2t_ground>* floors)
 {
+    /*
     // Initialise variables
     std::vector<p2t::Point*> ground;
     std::vector<p2t::Triangle*> triangles;
@@ -48,6 +49,30 @@ void CYLevelLoader::addFloor(float x1, float y1, float x2, float y2, float x3, f
 
     addHorizontalQuad(x1, y1, x2, y2, x3, y3, x4, y4, level, 0, texture1, polys);
     addHorizontalQuad(x4, y4, x3, y3, x2, y2, x1, y1, level, 0, texture2, polys);
+    */
+
+    // Set up
+    p2t_ground floor;
+    floor.level = level;
+
+    if (texture1[0] == 'c') {
+        floor.floorTexture = CY_COLOR;
+        f1.colors    = extractColor(texture);
+    } else {
+        f1.textureID = CYLevelLoader::level_textures->getWallTexture(stoi(texture));
+    }
+
+    // Initialise variables
+    std::vector<p2t::Point*> ground;
+    std::vector<p2t::Triangle*> triangles;
+
+    // Create main polygon for the ground
+    ground.push_back(new p2t::Point(x1,  y1));
+    ground.push_back(new p2t::Point(x2,  y2));
+    ground.push_back(new p2t::Point(x3,  y3));
+    ground.push_back(new p2t::Point(x4,  y4));
+
+    floors.push_back(std::move())
 }
 
 void CYLevelLoader::addHorizontalQuad(float x1, float y1, float x2, float y2, float x3, float y3,

@@ -26,7 +26,8 @@ namespace CYLevelLoader
         std::vector<GLfloat> p, t, n, c;
         std::vector<GLuint>  i;
 
-        texture_id                  textureID;
+        texture_id textureID;
+        int index_count = 4;
 
         bool operator < (const polygon_mesh& a) const
         {

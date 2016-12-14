@@ -57,9 +57,16 @@ void CYLevelLoader::addFloor(float x1, float y1, float x2, float y2, float x3, f
 
     if (texture1[0] == 'c') {
         floor.floorTexture = CY_COLOR;
-        f1.colors    = extractColor(texture);
+        floor.floorColors  = extractColor(texture1);
     } else {
-        f1.textureID = CYLevelLoader::level_textures->getWallTexture(stoi(texture));
+        floor.floorTexture = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture1));
+    }
+
+    if (texture2[0] == 'c') {
+        floor.floorTexture = CY_COLOR;
+        floor.floorColors  = extractColor(texture2);
+    } else {
+        floor.floorTexture = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture1));
     }
 
     // Initialise variables
@@ -71,8 +78,9 @@ void CYLevelLoader::addFloor(float x1, float y1, float x2, float y2, float x3, f
     ground.push_back(new p2t::Point(x2,  y2));
     ground.push_back(new p2t::Point(x3,  y3));
     ground.push_back(new p2t::Point(x4,  y4));
+    floor.quad = ground;
 
-    floors.push_back(std::move())
+    floors->push_back(std::move(floor));
 }
 
 void CYLevelLoader::addHorizontalQuad(float x1, float y1, float x2, float y2, float x3, float y3,

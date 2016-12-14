@@ -232,7 +232,7 @@ std::vector<polygon_mesh> CYLevelLoader::convertPolygonsIntoMeshInfo(objVector& 
     for (auto& ground : *obj_v.floors)
     {
         std::vector<p2t::Triangle*> triangles;
-        p2t::CDT* cdt = new p2t::CDT(ground);
+        p2t::CDT* cdt = new p2t::CDT(ground.quad);
 
         // TODO: Add holes
 
@@ -248,23 +248,51 @@ std::vector<polygon_mesh> CYLevelLoader::convertPolygonsIntoMeshInfo(objVector& 
             p2t::Point&   p2 = *t.GetPoint(1);
             p2t::Point&   p3 = *t.GetPoint(2);
 
-            p_m.i = {0, 1, 2};
+            p_m.i = {1, 0, 2};
 
-            float height   = ground.level * HEIGHT;
-            glm::vec3 pos1 = glm::vec3((p1.x - 200)  / WORLD_SIZE, height, (p1.y - 200)  / WORLD_SIZE);
-            glm::vec3 pos2 = glm::vec3((p2.x - 200)  / WORLD_SIZE, height, (p2.y - 200)  / WORLD_SIZE);
-            glm::vec3 pos3 = glm::vec3((p3.x - 200)  / WORLD_SIZE, height, (p3.y - 200)  / WORLD_SIZE);
+            float g_height = ground.level * HEIGHT;
+            glm::vec3 pos1 = glm::vec3((p1.x - 200)  / WORLD_SIZE, g_height, (p1.y - 200)  / WORLD_SIZE);
+            glm::vec3 pos2 = glm::vec3((p2.x - 200)  / WORLD_SIZE, g_height, (p2.y - 200)  / WORLD_SIZE);
+            glm::vec3 pos3 = glm::vec3((p3.x - 200)  / WORLD_SIZE, g_height, (p3.y - 200)  / WORLD_SIZE);
+            glm::vec3 norm = glm::cross(pos3 - pos1, pos2 - pos1);
 
-            p_m.p.insert(p_m.p.end(), {poly.vertex[1].x, poly.vertex[1].y, poly.vertex[1].z});
-            p_m.p.insert(p_m.p.end(), {poly.vertex[2].x, poly.vertex[2].y, poly.vertex[2].z});
-            p_m.p.insert(p_m.p.end(), {poly.vertex[0].x, poly.vertex[0].y, poly.vertex[0].z});
+            p_m.p.insert(p_m.p.end(), {pos1.x, pos1.y, pos1.z});
+            p_m.p.insert(p_m.p.end(), {pos2.x, pos2.y, pos2.z});
+            p_m.p.insert(p_m.p.end(), {pos3.x, pos3.y, pos3.z});
 
-            sf::Vector2f tSize = CYLevelLoader::level_textures->getTextureSize(poly.textureID);
+            sf::Vector2f tSize = CYLevelLoader::level_textures->getTextureSize(ground.floorTexture);
 
-            p_m.t.insert(p_m.t.end(), {poly.vertex[1].x*TEXTURE_SIZE * tSize.x, poly.vertex[1].z*TEXTURE_SIZE * tSize.y});
-            p_m.t.insert(p_m.t.end(), {poly.vertex[2].x*TEXTURE_SIZE * tSize.x, poly.vertex[2].z*TEXTURE_SIZE * tSize.y});
-            p_m.t.insert(p_m.t.end(), {poly.vertex[0].x*TEXTURE_SIZE * tSize.x, poly.vertex[0].z*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {pos1.x*TEXTURE_SIZE * tSize.x, pos1.z*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {pos2.x*TEXTURE_SIZE * tSize.x, pos2.z*TEXTURE_SIZE * tSize.y});
+            p_m.t.insert(p_m.t.end(), {pos3.x*TEXTURE_SIZE * tSize.x, pos3.z*TEXTURE_SIZE * tSize.y});
 
+            p_m.textureID = ground.floorTexture;
+
+            for (int it = 0; it < 3; it++)
+                p_m.c.insert(p_m.c.end(), {ground.floorColors[0], ground.floorColors[1], ground.floorColors[2]});
+
+            for (int it = 0; it < 3; it++)
+                p_m.n.insert(p_m.n.end(), {norm.x, norm.y, norm.z});
+
+            p_m.index_count = 3;
+
+            // Copy
+            polygon_mesh p_m2   = p_m;
+            p_m2.i              = {2, 0, 1};
+            glm::vec3 norm2     = glm::cross(pos2 - pos1, pos3 - pos1);
+            p_m2.textureID      = ground.ceilingTexture;
+
+            p_m2.c.clear();
+            for (int it = 0; it < 3; it++)
+                p_m2.c.insert(p_m2.c.end(), {ground.ceilingColors[0], ground.ceilingColors[1], ground.ceilingColors[2]});
+
+            p_m2.n.clear();
+            for (int it = 0; it < 3; it++)
+                p_m2.n.insert(p_m2.n.end(), {norm2.x, norm2.y, norm2.z});
+
+            // Push back
+            poly_meshes.push_back(std::move(p_m));
+            poly_meshes.push_back(std::move(p_m2));
         }
 
     }
@@ -379,7 +407,7 @@ std::vector<static_world_chunk> CYLevelLoader::generateWorldMeshes(std::vector<p
         for (GLuint index : poly.i)
             i.push_back(index + i_counter);
 
-        i_counter += 4;
+        i_counter += poly.index_count;
 
     }
 

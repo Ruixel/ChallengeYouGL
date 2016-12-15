@@ -20,7 +20,7 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
             return;
 
         addFloor(ptof(0),  ptof(1),  ptof(2), ptof(3), ptof(4), ptof(5), ptof(6), ptof(7),
-                 ptoi(11), ptos(8), ptos(10), obj_v->floors);
+                 ptoi(11), ptos(10), ptos(8), obj_v->floors);
 
     }
 

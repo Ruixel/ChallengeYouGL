@@ -28,7 +28,7 @@ public:
     Camera();
     void init(sf::RenderWindow& window);
 
-    glm::mat4 generateProjectionMatrix(float aspectRatio);
+    glm::mat4 generateProjectionMatrix();
     glm::mat4 generateViewMatrix();
 
     const Vector3& getPosition () const;

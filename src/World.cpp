@@ -9,7 +9,7 @@ void World::initWorld(sf::RenderWindow& window)
     this->m_camera.init(window);
 
     m_staticShader.use();
-    glm::mat4 pMatrix = m_camera.generateProjectionMatrix(1.6f);
+    glm::mat4 pMatrix = m_camera.generateProjectionMatrix();
     m_staticShader.loadProjectionMatrix(pMatrix);
     m_staticShader.stop();
 

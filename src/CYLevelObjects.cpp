@@ -272,7 +272,7 @@ void CYLevelLoader::createPillar(float x, float y, int angled, float size, int l
     addVerticalQuad(x_2, y_2, x_1, y_2, height_min, height_max, 0, true, texture, polys);
 
     // Top & Bottom
-    addHorizontalQuad(x_2, y_2, x_1, y_2, x_1, y_1, x_2, y_1, height_min+0.002f, 0, texture, polys);
+    addHorizontalQuad(x_2, y_2, x_1, y_2, x_1, y_1, x_2, y_1, height_min, 0, texture, polys);
     addHorizontalQuad(x_2, y_1, x_1, y_1, x_1, y_2, x_2, y_2, height_max-0.001f, 0, texture, polys);
 }
 

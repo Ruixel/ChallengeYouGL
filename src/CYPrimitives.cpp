@@ -66,7 +66,7 @@ void CYLevelLoader::addFloor(float x1, float y1, float x2, float y2, float x3, f
         floor.floorTexture = CY_COLOR;
         floor.floorColors  = extractColor(texture2);
     } else {
-        floor.floorTexture = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture1));
+        floor.floorTexture = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture2));
     }
 
     // Initialise variables

@@ -219,10 +219,10 @@ void CYLevelLoader::createPlat(float x, float y, int size, int level, int z_idx,
         default: size = size;
     }
 
-    int x_min      = ptof(0) - size*5;
-    int x_max      = ptof(0) + size*5;
-    int y_min      = ptof(1) - size*5;
-    int y_max      = ptof(1) + size*5;
+    float x_min      = ptof(0) - size*5;
+    float x_max      = ptof(0) + size*5;
+    float y_min      = ptof(1) - size*5;
+    float y_max      = ptof(1) + size*5;
 
     addHorizontalQuad(x_min, y_max, x_max, y_max, x_max, y_min, x_min, y_min, p_height, 0, texture, polys);
     addHorizontalQuad(x_min, y_min, x_max, y_min, x_max, y_max, x_min, y_max, p_height, 0, texture, polys);
@@ -345,10 +345,10 @@ void CYLevelLoader::createHole(float x, float y, int size, int level, std::vecto
         default: size = size;
     }
 
-    int x_min      = ptof(0) - size*5 + 0.001f;
-    int x_max      = ptof(0) + size*5 - 0.001f;
-    int y_min      = ptof(1) - size*5 + 0.001f;
-    int y_max      = ptof(1) + size*5 - 0.001f;
+    float x_min      = (ptof(0) - size*5) + 0.01f;
+    float x_max      = (ptof(0) + size*5) - 0.01f;
+    float y_min      = (ptof(1) - size*5) + 0.01f;
+    float y_max      = (ptof(1) + size*5) - 0.01f;
 
     std::vector<p2t::Point*> hole;
     hole.push_back(new p2t::Point(x_min, y_max));

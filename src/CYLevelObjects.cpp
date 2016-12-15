@@ -167,6 +167,11 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
             break;
         }
     }
+
+    if (obj_name == "Hole")
+    {
+        createHole(ptof(0), ptof(1), ptoi(2), ptoi(3), obj_v->holes);
+    }
 }
 
 void CYLevelLoader::createWall(float x_size, float y_size, float x, float y, int level, int z_idx,
@@ -328,4 +333,32 @@ void CYLevelLoader::createRamp(float x, float y, int direction, int level,
 
     addRamp(x_1, y_1, width, length, min_height, max_height, false, texture, polys);
     addRamp(x_1, y_1, width, length, min_height, max_height, true,  texture, polys);
+}
+
+void CYLevelLoader::createHole(float x, float y, int size, int level, std::vector<p2t_quad>* holes)
+{
+    // Size of hole
+    switch (size)
+    {
+        case 3:  size = 4; break;
+        case 4:  size = 8; break;
+        default: size = size;
+    }
+
+    int x_min      = ptof(0) - size*5 + 0.001f;
+    int x_max      = ptof(0) + size*5 - 0.001f;
+    int y_min      = ptof(1) - size*5 + 0.001f;
+    int y_max      = ptof(1) + size*5 - 0.001f;
+
+    std::vector<p2t::Point*> hole;
+    hole.push_back(new p2t::Point(x_min, y_max));
+    hole.push_back(new p2t::Point(x_max, y_max));
+    hole.push_back(new p2t::Point(x_max, y_min));
+    hole.push_back(new p2t::Point(x_min, y_min));
+
+    p2t_quad h;
+    h.quad = hole;
+    h.level = level;
+
+    holes->push_back(std::move(h));
 }

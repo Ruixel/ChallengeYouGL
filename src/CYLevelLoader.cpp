@@ -229,12 +229,23 @@ std::vector<polygon_mesh> CYLevelLoader::convertPolygonsIntoMeshInfo(objVector& 
 {
     std::vector<polygon_mesh> poly_meshes;
 
+    // Sort through the holes to reduce load time
+    std::sort(obj_v.holes->begin(), obj_v.holes->end());
+
+    int hole_number = 0;
     for (auto& ground : *obj_v.floors)
     {
         std::vector<p2t::Triangle*> triangles;
         p2t::CDT* cdt = new p2t::CDT(ground.quad);
 
-        // TODO: Add holes
+        // Add holes
+        for (int it = 0; it < obj_v.holes->size(); it++)
+        {
+            if ((*obj_v.holes)[it].level != ground.level)
+                continue;
+
+            cdt->AddHole((*obj_v.holes)[it].quad);
+        }
 
         cdt->Triangulate();
         triangles = cdt->GetTriangles();

@@ -35,7 +35,7 @@ namespace CYLevelLoader
                     const std::string& texture, std::vector<polygon>* polys);
 
     // Hole: [[x, y], [size], level]
-    void createHole(float x, float y, int size, int level, std::vector<polygon>* polys);
+    void createHole(float x, float y, int size, int level, std::vector<p2t_quad>* holes);
 };
 
 // Quick conversions

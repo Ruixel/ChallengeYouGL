@@ -31,6 +31,12 @@ namespace CYLevelLoader
     struct p2t_quad {
         std::vector<p2t::Point*> quad;
         int level;
+
+        // Sort via level
+        bool operator < (const p2t_quad& a) const
+        {
+            return level < a.level;
+        }
     };
 
     // Polygon struct w/ properties

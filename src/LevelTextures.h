@@ -5,28 +5,28 @@
 
 #include "Loader.h"
 
-enum texture_id
+enum class texture_id
 {
-    CY_COLOR                    = 0,
-    CY_GRASS                    = 1,
-    CY_STUCCO                   = 2,
-    CY_BRICK                    = 3,
-    CY_STONE                    = 4,
-    CY_WOOD                     = 5,
-    CY_HAPPY                    = 6,
-    CY_EGYPT                    = 7,
-    CY_BARK                     = 9,
-    CY_SCIFI                    = 10,
-    CY_TILE                     = 11,
-    CY_ROCK                     = 13,
-    CY_PARQUET                  = 14,
-    CY_BOOKS                    = 17,
+    COLOR                    = 0,
+    GRASS                    = 1,
+    STUCCO                   = 2,
+    BRICK                    = 3,
+    STONE                    = 4,
+    WOOD                     = 5,
+    HAPPY                    = 6,
+    EGYPT                    = 7,
+    BARK                     = 9,
+    SCIFI                    = 10,
+    TILE                     = 11,
+    ROCK                     = 13,
+    PARQUET                  = 14,
+    BOOKS                    = 17,
 
     // Translucent Textures
-    CY_BARS                     = 100,
-    CY_GLASS                    = 101,
+    BARS                     = 100,
+    GLASS                    = 101,
 
-    CY_UNASSIGNED               = -1
+    UNASSIGNED               = -1
 };
 
 class LevelTextures

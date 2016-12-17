@@ -48,6 +48,7 @@ void MainGame::initWindow()
     this->window->setFramerateLimit(FRAME_RATE);
     this->window->setVerticalSyncEnabled(false);
 
+
     return;
 }
 

@@ -58,11 +58,11 @@ void main()
     }
 
     col = vec3(texture(screenTexture, fboTexCoords.st).xyz);
-    color = vec4(col.r * 0.7, 0.0, 0.0, 1.0);
+    //color = vec4(col.r * 0.7, col.g * 0.1, col.b * 0.1, 1.0);
 
     // Inverted Colors
     // color = vec4(vec3(1.0 - texture(screenTexture, fboTexCoords)), 1.0);
 
     // No Post FX
-    // color = texture(screenTexture, fboTexCoords);
+    color = texture(screenTexture, fboTexCoords);
 }

@@ -6,6 +6,7 @@
 
 #include "Entity.h"
 #include "Cube.h"
+#include "SkyDome.h"
 #include "WorldSpawn.h"
 #include "Camera.h"
 #include "ShaderProgram.h"

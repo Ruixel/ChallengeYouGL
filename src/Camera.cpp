@@ -13,7 +13,7 @@ void Camera::init(sf::RenderWindow& window)
 glm::mat4 Camera::generateProjectionMatrix()
 {
     float aspectRatio = (float)this->m_window->getSize().x / (float)this->m_window->getSize().y;
-    return glm::perspective(glm::radians(45.f), aspectRatio, .1f, 1000.f);
+    return glm::perspective(glm::radians(45.f), aspectRatio, .1f, 1500.f);
 }
 
 glm::mat4 Camera::generateViewMatrix()

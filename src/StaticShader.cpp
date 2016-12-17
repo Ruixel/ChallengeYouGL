@@ -20,6 +20,9 @@ void StaticShader::getAllUniformLocations()
     location_transformationMatrix   = this->getUniformLocation("modelTransformation");
     location_projectionMatrix       = this->getUniformLocation("projectionTransformation");
     location_viewMatrix             = this->getUniformLocation("viewTransformation");
+
+    location_enableLighting         = this->getUniformLocation("enableLighting");
+    location_isEntity           = this->getUniformLocation("isEntity");
 }
 
 void StaticShader::loadTransformationMatrix(const glm::mat4& matrix)
@@ -35,4 +38,14 @@ void StaticShader::loadProjectionMatrix(const glm::mat4& projectionMatrix)
 void StaticShader::loadViewMatrix(Camera& cam)
 {
     this->loadMatrix(location_viewMatrix, cam.generateViewMatrix());
+}
+
+void StaticShader::enableLighting(bool enable)
+{
+    this->loadBoolean(location_enableLighting, enable);
+}
+
+void StaticShader::isEntity(bool isEntity)
+{
+    this->loadBoolean(location_isEntity, isEntity);
 }

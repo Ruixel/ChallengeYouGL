@@ -134,27 +134,3 @@ void Loader::insertIntoStringVector(std::vector<string>* vec, std::istringstream
     //vec->push_back(T{stof(x), stof(y), stof(z)});
     //cout << "Vector: " << x[0] << ", " << x[1] << ", " << x[2] << endl;
 }
-
-
-/*void OBJLoader::insertIntoVector3f(std::vector<vector3f>* vec, std::istringstream* ss)
-{
-    string x, y, z;
-
-    ss->seekg(2);
-    *ss >> x >> y >> z;
-    vec->push_back(vector3f{stof(x), stof(y), stof(z)});
-
-    cout << "Vector3f: " << x << ", " << y << ", " << z << endl;
-}
-
-void OBJLoader::insertIntoVector2f(std::vector<vector2f>* vec, std::istringstream* ss)
-{
-    string x, y;
-
-    ss->seekg(2);
-    *ss >> x >> y;
-    vec->push_back(vector2f{stof(x), stof(y)});
-
-    cout << "Vector2f: " << x << ", " << y << endl;
-}
-*/

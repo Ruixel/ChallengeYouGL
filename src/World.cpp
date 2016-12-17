@@ -12,6 +12,7 @@ void World::initWorld(sf::RenderWindow& window)
     m_staticShader.use();
     glm::mat4 pMatrix = m_camera.generateProjectionMatrix();
     m_staticShader.loadProjectionMatrix(pMatrix);
+    m_staticShader.enableLighting(true);
     m_staticShader.stop();
 
     // Preload fonts
@@ -47,6 +48,7 @@ void World::initWorld(sf::RenderWindow& window)
     quadVao = Loader::loadToVAO(bag::quadVertices, bag::quadIndices, bag::quadTexCoods);
     /* TEMP */
 
+    insertEntity(std::make_unique<SkyDome>(m_staticShader));
     insertEntity(std::make_unique<WorldSpawn>("dat/maps/Misc.cy", m_staticShader, &m_camera));
 }
 
@@ -121,7 +123,7 @@ void World::renderWorld()
     glClearColor(2.f/255, 119.f/255, 189.f/255, 1.0f);
 
     glEnable(GL_DEPTH_TEST);
-    glDisable(GL_BLEND);
+    //glDisable(GL_BLEND);
 
     // Render
     m_staticShader.use();
@@ -145,7 +147,7 @@ void World::renderWorld()
 
     // Bind Back to the default window & draw main FBO on quad
     m_postfx.unbindFramebuffer();
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
 

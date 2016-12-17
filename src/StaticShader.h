@@ -19,6 +19,9 @@ private:
    int location_projectionMatrix        = 0;
    int location_viewMatrix              = 0;
 
+   int location_enableLighting          = 0;
+   int location_isEntity            = 0;
+
 public:
     StaticShader();
     ~StaticShader() = default;
@@ -26,6 +29,9 @@ public:
     void loadTransformationMatrix(const glm::mat4& matrix);
     void loadProjectionMatrix(const glm::mat4& projectionMatrix);
     void loadViewMatrix(Camera& cam);
+
+    void enableLighting(bool enable);
+    void isEntity(bool enable);
 };
 
 #endif // STATICSHADER_H

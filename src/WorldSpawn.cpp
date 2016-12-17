@@ -7,11 +7,12 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera)
 {
     CYLevelLoader::level_textures = &this->level_textures;
     //level_objs = CYLevelLoader::loadFromFile(levelPath);
-    level_objs = CYLevelLoader::loadFromWebsite(51358);
+    level_objs = CYLevelLoader::loadFromWebsite(2071);
 }
 
 void WorldSpawn::draw()
 {
+    shader->isEntity(false);
     shader->loadTransformationMatrix(transformationMatrix);
 
     glActiveTexture(GL_TEXTURE0);

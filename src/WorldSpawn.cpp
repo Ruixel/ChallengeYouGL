@@ -16,7 +16,7 @@ void WorldSpawn::draw()
 
     glActiveTexture(GL_TEXTURE0);
 
-    texture_id previous_texture = texture_id::UNASSIGNED;
+    texture_id previous_texture = CY_UNASSIGNED;
     for (auto& chunk : level_objs.chunks)
     {
         level_textures.bindTexture(chunk.textureID);

@@ -16,14 +16,14 @@ void CYLevelLoader::addFloor(float x1, float y1, float x2, float y2, float x3, f
     floor.level = level;
 
     if (texture1[0] == 'c') {
-        floor.floorTexture = texture_id::COLOR;
+        floor.floorTexture = CY_COLOR;
         floor.floorColors  = extractColor(texture1);
     } else {
         floor.floorTexture = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture1));
     }
 
     if (texture2[0] == 'c') {
-        floor.floorTexture = texture_id::COLOR;
+        floor.floorTexture = CY_COLOR;
         floor.floorColors  = extractColor(texture2);
     } else {
         floor.floorTexture = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture2));
@@ -59,7 +59,7 @@ void CYLevelLoader::addHorizontalQuad(float x1, float y1, float x2, float y2, fl
     f1.triwall    = tri;
 
     if (texture[0] == 'c') {
-        f1.textureID = texture_id::COLOR;
+        f1.textureID = CY_COLOR;
         f1.colors    = CYLevelLoader::extractColor(texture);
     } else {
         f1.textureID = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture));
@@ -96,7 +96,7 @@ void CYLevelLoader::addRamp(float x, float y, sf::Vector2f width, sf::Vector2f l
     f1.is_ramp    = true;
 
     if (texture[0] == 'c') {
-        f1.textureID = texture_id::COLOR;
+        f1.textureID = CY_COLOR;
         f1.colors    = CYLevelLoader::extractColor(texture);
     } else {
         f1.textureID = CYLevelLoader::level_textures->getPlatformTexture(stoi(texture));
@@ -133,7 +133,7 @@ void CYLevelLoader::addVerticalQuad(float x_1, float y_1, float x_2, float y_2, 
     f1.normal     = glm::cross(f1.vertex[2] - f1.vertex[1], f1.vertex[3] - f1.vertex[1]);
 
     if (texture[0] == 'c') {
-        f1.textureID = texture_id::COLOR;
+        f1.textureID = CY_COLOR;
         f1.colors    = extractColor(texture);
     } else {
         f1.textureID = CYLevelLoader::level_textures->getWallTexture(stoi(texture));

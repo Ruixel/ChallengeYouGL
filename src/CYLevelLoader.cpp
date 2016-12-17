@@ -383,14 +383,14 @@ std::vector<static_world_chunk> CYLevelLoader::generateWorldMeshes(std::vector<p
     std::vector<static_world_chunk> s_w_chunks;
 
     // Place static primitives into a single VAO to reduce CPU overhead
-    texture_id previous_texture = texture_id::UNASSIGNED;
+    texture_id previous_texture = CY_UNASSIGNED;
     static_world_chunk* world_chunk;
     int i_counter = 0;
     std::vector<GLfloat> p, t, n, c;
     std::vector<GLuint>  i;
     for (auto& poly : poly_meshes)
     {
-        if ((poly.textureID != previous_texture) && (previous_texture != texture_id::UNASSIGNED))
+        if ((poly.textureID != previous_texture) && (previous_texture != CY_UNASSIGNED))
         {
             world_chunk->meshID    = Loader::loadToVAO(p, i, t, n, c);
             world_chunk->textureID = previous_texture;

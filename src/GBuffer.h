@@ -9,19 +9,17 @@
 class GBuffer
 {
 public:
-    enum class GBUFFER_TEXTURE_TYPE
-    {
-        POSITION,
-        DIFFUSE,
-        NORMAL,
-        TEXCOORD,
-        TOTAL,
+    enum GBUFFER_TEXTURE_TYPE {
+        GBUFFER_TEXTURE_TYPE_POSITION,
+        GBUFFER_TEXTURE_TYPE_DIFFUSE,
+        GBUFFER_TEXTURE_TYPE_NORMAL,
+        GBUFFER_TEXTURE_TYPE_TEXCOORD,
+        GBUFFER_NUM_TEXTURES,
     };
-
 
 private:
     GLuint m_fbo;
-    GLuint m_textures[static_cast<int>(GBUFFER_TEXTURE_TYPE::TOTAL)];
+    GLuint m_textures[GBUFFER_NUM_TEXTURES];
     GLuint m_depthTexture;
 
 public:
@@ -33,7 +31,5 @@ public:
     void bindForWriting();
     void bindForReading();
 };
-
-constexpr static int GBUFFER_TEXTURE_TYPE_TOTAL = static_cast<int>(GBuffer::GBUFFER_TEXTURE_TYPE::TOTAL);
 
 #endif // GBUFFER_H

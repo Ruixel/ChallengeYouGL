@@ -1,26 +1,27 @@
 #ifndef GBUFFER_H
 #define GBUFFER_H
 
-#include "GLError.h"
-
 #define GLEW_STATIC
 #include <GL/glew.h>
+
+#include <vector>
+
+#include "GLError.h"
 
 class GBuffer
 {
 public:
     enum GBUFFER_TEXTURE_TYPE {
-        GBUFFER_TEXTURE_TYPE_POSITION,
-        GBUFFER_TEXTURE_TYPE_DIFFUSE,
+        GBUFFER_TEXTURE_TYPE_POSITION = 0,
         GBUFFER_TEXTURE_TYPE_NORMAL,
-        GBUFFER_TEXTURE_TYPE_TEXCOORD,
-        GBUFFER_NUM_TEXTURES,
+        GBUFFER_TEXTURE_TYPE_ALBEDO,
+        GBUFFER_NUM_TEXTURES
     };
 
 private:
     GLuint m_fbo;
     GLuint m_textures[GBUFFER_NUM_TEXTURES];
-    GLuint m_depthTexture;
+    GLuint m_rbo;
 
 public:
     GBuffer();
@@ -30,6 +31,14 @@ public:
 
     void bindForWriting();
     void bindForReading();
+    void setReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
 };
+
+namespace bag
+{
+    extern std::vector<GLfloat> quadVertices;
+    extern std::vector<GLfloat> quadTexCoods;
+    extern std::vector<GLuint> quadIndices;
+}
 
 #endif // GBUFFER_H

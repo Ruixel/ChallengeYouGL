@@ -1,6 +1,7 @@
 #include "World.h"
 
 World::World()
+: m_screenShader("shaders/basic_fbo.vert", "shaders/basic_fbo.frag")
 {}
 
 void World::initWorld(sf::RenderWindow& window)
@@ -16,6 +17,9 @@ void World::initWorld(sf::RenderWindow& window)
     // Preload fonts
     if (!font_GoldenRatio.loadFromFile("dat/GoldenRatio.otf"))
         std::cout << "Error loading GoldenRatio font" << std::endl;
+
+    // Set up G-Buffers
+    m_postfx.init(m_window->getSize().x, m_window->getSize().y);
 
     // GUI Text
     text_MouseControl.setFont(font_GoldenRatio);
@@ -38,6 +42,10 @@ void World::initWorld(sf::RenderWindow& window)
 
         insertEntity(std::move(cube));
     }
+
+    /* TEMP */
+    quadVao = Loader::loadToVAO(bag::quadVertices, bag::quadIndices, bag::quadTexCoods);
+    /* TEMP */
 
     insertEntity(std::make_unique<WorldSpawn>("dat/maps/Misc.cy", m_staticShader, &m_camera));
 }
@@ -86,6 +94,36 @@ void World::updateWorld(float deltaTime)
 
 void World::renderWorld()
 {
+    /*
+    m_staticShader.use();
+    m_staticShader.loadViewMatrix(m_camera);
+
+    for (auto& m_entity : worldEntities)
+    {
+        m_entity->draw();
+    }
+
+    m_staticShader.stop();
+
+    m_window->pushGLStates();
+
+    if (!m_camera.getToggle())
+        m_window->draw(text_MouseControl);
+
+    m_window->draw(text_FPS);
+
+    m_window->popGLStates();*/
+
+    // FBO Test
+    // First Pass
+    m_postfx.bindFramebuffer();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClearColor(2.f/255, 119.f/255, 189.f/255, 1.0f);
+
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+
+    // Render
     m_staticShader.use();
     m_staticShader.loadViewMatrix(m_camera);
 
@@ -105,6 +143,17 @@ void World::renderWorld()
 
     m_window->popGLStates();
 
+    // Bind Back to the default window & draw main FBO on quad
+    m_postfx.unbindFramebuffer();
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
+
+    m_screenShader.use();
+    glBindVertexArray(quadVao->getVaoID());
+    m_postfx.bindTexture();
+    glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }
 
 ////////////////////////

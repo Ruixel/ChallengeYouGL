@@ -21,9 +21,6 @@ void MainGame::mainLoop()
     {
         m_world->updateWorld(deltaTime);
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-        glClearColor(2.f/255, 119.f/255, 189.f/255, 1.0f);
-
         m_world->renderWorld();
 
         window->display();

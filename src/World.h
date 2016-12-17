@@ -8,7 +8,11 @@
 #include "Cube.h"
 #include "WorldSpawn.h"
 #include "Camera.h"
+#include "ShaderProgram.h"
 #include "StaticShader.h"
+#include "GBuffer.h"
+#include "BasicShader.h"
+#include "PostFX.h"
 
 class World
 {
@@ -22,6 +26,11 @@ private:
     sf::Font font_GoldenRatio;
     sf::Text text_MouseControl;
     sf::Text text_FPS;
+
+    BasicShader m_screenShader;
+
+    PostFX m_postfx;
+    std::unique_ptr<RawModel> quadVao;
 
 public:
     World();

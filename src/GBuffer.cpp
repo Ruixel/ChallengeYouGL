@@ -7,11 +7,11 @@ bool GBuffer::init(unsigned int width, unsigned int height)
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_fbo);
 
     // Create gbuffer textures
-    glGenTextures(GBUFFER_TEXTURE_TYPE_TOTAL, m_textures);
+    glGenTextures(GBUFFER_NUM_TEXTURES, m_textures);
     glGenTextures(1, &m_depthTexture);
 
     // Bind FBOs to each type
-    for (unsigned int i = 0; i < GBUFFER_TEXTURE_TYPE_TOTAL; i++)
+    for (unsigned int i = 0; i < GBUFFER_NUM_TEXTURES; i++)
     {
         glBindTexture(GL_TEXTURE_2D, m_textures[i]);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F, width, height, 0, GL_RGB, GL_FLOAT, NULL);
@@ -28,7 +28,7 @@ bool GBuffer::init(unsigned int width, unsigned int height)
     // Enable writing to textures
     GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1,
                             GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3};
-    glDrawBuffers(GBUFFER_TEXTURE_TYPE_TOTAL, drawBuffers);
+    glDrawBuffers(GBUFFER_NUM_TEXTURES, drawBuffers);
 
     GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 

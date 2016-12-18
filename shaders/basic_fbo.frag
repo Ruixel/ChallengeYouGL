@@ -3,6 +3,7 @@ in vec2 fboTexCoords;
 out vec4 color;
 
 uniform sampler2D screenTexture;
+uniform int theme;
 
 const float offset = 1.0 / 300;
 
@@ -58,11 +59,17 @@ void main()
     }
 
     col = vec3(texture(screenTexture, fboTexCoords.st).xyz);
-    //color = vec4(col.r * 0.7, col.g * 0.1, col.b * 0.1, 1.0);
+
+    switch(theme)
+    {
+        case 1: color = vec4(col.r, col.g, col.b, 1.0);                   break;
+        case 2: color = vec4(col.r * 0.3, col.g * 0.3, col.b * 0.3, 1.0); break;
+        case 3: color = vec4(col.r * 0.9, col.g * 0.1, col.b * 0.1, 1.0); break;
+    }
 
     // Inverted Colors
     // color = vec4(vec3(1.0 - texture(screenTexture, fboTexCoords)), 1.0);
 
     // No Post FX
-    color = texture(screenTexture, fboTexCoords);
+    //color = texture(screenTexture, fboTexCoords);
 }

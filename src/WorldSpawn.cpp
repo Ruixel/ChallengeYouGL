@@ -1,13 +1,16 @@
 #include "WorldSpawn.h"
 
-WorldSpawn::WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera)
+WorldSpawn::WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera, PostFX* postfx)
 //:   Entity(Loader::loadToVAO(v, i, t, v), Loader::loadTexture("iceman.jpg"))
 :   shader(&sh)
 ,   m_camera(camera)
 {
     CYLevelLoader::level_textures = &this->level_textures;
     //level_objs = CYLevelLoader::loadFromFile(levelPath);
-    level_objs = CYLevelLoader::loadFromWebsite(53221);
+    level_objs = CYLevelLoader::loadFromWebsite(2071);
+
+    // Change theme
+    postfx->changeTheme(level_objs.theme);
 }
 
 void WorldSpawn::draw()

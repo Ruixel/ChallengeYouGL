@@ -28,8 +28,6 @@ private:
     sf::Text text_MouseControl;
     sf::Text text_FPS;
 
-    BasicShader m_screenShader;
-
     PostFX m_postfx;
     std::unique_ptr<RawModel> quadVao;
 

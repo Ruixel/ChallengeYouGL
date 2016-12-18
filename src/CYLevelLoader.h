@@ -47,6 +47,8 @@ namespace CYLevelLoader
     {
         std::string name, author, levels, version;
         std::vector<static_world_chunk> chunks;
+
+        int theme;
     };
 
     // Main functions

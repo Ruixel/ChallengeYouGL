@@ -59,6 +59,8 @@ namespace CYLevelLoader
         std::vector<polygon>*  polys;
         std::vector<p2t_ground>* floors;
         std::vector<p2t_quad>* holes;
+
+        int theme = 0;
     };
 
     // Primitive Objects

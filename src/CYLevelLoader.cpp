@@ -27,6 +27,8 @@ cyLevel CYLevelLoader::loadFromFile(const char* levelPath)
     cyLevel game_level;
 
     objVector obj_v = CYLevelLoader::loadContentsIntoChunks(level, game_level);
+    game_level.theme = obj_v.theme;
+
     std::vector<polygon_mesh> poly_meshes = CYLevelLoader::convertPolygonsIntoMeshInfo(obj_v);
 
     // Sort the polygons via texture
@@ -69,6 +71,8 @@ cyLevel CYLevelLoader::loadFromWebsite(int gameNumber)
     cyLevel game_level;
 
     objVector obj_v = CYLevelLoader::loadContentsIntoChunks(level, game_level);
+    game_level.theme = obj_v.theme;
+
     std::vector<polygon_mesh> poly_meshes = CYLevelLoader::convertPolygonsIntoMeshInfo(obj_v);
 
     // Sort the polygons via texture

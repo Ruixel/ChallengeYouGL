@@ -54,7 +54,33 @@ void PostFX::bindTexture()
     glBindTexture(GL_TEXTURE_2D, m_textureid);
 }
 
+void PostFX::changeTheme(int theme)
+{
+    m_screenShader.loadInt(location_theme, 0);
+}
+
+PostFX::PostFX()
+: m_screenShader("shaders/basic_fbo.vert", "shaders/basic_fbo.frag")
+{
+    location_theme = m_screenShader.getUniformLocation("theme");
+    this->changeTheme(1);
+}
+
 PostFX::~PostFX()
 {
     glDeleteFramebuffers(1, &m_fbo);
+}
+
+void PostFX::renderScene(const std::unique_ptr<RawModel>& quadVao)
+{
+    this->unbindFramebuffer();
+    glClearColor(0.f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
+
+    m_screenShader.use();
+    glBindVertexArray(quadVao->getVaoID());
+    this->bindTexture();
+    glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }

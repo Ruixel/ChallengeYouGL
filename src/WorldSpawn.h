@@ -16,6 +16,7 @@
 #include "OBJLoader.h"
 #include "LevelTextures.h"
 #include "CYLevelLoader.h"
+#include "PostFX.h"
 
 using namespace CYLevelLoader;
 
@@ -39,7 +40,7 @@ private:
     void renderWorld();
 
 public:
-    WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera);
+    WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera, PostFX* postfx);
 
     void draw();
     void update(const float dt);

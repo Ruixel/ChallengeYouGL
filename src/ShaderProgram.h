@@ -16,12 +16,6 @@ class ShaderProgram
 {
 protected:
     void bindAttribute(GLuint attribute, const GLchar* variableName);
-    int getUniformLocation(const GLchar* uniformName);
-
-    void loadFloat(GLuint location, GLfloat value);
-    void loadVector(GLuint location, glm::vec3 vector3f);
-    void loadBoolean(GLuint location, bool b);
-    void loadMatrix(GLuint location, glm::mat4 matrix4f);
 
 private:
     GLuint programID;
@@ -37,6 +31,14 @@ public:
     ~ShaderProgram() = default;
 
     virtual void loadProjectionMatrix(const glm::mat4& matrix) = 0;
+
+    int getUniformLocation(const GLchar* uniformName);
+
+    void loadFloat(GLuint location, GLfloat value);
+    void loadVector(GLuint location, glm::vec3 vector3f);
+    void loadBoolean(GLuint location, bool b);
+    void loadMatrix(GLuint location, glm::mat4 matrix4f);
+    void loadInt(GLuint location, int value);
 
     void use();
     void stop();

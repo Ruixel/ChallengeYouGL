@@ -172,6 +172,12 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
     {
         createHole(ptof(0), ptof(1), ptoi(2), ptoi(3), obj_v->holes);
     }
+
+    if (obj_name == "Theme")
+    {
+        obj_v->theme = ptoi(2);
+        std::cout << "Theme: " << obj_v->theme << std::endl;
+    }
 }
 
 void CYLevelLoader::createWall(float x_size, float y_size, float x, float y, int level, int z_idx,

@@ -22,7 +22,7 @@ void StaticShader::getAllUniformLocations()
     location_viewMatrix             = this->getUniformLocation("viewTransformation");
 
     location_enableLighting         = this->getUniformLocation("enableLighting");
-    location_isEntity           = this->getUniformLocation("isEntity");
+    location_isEntity               = this->getUniformLocation("isEntity");
 }
 
 void StaticShader::loadTransformationMatrix(const glm::mat4& matrix)

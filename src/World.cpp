@@ -1,7 +1,6 @@
 #include "World.h"
 
 World::World()
-: m_screenShader("shaders/basic_fbo.vert", "shaders/basic_fbo.frag")
 {}
 
 void World::initWorld(sf::RenderWindow& window)
@@ -19,7 +18,7 @@ void World::initWorld(sf::RenderWindow& window)
     if (!font_GoldenRatio.loadFromFile("dat/GoldenRatio.otf"))
         std::cout << "Error loading GoldenRatio font" << std::endl;
 
-    // Set up G-Buffers
+    // Set up PostFX
     m_postfx.init(m_window->getSize().x, m_window->getSize().y);
 
     // GUI Text
@@ -49,7 +48,7 @@ void World::initWorld(sf::RenderWindow& window)
     /* TEMP */
 
     insertEntity(std::make_unique<SkyDome>(m_staticShader));
-    insertEntity(std::make_unique<WorldSpawn>("dat/maps/Misc.cy", m_staticShader, &m_camera));
+    insertEntity(std::make_unique<WorldSpawn>("dat/maps/Misc.cy", m_staticShader, &m_camera, &m_postfx));
 }
 
 void World::updateWorld(float deltaTime)
@@ -136,6 +135,10 @@ void World::renderWorld()
 
     m_staticShader.stop();
 
+    // Bind Back to the default window & draw main FBO on quad
+    m_postfx.renderScene(quadVao);
+
+    // GUI
     m_window->pushGLStates();
 
     if (!m_camera.getToggle())
@@ -145,17 +148,6 @@ void World::renderWorld()
 
     m_window->popGLStates();
 
-    // Bind Back to the default window & draw main FBO on quad
-    m_postfx.unbindFramebuffer();
-    glClearColor(0.f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glDisable(GL_DEPTH_TEST);
-
-    m_screenShader.use();
-    glBindVertexArray(quadVao->getVaoID());
-    m_postfx.bindTexture();
-    glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
 }
 
 ////////////////////////

@@ -176,7 +176,6 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
     if (obj_name == "Theme")
     {
         obj_v->theme = ptoi(2);
-        std::cout << "Theme: " << obj_v->theme << std::endl;
     }
 }
 

@@ -56,7 +56,9 @@ void PostFX::bindTexture()
 
 void PostFX::changeTheme(int theme)
 {
-    m_screenShader.loadInt(location_theme, 0);
+    m_screenShader.use();
+    m_screenShader.loadInt(location_theme, theme);
+    m_screenShader.stop();
 }
 
 PostFX::PostFX()

@@ -62,7 +62,7 @@ void main()
 
     switch(theme)
     {
-        case 1: color = vec4(col.r, col.g, col.b, 1.0);                   break;
+        case 0: color = vec4(col.r, col.g, col.b, 1.0);                   break;
         case 2: color = vec4(col.r * 0.3, col.g * 0.3, col.b * 0.3, 1.0); break;
         case 3: color = vec4(col.r * 0.9, col.g * 0.1, col.b * 0.1, 1.0); break;
     }

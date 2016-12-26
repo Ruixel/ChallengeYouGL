@@ -12,6 +12,9 @@ MainGame::MainGame()
     mainLoop();
 }
 
+int n = 6;
+int i = 0;
+
 void MainGame::mainLoop()
 {
     auto currentTime    = 0.0f;
@@ -23,8 +26,20 @@ void MainGame::mainLoop()
 
         m_world->renderWorld();
 
-        window->display();
-        this->updateWindow();
+        if (i==0)
+            glAccum(GL_LOAD, 1.0 / n);
+        else
+            glAccum(GL_ACCUM, 1.0 / n);
+
+        i++;
+
+        if (i>=n)
+        {
+            i = 0;
+            glAccum(GL_RETURN, 1.0);
+            window->display();
+            this->updateWindow();
+        }
 
         currentTime = clock.restart().asSeconds();
         deltaTime = currentTime - 0;

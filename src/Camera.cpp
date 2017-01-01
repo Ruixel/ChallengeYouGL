@@ -33,7 +33,7 @@ void Camera::update (const float deltaTime)
     if (!camera_locked)
         return;
 
-    const float dt = deltaTime * 80;
+    const float dt = deltaTime * 100;
 
     auto mouseMove = m_lastMousePos - sf::Mouse::getPosition();
 
@@ -43,20 +43,20 @@ void Camera::update (const float deltaTime)
     if      (m_rotation.x > HALF_PI ) m_rotation.x = HALF_PI;
     else if (m_rotation.x < -HALF_PI) m_rotation.x = -HALF_PI;
 
-    if      (m_rotation.y < 0 ) m_rotation.y = 2*PI;
-    else if (m_rotation.y > 2*PI) m_rotation.y = 0;
+    if      (m_rotation.y < 0.1 ) m_rotation.y = 2*PI - 0.1;
+    else if (m_rotation.y > 2*PI - 0.1) m_rotation.y = 0.1;
 
     auto yaw    = this->m_rotation.y + glm::radians(90.f);
     auto pitch  = this->m_rotation.x;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
-        this->m_position = Vector3(m_position.x - cos(yaw) * .2 * dt, m_position.y - sin(pitch) * .2 * dt, m_position.z - sin(yaw) * .2 * dt);
+        this->m_position = Vector3(m_position.x - (cos(yaw) * cos(pitch)) * .2 * dt, m_position.y - sin(pitch) * .2 * dt, m_position.z - (sin(yaw) * cos(pitch)) * .2 * dt);
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
-        this->m_position = Vector3(m_position.x + cos(yaw) * .2 * dt, m_position.y + sin(pitch) * .2 * dt, m_position.z + sin(yaw) * .2 * dt);
+        this->m_position = Vector3(m_position.x + (cos(yaw) * cos(pitch)) * .2 * dt, m_position.y + sin(pitch) * .2 * dt, m_position.z + (sin(yaw) * cos(pitch)) * .2 * dt);
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))

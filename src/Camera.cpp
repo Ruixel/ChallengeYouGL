@@ -28,10 +28,12 @@ glm::mat4 Camera::generateViewMatrix()
 
 // Remastered from Matt (Hopson97)
 
-void Camera::update ()
+void Camera::update (const float deltaTime)
 {
     if (!camera_locked)
         return;
+
+    const float dt = deltaTime * 80;
 
     auto mouseMove = m_lastMousePos - sf::Mouse::getPosition();
 
@@ -49,22 +51,22 @@ void Camera::update ()
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
-        this->m_position = Vector3(m_position.x - cos(yaw) * .2, m_position.y - sin(pitch) * .2, m_position.z - sin(yaw) * .2);
+        this->m_position = Vector3(m_position.x - cos(yaw) * .2 * dt, m_position.y - sin(pitch) * .2 * dt, m_position.z - sin(yaw) * .2 * dt);
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
-        this->m_position = Vector3(m_position.x + cos(yaw) * .2, m_position.y + sin(pitch) * .2, m_position.z + sin(yaw) * .2);
+        this->m_position = Vector3(m_position.x + cos(yaw) * .2 * dt, m_position.y + sin(pitch) * .2 * dt, m_position.z + sin(yaw) * .2 * dt);
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
-        this->m_position = Vector3(m_position.x + cos(yaw + HALF_PI) * .2, m_position.y, m_position.z + sin(yaw + HALF_PI) * .2);
+        this->m_position = Vector3(m_position.x + cos(yaw + HALF_PI) * .2 * dt, m_position.y, m_position.z + sin(yaw + HALF_PI) * .2 * dt);
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
-        this->m_position = Vector3(m_position.x - cos(yaw + HALF_PI) * .2, m_position.y, m_position.z - sin(yaw + HALF_PI) * .2);
+        this->m_position = Vector3(m_position.x - cos(yaw + HALF_PI) * .2 * dt, m_position.y, m_position.z - sin(yaw + HALF_PI) * .2 * dt);
     }
 
     sf::Vector2u windowSize = m_window->getSize();

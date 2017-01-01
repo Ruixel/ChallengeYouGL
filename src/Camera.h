@@ -42,8 +42,8 @@ public:
     void toggleLockMouse();
     bool getToggle();
 
-    void move (float dt);
-    void update ();
+    void move ();
+    void update (const float deltaTime);
 };
 
 #endif // CAMERA_H

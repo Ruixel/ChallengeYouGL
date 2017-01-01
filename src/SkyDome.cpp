@@ -26,7 +26,7 @@ void SkyDome::draw()
 
 void SkyDome::update(const float dt)
 {
-    this->rotation  = sf::Vector3f(0, this->rotation.y + 0.0001, 0); //this->rotation.y + 0.015
+    this->rotation  = sf::Vector3f(0, this->rotation.y + (dt * 0.02f), 0); //this->rotation.y + 0.015
 
     createTransformationMatrix();
 }

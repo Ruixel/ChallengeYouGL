@@ -85,11 +85,11 @@ void World::updateWorld(float deltaTime)
         c.restart();
     }
 
-    m_camera.update();
+    m_camera.update(deltaTime);
 
     for (auto& m_entity : worldEntities)
     {
-        m_entity->update(0.f);
+        m_entity->update(deltaTime);
     }
 }
 

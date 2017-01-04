@@ -1,15 +1,42 @@
 #include "MainGame.h"
 
+// STATE FUNCTION //
+void MainGame::pushState(State::State_Base* state)
+{
+    this->states.push(state);
+}
+
+void MainGame::popState()
+{
+    delete this->states.top();
+    this->states.pop();
+}
+
+void MainGame::changeState(State::State_Base* state)
+{
+    if (!this->states.empty())
+        popState();
+
+    pushState(state);
+}
+
+State::State_Base* MainGame::peekState()
+{
+    if (this->states.empty())
+        return nullptr;
+
+    return this->states.top();
+}
+
+// MAIN FUNCTION //
+
 MainGame::MainGame()
 {
     // Init libraries / window
     initWindow();
     initGL();
 
-    m_world = std::make_unique<World>();
-
-    m_world->initWorld(*this->window);
-    mainLoop();
+    this->pushState(new State::State_Playing(window));
 }
 
 int n = 6;
@@ -22,9 +49,13 @@ void MainGame::mainLoop()
 
     while (this->window->isOpen())
     {
-        m_world->updateWorld(deltaTime);
+        auto game_state = this->peekState();
+        if (this->peekState() == nullptr)
+            continue;
 
-        m_world->renderWorld();
+        peekState()->input();
+        peekState()->update(deltaTime);
+        peekState()->render();
 
         if (i==0)
             glAccum(GL_LOAD, 1.0 / n);
@@ -63,7 +94,6 @@ void MainGame::initWindow()
     this->window->setFramerateLimit(FRAME_RATE);
     this->window->setVerticalSyncEnabled(false);
 
-
     return;
 }
 
@@ -88,7 +118,7 @@ bool MainGame::initGL()
     return true;
 }
 
-////// UPDATE FUNCTIoNS //////
+////// UPDATE FUNCTIONS //////
 
 void MainGame::updateWindow()
 {
@@ -106,4 +136,7 @@ void MainGame::updateWindow()
 MainGame::~MainGame()
 {
     delete this->window;
+
+    while (!this->states.empty())
+        popState();
 }

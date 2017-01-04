@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "MainGame.h"
+#include "State_Playing.h"
 
 int main()
 {

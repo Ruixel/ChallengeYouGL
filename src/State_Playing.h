@@ -14,7 +14,6 @@ namespace State
         std::unique_ptr<World> m_world;
 
     public:
-        //State_Playing(MainGame* app);
         State_Playing(sf::RenderWindow* window);
 
         void input()                override;

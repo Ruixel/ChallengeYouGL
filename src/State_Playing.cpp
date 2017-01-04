@@ -7,8 +7,6 @@ namespace State
     {
         m_world = std::make_unique<World>();
         m_world->initWorld(*m_window);
-
-        std::cout << "Pushing state" << std::endl;
     }
 
     void State_Playing::input()

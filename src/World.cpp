@@ -8,11 +8,7 @@ void World::initWorld(sf::RenderWindow& window)
     this->m_window = &window;
     this->m_camera.init(window);
 
-    m_staticShader.use();
-    glm::mat4 pMatrix = m_camera.generateProjectionMatrix();
-    m_staticShader.loadProjectionMatrix(pMatrix);
-    m_staticShader.enableLighting(true);
-    m_staticShader.stop();
+    setupCameraUniforms();
 
     // Preload fonts
     if (!font_GoldenRatio.loadFromFile("dat/GoldenRatio.otf"))
@@ -26,7 +22,7 @@ void World::initWorld(sf::RenderWindow& window)
     text_MouseControl.setString("MOUSE CONTROL OFF - PRESS 'T'");
     text_MouseControl.setCharacterSize(18);
     text_MouseControl.setFillColor(sf::Color(255, 184, 16, 255));
-    text_MouseControl.setPosition(717, 5);
+    text_MouseControl.setPosition(window.getSize().x - 307, 5);
 
     // FPS Text
     text_FPS.setFont(font_GoldenRatio);
@@ -34,6 +30,20 @@ void World::initWorld(sf::RenderWindow& window)
     text_FPS.setCharacterSize(18);
     text_FPS.setFillColor(sf::Color(255, 184, 16, 255));
     text_FPS.setPosition(5, 5);
+
+    std::unique_ptr<GUI::Widget> test_box = std::make_unique<GUI::Widget>(1280, 720);
+    test_box->setSize(sf::FloatRect(1, 0, 0, 60));
+    test_box->setPos(sf::FloatRect(0, 0, 0, -10));
+    test_box->setOutline(sf::Color(255, 255, 255, 192), 5);
+    test_box->setColor(sf::Color(0, 0, 0, 255));
+    insertGUIWidget(std::move(test_box));
+
+    std::unique_ptr<GUI::Widget> test_box2 = std::make_unique<GUI::Widget>(1280, 720);
+    test_box2->setSize(sf::FloatRect(1, 0, 0, 60));
+    test_box2->setPos(sf::FloatRect(0, 0, 1, -50));
+    test_box2->setOutline(sf::Color(255, 255, 255, 192), 5);
+    test_box2->setColor(sf::Color(0, 0, 0, 255));
+    insertGUIWidget(std::move(test_box2));
 
     for (int i = 0; i < 20; i++)
     {
@@ -53,30 +63,6 @@ void World::initWorld(sf::RenderWindow& window)
 
 void World::updateWorld(float deltaTime)
 {
-    sf::Event event;
-    while (m_window->pollEvent(event))
-    {
-        switch (event.type)
-        {
-        case sf::Event::KeyPressed:
-            if (event.key.code == sf::Keyboard::T)
-                m_camera.toggleLockMouse();
-            break;
-
-        case sf::Event::Closed :
-            m_window->close();
-            break;
-
-        case sf::Event::Resized :
-            m_window->setSize({event.size.width, event.size.height});
-            glViewport(0, 0, event.size.width, event.size.height);
-            break;
-
-        default:
-            break;
-        }
-    }
-
     float fps = 1.f / deltaTime;
     static sf::Clock c;
     if (c.getElapsedTime().asSeconds() > 0.4)
@@ -144,6 +130,11 @@ void World::renderWorld()
     if (!m_camera.getToggle())
         m_window->draw(text_MouseControl);
 
+    for (auto& m_gui : world_GUI)
+    {
+        m_window->draw(*m_gui);
+    }
+
     m_window->draw(text_FPS);
 
     m_window->popGLStates();
@@ -155,4 +146,23 @@ void World::renderWorld()
 void World::insertEntity(std::unique_ptr<Entity> entity)
 {
     worldEntities.push_back(std::move(entity));
+}
+
+void World::insertGUIWidget(std::unique_ptr<GUI::Widget> gui_widget)
+{
+    world_GUI.push_back(std::move(gui_widget));
+}
+
+Camera* World::getCamera()
+{
+    return &m_camera;
+}
+
+void World::setupCameraUniforms()
+{
+    m_staticShader.use();
+    glm::mat4 pMatrix = m_camera.generateProjectionMatrix();
+    m_staticShader.loadProjectionMatrix(pMatrix);
+    //m_staticShader.enableLighting(true);
+    m_staticShader.stop();
 }

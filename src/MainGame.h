@@ -20,7 +20,7 @@
 class MainGame
 {
 private:
-    const int WIDTH      = 1024;
+    const int WIDTH      = 1280;
     const int HEIGHT     = 720;
     const int FRAME_RATE = 120;
     const int ANTI_ALIAS = 4;

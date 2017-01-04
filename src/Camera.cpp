@@ -13,7 +13,7 @@ void Camera::init(sf::RenderWindow& window)
 glm::mat4 Camera::generateProjectionMatrix()
 {
     float aspectRatio = (float)this->m_window->getSize().x / (float)this->m_window->getSize().y;
-    return glm::perspective(glm::radians(45.f), aspectRatio, .1f, 1500.f);
+    return glm::perspective(glm::radians(103.f), aspectRatio, .1f, 1500.f);
 }
 
 glm::mat4 Camera::generateViewMatrix()
@@ -43,8 +43,8 @@ void Camera::update (const float deltaTime)
     if      (m_rotation.x > HALF_PI ) m_rotation.x = HALF_PI;
     else if (m_rotation.x < -HALF_PI) m_rotation.x = -HALF_PI;
 
-    if      (m_rotation.y < 0.1 ) m_rotation.y = 2*PI - 0.1;
-    else if (m_rotation.y > 2*PI - 0.1) m_rotation.y = 0.1;
+    if      (m_rotation.y < 0 ) m_rotation.y = 2*PI - 0;
+    else if (m_rotation.y > 2*PI - 0) m_rotation.y = 0;
 
     auto yaw    = this->m_rotation.y + glm::radians(90.f);
     auto pitch  = this->m_rotation.x;

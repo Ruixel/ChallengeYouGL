@@ -2,6 +2,7 @@
 #define STATE_PLAYING_H
 
 #include <memory>
+#include <iostream>
 
 #include "State_Base.h"
 #include "World.h"

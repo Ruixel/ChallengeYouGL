@@ -11,7 +11,38 @@ namespace State
 
     void State_Playing::input()
     {
+        sf::Event event;
+        while (m_window->pollEvent(event))
+        {
+            switch (event.type)
+            {
+            case sf::Event::KeyPressed:
+                if (event.key.code == sf::Keyboard::T)
+                    m_world->getCamera()->toggleLockMouse();
+                break;
 
+            case sf::Event::Closed :
+                m_window->close();
+                break;
+
+            case sf::Event::Resized :
+                {
+                    sf::FloatRect area(0, 0, event.size.width, event.size.height);
+                    std::cout << "Width: " << area.width << std::endl;
+
+                    glViewport(0, 0, area.width, area.height);
+                    m_window->setSize({area.width, area.height});
+                    m_window->setView(sf::View(area));
+
+                    m_world->setupCameraUniforms();
+
+                    break;
+                }
+
+            default:
+                break;
+            }
+        }
     }
 
     void State_Playing::update(const float dt)

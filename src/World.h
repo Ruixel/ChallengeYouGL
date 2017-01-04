@@ -14,11 +14,13 @@
 #include "GBuffer.h"
 #include "BasicShader.h"
 #include "PostFX.h"
+#include "gui/Widget.h"
 
 class World
 {
 private:
     std::vector<std::unique_ptr<Entity>> worldEntities;
+    std::vector<std::unique_ptr<GUI::Widget>> world_GUI;
 
     Camera m_camera;
     StaticShader m_staticShader;
@@ -39,6 +41,9 @@ public:
     void renderWorld();
 
     void insertEntity(std::unique_ptr<Entity> entity);
+    void insertGUIWidget(std::unique_ptr<GUI::Widget> gui_widget);
+    Camera* getCamera();
+    void setupCameraUniforms();
 };
 
 #endif // WORLD_H

@@ -5,7 +5,7 @@
 
 int main()
 {
-    std::cout << "Ayy lmao" << std::endl;
+    std::cout << "Initialising Game..." << std::endl;
 
     MainGame mainGame;
     mainGame.mainLoop();

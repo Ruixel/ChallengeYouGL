@@ -34,14 +34,14 @@ void World::initWorld(sf::RenderWindow& window)
     std::unique_ptr<GUI::Widget> test_box = std::make_unique<GUI::Widget>(1280, 720);
     test_box->setSize(sf::FloatRect(1, 0, 0, 60));
     test_box->setPos(sf::FloatRect(0, 0, 0, -10));
-    test_box->setOutline(sf::Color(255, 255, 255, 192), 5);
+    //test_box->setOutline(sf::Color(255, 255, 255, 192), 5);
     test_box->setColor(sf::Color(0, 0, 0, 255));
     insertGUIWidget(std::move(test_box));
 
     std::unique_ptr<GUI::Widget> test_box2 = std::make_unique<GUI::Widget>(1280, 720);
     test_box2->setSize(sf::FloatRect(1, 0, 0, 60));
     test_box2->setPos(sf::FloatRect(0, 0, 1, -50));
-    test_box2->setOutline(sf::Color(255, 255, 255, 192), 5);
+    //test_box2->setOutline(sf::Color(255, 255, 255, 192), 5);
     test_box2->setColor(sf::Color(0, 0, 0, 255));
     insertGUIWidget(std::move(test_box2));
 
@@ -156,6 +156,14 @@ void World::insertGUIWidget(std::unique_ptr<GUI::Widget> gui_widget)
 Camera* World::getCamera()
 {
     return &m_camera;
+}
+
+void World::resizeGUI(int width, int height)
+{
+    for (auto& m_gui : world_GUI)
+    {
+        m_gui->setParentSize(width, height);
+    }
 }
 
 void World::setupCameraUniforms()

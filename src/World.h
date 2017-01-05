@@ -44,6 +44,8 @@ public:
     void insertGUIWidget(std::unique_ptr<GUI::Widget> gui_widget);
     Camera* getCamera();
     void setupCameraUniforms();
+
+    void resizeGUI(int width, int height);
 };
 
 #endif // WORLD_H

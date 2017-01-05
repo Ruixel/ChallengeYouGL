@@ -28,13 +28,13 @@ namespace State
             case sf::Event::Resized :
                 {
                     sf::FloatRect area(0, 0, event.size.width, event.size.height);
-                    std::cout << "Width: " << area.width << std::endl;
 
                     glViewport(0, 0, area.width, area.height);
                     m_window->setSize({area.width, area.height});
                     m_window->setView(sf::View(area));
 
                     m_world->setupCameraUniforms();
+                    m_world->resizeGUI(area.width, area.height);
 
                     break;
                 }

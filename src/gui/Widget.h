@@ -31,6 +31,7 @@ namespace GUI
         void setOutline(const sf::Color& color, int thickness);
 
         void resetPositionAndSize();
+        void setParentSize(int width, int height);
         void setSize  (const sf::FloatRect& rect) { m_rectangle_size = rect;     this->resetPositionAndSize(); }
         void setPos   (const sf::FloatRect& rect) { m_rectangle_position = rect; this->resetPositionAndSize(); }
 

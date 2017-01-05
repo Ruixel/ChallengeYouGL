@@ -35,6 +35,12 @@ namespace GUI
         this->m_rectangle.setSize(this->getSizeInPixels());
     }
 
+    void Widget::setParentSize(int width, int height)
+    {
+        this->parent_size = sf::Vector2f(width, height);
+        this->resetPositionAndSize();
+    }
+
     const sf::Vector2f& Widget::getSizeInPixels()
     {
         int width  = (parent_size.x * this->m_rectangle_size.left)  + this->m_rectangle_size.top;

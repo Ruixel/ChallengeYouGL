@@ -10,7 +10,8 @@ WorldSpawn::WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera, 
     level_objs = CYLevelLoader::loadFromWebsite(79359);
 
     // Change theme
-    postfx->changeTheme(level_objs.theme);
+    if (postfx != nullptr)
+        postfx->changeTheme(level_objs.theme);
 }
 
 void WorldSpawn::draw()

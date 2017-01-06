@@ -36,7 +36,7 @@ MainGame::MainGame()
     initWindow();
     initGL();
 
-    this->pushState(new State::State_Playing(window));
+    this->pushState(new State::State_Menu(window));
 }
 
 int n = 6;

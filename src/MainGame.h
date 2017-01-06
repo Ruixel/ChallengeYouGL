@@ -15,7 +15,7 @@
 #include "GLError.h"
 #include "World.h"
 #include "State_Base.h"
-#include "State_Playing.h"
+#include "State_Menu.h"
 
 class MainGame
 {

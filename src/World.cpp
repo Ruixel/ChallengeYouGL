@@ -31,19 +31,7 @@ void World::initWorld(sf::RenderWindow& window)
     text_FPS.setFillColor(sf::Color(255, 184, 16, 255));
     text_FPS.setPosition(5, 5);
 
-    std::unique_ptr<GUI::Widget> test_box = std::make_unique<GUI::Widget>(1280, 720);
-    test_box->setSize(sf::FloatRect(1, 0, 0, 60));
-    test_box->setPos(sf::FloatRect(0, 0, 0, -10));
-    //test_box->setOutline(sf::Color(255, 255, 255, 192), 5);
-    test_box->setColor(sf::Color(0, 0, 0, 255));
-    insertGUIWidget(std::move(test_box));
 
-    std::unique_ptr<GUI::Widget> test_box2 = std::make_unique<GUI::Widget>(1280, 720);
-    test_box2->setSize(sf::FloatRect(1, 0, 0, 60));
-    test_box2->setPos(sf::FloatRect(0, 0, 1, -50));
-    //test_box2->setOutline(sf::Color(255, 255, 255, 192), 5);
-    test_box2->setColor(sf::Color(0, 0, 0, 255));
-    insertGUIWidget(std::move(test_box2));
 
     for (int i = 0; i < 20; i++)
     {

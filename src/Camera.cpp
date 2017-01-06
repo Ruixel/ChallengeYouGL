@@ -10,10 +10,10 @@ void Camera::init(sf::RenderWindow& window)
     m_window->setMouseCursorVisible(false);
 }
 
-glm::mat4 Camera::generateProjectionMatrix()
+glm::mat4 Camera::generateProjectionMatrix(float fov)
 {
     float aspectRatio = (float)this->m_window->getSize().x / (float)this->m_window->getSize().y;
-    return glm::perspective(glm::radians(90.f), aspectRatio, .1f, 1500.f);
+    return glm::perspective(glm::radians(fov), aspectRatio, .1f, 1500.f);
 }
 
 glm::mat4 Camera::generateViewMatrix()

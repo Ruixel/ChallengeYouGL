@@ -15,7 +15,7 @@ typedef glm::vec3 Vector3;
 
 class Camera
 {
-private:
+protected:
     Vector3 m_position = Vector3(0, 2, 0);
     Vector3 m_rotation = Vector3(-HALF_PI, HALF_PI, 0);
 
@@ -28,7 +28,7 @@ public:
     Camera();
     void init(sf::RenderWindow& window);
 
-    glm::mat4 generateProjectionMatrix();
+    glm::mat4 generateProjectionMatrix(float fov);
     glm::mat4 generateViewMatrix();
 
     const Vector3& getPosition () const;
@@ -43,7 +43,7 @@ public:
     bool getToggle();
 
     void move ();
-    void update (const float deltaTime);
+    virtual void update (const float deltaTime);
 };
 
 #endif // CAMERA_H

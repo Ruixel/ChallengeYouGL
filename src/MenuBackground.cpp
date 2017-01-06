@@ -7,6 +7,7 @@ void MenuBackground::initMenu(sf::RenderWindow& window)
 {
     m_window = &window;
     m_camera.init(window);
+    m_camera.toggleLockMouse();
 
     setupCameraUniforms();
     setupGUI();
@@ -32,7 +33,8 @@ void MenuBackground::setupGUI()
 
 void MenuBackground::updateMenu(float deltaTime)
 {
-    sky_dome->update(deltaTime);
+    //sky_dome->update(deltaTime);
+    w_spawn->update(deltaTime);
     m_camera.update(deltaTime);
 }
 
@@ -44,16 +46,36 @@ void MenuBackground::insertGUIWidget(std::unique_ptr<GUI::Widget> gui_widget)
 void MenuBackground::setupCameraUniforms()
 {
     m_staticShader.use();
-    glm::mat4 pMatrix = m_camera.generateProjectionMatrix();
+    glm::mat4 pMatrix = m_camera.generateProjectionMatrix(45);
     m_staticShader.loadProjectionMatrix(pMatrix);
     m_staticShader.stop();
 }
 
+int n = 10;
+float aperture = 0.3f;
+
 void MenuBackground::renderMenu()
 {
     m_staticShader.use();
-    m_staticShader.loadViewMatrix(m_camera);
+    //m_staticShader.loadViewMatrix(m_camera);
 
-    sky_dome->draw();
-    w_spawn->draw();
+    // get camera vectors
+    glm::vec3 right = m_camera.get_right();
+    glm::vec3 p_up  = m_camera.get_p_up(right);
+
+    for (int i = 0; i < n; i++)
+    {
+        glm::vec3 bokeh = right * cosf(i * 2 * M_PI / n) + p_up * sinf(i * 2 * M_PI / n);
+        m_staticShader.loadViewMatrix(m_camera, aperture, bokeh, p_up);
+
+        w_spawn->draw();
+        sky_dome->draw();
+
+        glAccum(i ? GL_ACCUM : GL_LOAD, 1.0 / n);
+    }
+}
+
+CinematicCamera* MenuBackground::getCamera()
+{
+    return &m_camera;
 }

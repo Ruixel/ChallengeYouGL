@@ -3,6 +3,7 @@
 
 #include "ShaderProgram.h"
 #include "Camera.h"
+#include "CinematicCamera.h"
 
 #include <glm/glm.hpp>
 
@@ -29,6 +30,7 @@ public:
     void loadTransformationMatrix(const glm::mat4& matrix);
     void loadProjectionMatrix(const glm::mat4& projectionMatrix);
     void loadViewMatrix(Camera& cam);
+    void loadViewMatrix(CinematicCamera& cam, float aperture, const glm::vec3& bokeh, const glm::vec3& p_up);
 
     void enableLighting(bool enable);
     void isEntity(bool enable);

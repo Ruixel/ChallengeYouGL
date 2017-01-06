@@ -8,12 +8,21 @@ namespace State
         glEnable(GL_DEPTH_TEST);
 
         m_background = std::make_unique<MenuBackground>();
-        m_background->initMenu(*window);
+        m_background->initMenu(*m_window);
     }
 
     void State_Menu::input()
     {
-
+        sf::Event event;
+        while (m_window->pollEvent(event))
+        {
+            switch (event.type)
+            {
+            case sf::Event::Closed :
+                m_window->close();
+                break;
+            }
+        }
     }
 
     void State_Menu::update(const float dt)

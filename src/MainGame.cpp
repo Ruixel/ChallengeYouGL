@@ -39,7 +39,9 @@ MainGame::MainGame()
     this->pushState(new State::State_Menu(window));
 }
 
-int n = 6;
+// MOTION BLUR //
+
+/*int n = 6;
 int i = 0;
 
 void MainGame::mainLoop()
@@ -71,6 +73,30 @@ void MainGame::mainLoop()
             window->display();
             this->updateWindow();
         }
+
+        currentTime = clock.restart().asSeconds();
+        deltaTime = currentTime - 0;
+    }
+}*/
+
+void MainGame::mainLoop()
+{
+    auto currentTime    = 0.0f;
+    auto deltaTime      = 0.0f;
+
+    while (this->window->isOpen())
+    {
+        auto game_state = this->peekState();
+        if (this->peekState() == nullptr)
+            continue;
+
+        peekState()->input();
+        peekState()->update(deltaTime);
+        peekState()->render();
+
+        glAccum(GL_RETURN, 1);
+        window->display();
+        this->updateWindow();
 
         currentTime = clock.restart().asSeconds();
         deltaTime = currentTime - 0;

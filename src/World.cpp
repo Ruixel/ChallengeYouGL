@@ -157,7 +157,7 @@ void World::resizeGUI(int width, int height)
 void World::setupCameraUniforms()
 {
     m_staticShader.use();
-    glm::mat4 pMatrix = m_camera.generateProjectionMatrix();
+    glm::mat4 pMatrix = m_camera.generateProjectionMatrix(90);
     m_staticShader.loadProjectionMatrix(pMatrix);
     //m_staticShader.enableLighting(true);
     m_staticShader.stop();

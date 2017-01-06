@@ -3,7 +3,7 @@
 CinematicCamera::CinematicCamera()
 {
     eye = glm::vec3(5, 40, -30);
-    lookingAt = glm::vec3(-15, 70, -70);
+    lookingAt = glm::vec3(-1500, 7000, -7000);
 }
 
 void CinematicCamera::update(const float dt)

@@ -33,7 +33,7 @@ void MenuBackground::setupGUI()
 
 void MenuBackground::updateMenu(float deltaTime)
 {
-    //sky_dome->update(deltaTime);
+    sky_dome->update(deltaTime);
     w_spawn->update(deltaTime);
     m_camera.update(deltaTime);
 }
@@ -52,11 +52,11 @@ void MenuBackground::setupCameraUniforms()
 }
 
 int n = 10;
-float aperture = 0.3f;
+float aperture = 0.05f;
 
 void MenuBackground::renderMenu()
 {
-    m_staticShader.use();
+
     //m_staticShader.loadViewMatrix(m_camera);
 
     // get camera vectors
@@ -65,14 +65,30 @@ void MenuBackground::renderMenu()
 
     for (int i = 0; i < n; i++)
     {
+        m_staticShader.use();
         glm::vec3 bokeh = right * cosf(i * 2 * M_PI / n) + p_up * sinf(i * 2 * M_PI / n);
         m_staticShader.loadViewMatrix(m_camera, aperture, bokeh, p_up);
 
         w_spawn->draw();
         sky_dome->draw();
 
+        m_staticShader.stop();
+
+        // GUI
+        m_window->pushGLStates();
+
+        for (auto& m_gui : this->m_GUI)
+        {
+            m_window->draw(*m_gui);
+        }
+
+        m_window->popGLStates();
+
+        // Accumulation Buffer
         glAccum(i ? GL_ACCUM : GL_LOAD, 1.0 / n);
     }
+
+
 }
 
 CinematicCamera* MenuBackground::getCamera()

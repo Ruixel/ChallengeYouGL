@@ -6,6 +6,7 @@
 #include "StaticShader.h"
 #include "SkyDome.h"
 #include "gui/Widget.h"
+#include "gui/Image.h"
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
     const double M_PI = 3.1415926535;

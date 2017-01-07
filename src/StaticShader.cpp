@@ -44,7 +44,6 @@ void StaticShader::loadViewMatrix(CinematicCamera& cam, float aperture, const gl
 {
     glm::mat4 view_matrix = glm::lookAt(cam.getEyeVector() + aperture * bokeh, cam.getObjectVector(), p_up);
     this->loadMatrix(location_viewMatrix, view_matrix);
-    this->loadMatrix(location_transformationMatrix, glm::mat4());
 }
 
 void StaticShader::enableLighting(bool enable)

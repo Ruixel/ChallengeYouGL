@@ -2,8 +2,8 @@
 
 CinematicCamera::CinematicCamera()
 {
-    eye = glm::vec3(5, 40, -30);
-    lookingAt = glm::vec3(-1500, 7000, -7000);
+    this->m_position = Vector3(20, 35, -20);
+    this->m_rotation = Vector3(-PI / 6, -PI / 4, 0);
 }
 
 void CinematicCamera::update(const float dt)
@@ -11,12 +11,3 @@ void CinematicCamera::update(const float dt)
 
 }
 
-const glm::vec3& CinematicCamera::get_right()
-{
-    return glm::normalize(glm::cross(lookingAt - eye, up));
-}
-
-const glm::vec3& CinematicCamera::get_p_up(const glm::vec3& right)
-{
-    return glm::normalize(glm::cross(lookingAt - eye, right));
-}

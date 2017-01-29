@@ -4,6 +4,8 @@
 #include "WorldSpawn.h"
 #include "CinematicCamera.h"
 #include "StaticShader.h"
+#include "gStaticShader.h"
+#include "GBuffer.h"
 #include "SkyDome.h"
 #include "gui/Widget.h"
 #include "gui/Image.h"
@@ -16,11 +18,17 @@ class MenuBackground
 {
 private:
     CinematicCamera m_camera;
-    StaticShader m_staticShader;
+    // StaticShader m_staticShader;
+    gStaticShader m_geometryShader;
+    BasicShader m_screenShader;
+
     sf::RenderWindow* m_window;
 
     std::unique_ptr<WorldSpawn> w_spawn;
     std::unique_ptr<SkyDome>    sky_dome;
+
+    GBuffer m_gbuffer;
+    std::unique_ptr<RawModel> quadVao;
 
     std::vector<std::unique_ptr<GUI::Widget>> m_GUI;
     void setupGUI();
@@ -34,6 +42,8 @@ public:
 
     void setupCameraUniforms();
     CinematicCamera* getCamera();
+
+    void renderGeometry();
 
     void insertGUIWidget(std::unique_ptr<GUI::Widget> gui_widget);
     void resizeGUI(int width, int height);

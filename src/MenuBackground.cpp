@@ -1,6 +1,7 @@
 #include "MenuBackground.h"
 
 MenuBackground::MenuBackground()
+: m_screenShader("shaders/basic_fbo.vert", "shaders/basic_fbo.frag")
 {}
 
 void MenuBackground::initMenu(sf::RenderWindow& window)
@@ -12,8 +13,12 @@ void MenuBackground::initMenu(sf::RenderWindow& window)
     setupCameraUniforms();
     setupGUI();
 
-    w_spawn  = std::make_unique<WorldSpawn>("dat/maps/Misc.cy", m_staticShader, &m_camera, nullptr);
-    sky_dome = std::make_unique<SkyDome>(m_staticShader);
+    m_gbuffer.init(window.getSize().x, window.getSize().y);
+
+    quadVao = Loader::loadToVAO(bag::quadVertices, bag::quadIndices, bag::quadTexCoods);
+
+    w_spawn  = std::make_unique<WorldSpawn>("dat/maps/Misc.cy", m_geometryShader, &m_camera, nullptr);
+    sky_dome = std::make_unique<SkyDome>(m_geometryShader);
 }
 
 void MenuBackground::setupGUI()
@@ -50,10 +55,10 @@ void MenuBackground::insertGUIWidget(std::unique_ptr<GUI::Widget> gui_widget)
 
 void MenuBackground::setupCameraUniforms()
 {
-    m_staticShader.use();
+    m_geometryShader.use();
     glm::mat4 pMatrix = m_camera.generateProjectionMatrix(45);
-    m_staticShader.loadProjectionMatrix(pMatrix);
-    m_staticShader.stop();
+    m_geometryShader.loadProjectionMatrix(pMatrix);
+    m_geometryShader.stop();
 }
 
 /*int n = 10;
@@ -96,18 +101,32 @@ void MenuBackground::renderMenu()
 
 }*/
 
-
 void MenuBackground::renderMenu()
 {
-    m_staticShader.use();
-    m_staticShader.loadViewMatrix(m_camera);
+    m_gbuffer.bindForWriting();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClearColor(2.f/255, 119.f/255, 189.f/255, 1.0f);
+    this->renderGeometry();
+    m_gbuffer.unbindFramebuffer();
+
+    m_screenShader.use();
+    glBindVertexArray(quadVao->getVaoID());
+    m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_ALBEDO);
+    glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+}
+
+void MenuBackground::renderGeometry()
+{
+    m_geometryShader.use();
+    m_geometryShader.loadViewMatrix(m_camera);
 
     w_spawn->draw();
     sky_dome->draw();
 
-    m_staticShader.stop();
+    m_geometryShader.stop();
 
-    // GUI
+    /*/ GUI
     m_window->pushGLStates();
 
     for (auto& m_gui : this->m_GUI)
@@ -115,7 +134,7 @@ void MenuBackground::renderMenu()
         m_window->draw(*m_gui);
     }
 
-    m_window->popGLStates();
+    m_window->popGLStates();*/
 
 
 }

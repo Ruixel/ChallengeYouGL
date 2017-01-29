@@ -1,7 +1,7 @@
 #include "SkyDome.h"
 
-SkyDome::SkyDome(StaticShader& sh)
-: Entity(Loader::loadObjModel("dat/skydome.obj"), Loader::loadTexture("dat/skypolar.jpg"))
+SkyDome::SkyDome(gStaticShader& sh)
+: Entity(Loader::loadObjModel("dat/skydome.obj"), Loader::loadTexture("dat/img/skypolar.jpg"))
 , shader(&sh)
 {
     this->scale     = 1000.f;

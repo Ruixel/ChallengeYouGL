@@ -123,10 +123,10 @@ void CYLevelLoader::addNewObject(const std::string& obj_name, std::vector<std::s
 
     if (obj_name == "TriWall")
     {
-        for (auto& p : *properties)
+        /*for (auto& p : *properties)
         {
             std::cout << "p: " << p << std::endl;
-        }
+        }*/
         float height_min = ptof(5);
         float height_max = height_min + 1.f;
 

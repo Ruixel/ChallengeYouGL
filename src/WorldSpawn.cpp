@@ -1,6 +1,6 @@
 #include "WorldSpawn.h"
 
-WorldSpawn::WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera, PostFX* postfx)
+WorldSpawn::WorldSpawn(const char* levelPath, gStaticShader& sh, Camera* camera, PostFX* postfx)
 //:   Entity(Loader::loadToVAO(v, i, t, v), Loader::loadTexture("iceman.jpg"))
 :   shader(&sh)
 ,   m_camera(camera)

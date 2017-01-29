@@ -14,6 +14,7 @@ namespace GUI
 
     protected:
         sf::RectangleShape m_rectangle;
+        sf::Color          rectangle_color;
 
         sf::FloatRect m_rectangle_size;
         sf::FloatRect m_rectangle_position;
@@ -37,6 +38,8 @@ namespace GUI
 
         const sf::Vector2f& getPositionInPixels();
         const sf::Vector2f& getSizeInPixels();
+
+        //virtual void update();
 
         /*void setSizeScale  (const sf::FloatRect& rect) { m_rectangle_size_scale  = rect; }
         void setSizeOffset (const sf::FloatRect& rect) { m_rectangle_size_offset = rect; }

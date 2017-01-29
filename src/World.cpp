@@ -45,8 +45,8 @@ void World::initWorld(sf::RenderWindow& window)
     quadVao = Loader::loadToVAO(bag::quadVertices, bag::quadIndices, bag::quadTexCoods);
     /* TEMP */
 
-    insertEntity(std::make_unique<SkyDome>(m_staticShader));
-    insertEntity(std::make_unique<WorldSpawn>("dat/maps/Misc.cy", m_staticShader, &m_camera, &m_postfx));
+    //insertEntity(std::make_unique<SkyDome>(m_staticShader));
+    //insertEntity(std::make_unique<WorldSpawn>("dat/maps/Misc.cy", m_staticShader, &m_camera, &m_postfx));
 }
 
 void World::updateWorld(float deltaTime)

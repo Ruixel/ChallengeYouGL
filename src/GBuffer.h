@@ -32,6 +32,9 @@ public:
     void bindForWriting();
     void bindForReading();
     void setReadBuffer(GBUFFER_TEXTURE_TYPE TextureType);
+
+    void unbindFramebuffer();
+    void bindTexture(GBUFFER_TEXTURE_TYPE TextureType);
 };
 
 namespace bag

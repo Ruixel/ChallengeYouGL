@@ -12,7 +12,7 @@
 
 #include "Camera.h"
 #include "Loader.h"
-#include "StaticShader.h"
+#include "gStaticShader.h"
 #include "OBJLoader.h"
 #include "LevelTextures.h"
 #include "CYLevelLoader.h"
@@ -29,7 +29,7 @@ private:
 
     cyLevel level_objs;
 
-    StaticShader* shader;
+    gStaticShader* shader;
     Camera* m_camera;
 
     void createStruct(const std::string& obj_name, std::vector<std::string>* properties);
@@ -40,7 +40,7 @@ private:
     void renderWorld();
 
 public:
-    WorldSpawn(const char* levelPath, StaticShader& sh, Camera* camera, PostFX* postfx);
+    WorldSpawn(const char* levelPath, gStaticShader& sh, Camera* camera, PostFX* postfx);
 
     void draw();
     void update(const float dt);

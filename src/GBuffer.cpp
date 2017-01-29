@@ -85,6 +85,15 @@ void GBuffer::setReadBuffer(GBUFFER_TEXTURE_TYPE TextureType)
     glReadBuffer(GL_COLOR_ATTACHMENT0 + TextureType);
 }
 
+void GBuffer::bindTexture(GBUFFER_TEXTURE_TYPE TextureType)
+{
+    glBindTexture(GL_TEXTURE_2D, m_textures[TextureType]);
+}
+
+void GBuffer::unbindFramebuffer()
+{
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
 GBuffer::GBuffer()
 {

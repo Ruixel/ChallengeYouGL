@@ -20,6 +20,7 @@ namespace GUI
 
     void Widget::setColor(const sf::Color& color)
     {
+        rectangle_color = color;
         m_rectangle.setFillColor(color);
     }
 

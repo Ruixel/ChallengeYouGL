@@ -176,6 +176,16 @@ void MenuBackground::renderMenu()
     //m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
     glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+
+    // GUI
+    m_window->pushGLStates();
+
+    for (auto& m_gui : this->m_GUI)
+    {
+        m_window->draw(*m_gui);
+    }
+
+    m_window->popGLStates();
 }
 
 void MenuBackground::renderGeometry()
@@ -192,17 +202,6 @@ void MenuBackground::renderGeometry()
 
     glDepthMask(GL_FALSE);
     glDisable(GL_DEPTH_TEST);
-
-    /*/ GUI
-    m_window->pushGLStates();
-
-    for (auto& m_gui : this->m_GUI)
-    {
-        m_window->draw(*m_gui);
-    }
-
-    m_window->popGLStates();*/
-
 
 }
 

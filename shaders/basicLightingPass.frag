@@ -35,7 +35,7 @@ void main()
 
         // Attenuation
         float distance = length(lights[i].Position - FragPos);
-        float attenuation = 1.0 / (1.05 * (distance / 20)); //(1.0 + lights[i].Linear * distance + lights[i].Quadratic * distance * distance);
+        float attenuation = 1.0 / (1.0 + lights[i].Linear * distance + lights[i].Quadratic * distance * distance); //(1.05 * (distance / 20));
         diffuse  *= attenuation;
         lighting += diffuse;
     }

@@ -20,8 +20,8 @@ struct Light
     glm::vec3 Position = glm::vec3(0,0,0);
     glm::vec3 Color = glm::vec3(0,0,0);
 
-    float linear = 0.7f;
-    float quadratic = 1.8f;
+    float linear = 0.02f;
+    float quadratic = 0.01f;
 };
 
 class MenuBackground

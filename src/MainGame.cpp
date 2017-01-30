@@ -94,6 +94,8 @@ void MainGame::mainLoop()
         peekState()->update(deltaTime);
         peekState()->render();
 
+        //bag::checkForGLerrors();
+
         //glAccum(GL_RETURN, 1);
         window->display();
         this->updateWindow();

@@ -103,16 +103,25 @@ void MenuBackground::renderMenu()
 
 void MenuBackground::renderMenu()
 {
+    // GEOMETRY PASS
+    // Set up
     m_gbuffer.bindForWriting();
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glClearColor(0.f/255, 0.f/255, 0.f/255, 1.0f);
 
+    glDepthMask(GL_TRUE);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+
+    // Render Geometry
     this->renderGeometry();
+
+    // Render to screen
     m_gbuffer.unbindFramebuffer();
+    m_gbuffer.bindForReading();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_gbuffer.bindForReading();
+    /*
 
     sf::Vector2u windowSize = this->m_window->getSize();
     GLsizei HalfWidth  = 1280/2.0f;
@@ -127,17 +136,39 @@ void MenuBackground::renderMenu()
 
     m_gbuffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
     glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, HalfWidth, HalfHeight, windowSize.x, windowSize.y,
-                      GL_COLOR_BUFFER_BIT, GL_LINEAR);
+                      GL_COLOR_BUFFER_BIT, GL_LINEAR);*/
 
     /*m_screenShader.use();
     glBindVertexArray(quadVao->getVaoID());
     m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
     glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);*/
+
+    // LIGHTING PASS
+    // Set up
+    //glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE, GL_ONE);
+
+    // Set up textures
+    this->m_LightingPassShader.use();
+    glActiveTexture(GL_TEXTURE0);
+    m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
+    glActiveTexture(GL_TEXTURE1);
+    m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+    glActiveTexture(GL_TEXTURE2);
+    m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_ALBEDO);
+
+    glBindVertexArray(quadVao->getVaoID());
+    //m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+    glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 }
 
 void MenuBackground::renderGeometry()
 {
+    //
+
     m_geometryShader.use();
     m_geometryShader.loadViewMatrix(m_camera);
 
@@ -145,6 +176,9 @@ void MenuBackground::renderGeometry()
     sky_dome->draw();
 
     m_geometryShader.stop();
+
+    glDepthMask(GL_FALSE);
+    glDisable(GL_DEPTH_TEST);
 
     /*/ GUI
     m_window->pushGLStates();

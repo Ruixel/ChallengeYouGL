@@ -5,6 +5,7 @@
 #include "CinematicCamera.h"
 #include "StaticShader.h"
 #include "gStaticShader.h"
+#include "LightingPass.h"
 #include "GBuffer.h"
 #include "SkyDome.h"
 #include "gui/Widget.h"
@@ -20,7 +21,8 @@ private:
     CinematicCamera m_camera;
     // StaticShader m_staticShader;
     gStaticShader m_geometryShader;
-    BasicShader m_screenShader;
+    BasicShader   m_screenShader;
+    LightingPass  m_LightingPassShader;
 
     sf::RenderWindow* m_window;
 

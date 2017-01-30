@@ -105,6 +105,7 @@ void MenuBackground::renderMenu()
 {
     m_gbuffer.bindForWriting();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClearColor(0.f/255, 0.f/255, 0.f/255, 1.0f);
 
     this->renderGeometry();
     m_gbuffer.unbindFramebuffer();
@@ -114,12 +115,11 @@ void MenuBackground::renderMenu()
     m_gbuffer.bindForReading();
 
     sf::Vector2u windowSize = this->m_window->getSize();
-    GLsizei HalfWidth  = (GLsizei)(windowSize.x/2);
-    GLsizei HalfHeight = (GLsizei)(windowSize.y/2);
+    GLsizei HalfWidth  = 1280/2.0f;
+    GLsizei HalfHeight = 720/2.0f;
 
     m_gbuffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_POSITION);
-    glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, HalfWidth, HalfHeight,
-                      GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
     m_gbuffer.setReadBuffer(GBuffer::GBUFFER_TEXTURE_TYPE_ALBEDO);
     glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, 0, HalfHeight, HalfWidth, windowSize.y,
@@ -129,11 +129,11 @@ void MenuBackground::renderMenu()
     glBlitFramebuffer(0, 0, windowSize.x, windowSize.y, HalfWidth, HalfHeight, windowSize.x, windowSize.y,
                       GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
-    m_screenShader.use();
+    /*m_screenShader.use();
     glBindVertexArray(quadVao->getVaoID());
-    m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_ALBEDO);
+    m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
     glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    glBindVertexArray(0);*/
 }
 
 void MenuBackground::renderGeometry()

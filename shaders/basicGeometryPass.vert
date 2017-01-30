@@ -26,7 +26,7 @@ void main()
     vec4 world_position = modelTransformation * vec4(position, 1.0f);
     gl_Position = projectionTransformation * viewTransformation * world_position;
 
-    mat3 normalMatrix = transpose(inverse(mat3(modelTransformation)));
+    //mat3 normalMatrix = transpose(inverse(mat3(modelTransformation)));
 
     vec3 fixed_tex_color = vec3(tex_color.x / 255, tex_color.y / 255, tex_color.z / 255);
     fixed_tex_color = pow(fixed_tex_color, vec3(1.0/1.4));
@@ -34,5 +34,5 @@ void main()
 
     FragPos     = world_position.xyz;
     TexCoords   = texCoords;
-    Normal      = normalMatrix * normal;
+    Normal      = normal;
 }

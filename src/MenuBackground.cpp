@@ -19,6 +19,16 @@ void MenuBackground::initMenu(sf::RenderWindow& window)
 
     w_spawn  = std::make_unique<WorldSpawn>("dat/maps/Misc.cy", m_geometryShader, &m_camera, nullptr);
     sky_dome = std::make_unique<SkyDome>(m_geometryShader);
+
+    // Set up lights
+    m_lights[0].Color = glm::vec3(0.55f, 0.55f, 0.25f);
+    m_lights[0].Position = glm::vec3(5, 50, -60);
+
+    m_lights[2].Color = glm::vec3(0.55f, 0.55f, 0.25f);
+    m_lights[2].Position = glm::vec3(-5, 50, -60);
+
+    m_lights[1].Color = glm::vec3(0.4f, 1, 1);
+    m_lights[1].Position = glm::vec3(0.6, 0, 0);
 }
 
 void MenuBackground::setupGUI()
@@ -159,6 +169,9 @@ void MenuBackground::renderMenu()
     glActiveTexture(GL_TEXTURE2);
     m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_ALBEDO);
 
+    this->renderLights();
+    this->m_LightingPassShader.setViewPosition(m_camera);
+
     glBindVertexArray(quadVao->getVaoID());
     //m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
     glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
@@ -191,6 +204,18 @@ void MenuBackground::renderGeometry()
     m_window->popGLStates();*/
 
 
+}
+
+void MenuBackground::renderLights()
+{
+    for (int i = 0; i < m_lights.size(); i++ )
+    {
+        m_LightingPassShader.setVec3LightSetting(i, "Position", m_lights[i].Position);
+        m_LightingPassShader.setVec3LightSetting(i, "Color", m_lights[i].Color);
+
+        m_LightingPassShader.setFloatLightSetting(i, "Linear", m_lights[i].linear);
+        m_LightingPassShader.setFloatLightSetting(i, "Quadratic", m_lights[i].quadratic);
+    }
 }
 
 CinematicCamera* MenuBackground::getCamera()

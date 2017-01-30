@@ -8,6 +8,5 @@ CinematicCamera::CinematicCamera()
 
 void CinematicCamera::update(const float dt)
 {
-
 }
 

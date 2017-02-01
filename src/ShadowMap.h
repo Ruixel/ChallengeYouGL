@@ -39,7 +39,8 @@ public:
     void bindDepthFBO();
     void bindDepthTexture();
 
-    DepthShader* getDepthShader();
+    const glm::mat4& getLightSpaceMatrix();
+    DepthShader*     getDepthShader();
 };
 
 #endif // SHADOWMAP_H

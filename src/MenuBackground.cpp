@@ -130,12 +130,12 @@ void MenuBackground::renderMenu()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, m_window->getSize().x, m_window->getSize().y);
 
-    m_screenShader.use();
+    /*m_screenShader.use();
     glBindVertexArray(quadVao->getVaoID());
     glActiveTexture(GL_TEXTURE0);
     m_shadowmap.bindDepthTexture();
     glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    glBindVertexArray(0);*/
 
     // GEOMETRY PASS
     // Set up
@@ -200,11 +200,14 @@ void MenuBackground::renderMenu()
     m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
     glActiveTexture(GL_TEXTURE2);
     m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_ALBEDO);
+    glActiveTexture(GL_TEXTURE3);
+    m_shadowmap.bindDepthTexture();
 
     this->renderLights();
     this->m_LightingPassShader.setViewPosition(m_camera);
+    this->m_LightingPassShader.setLightSpaceMatrix(m_shadowmap.getLightSpaceMatrix());
 
-    /*glBindVertexArray(quadVao->getVaoID());
+    glBindVertexArray(quadVao->getVaoID());
     //m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
     glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
@@ -230,7 +233,7 @@ void MenuBackground::renderMenu()
         m_window->draw(*m_gui);
     }
 
-    m_window->popGLStates();*/
+    m_window->popGLStates();
 }
 
 void MenuBackground::renderGeometry()

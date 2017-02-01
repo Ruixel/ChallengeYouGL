@@ -61,6 +61,11 @@ void ShadowMap::bindDepthTexture()
     glBindTexture(GL_TEXTURE_2D, depthMap);
 }
 
+const glm::mat4& ShadowMap::getLightSpaceMatrix()
+{
+    return this->lightSpaceMatrix;
+}
+
 DepthShader* ShadowMap::getDepthShader()
 {
     return &m_depthShader;

@@ -14,12 +14,14 @@ void LightingPass::bindAttributes()
     this->loadInt(getUniformLocation("gPosition"),   0);
     this->loadInt(getUniformLocation("gNormal"),     1);
     this->loadInt(getUniformLocation("gAlbedoSpec"), 2);
+    this->loadInt(getUniformLocation("shadowMap"),   3);
     this->stop();
 }
 
 void LightingPass::getAllUniformLocations()
 {
     location_viewPos = this->getUniformLocation("viewPos");
+    location_lightSpaceMatrix = this->getUniformLocation("lightSpaceMatrix");
 }
 
 void LightingPass::setVec3LightSetting(uint8_t light_num, const std::string& property, const glm::vec3& vec)
@@ -35,6 +37,11 @@ void LightingPass::setFloatLightSetting(uint8_t light_num, const std::string& pr
 void LightingPass::setViewPosition(const Camera& camera)
 {
     this->loadVector(location_viewPos, camera.getPosition());
+}
+
+void LightingPass::setLightSpaceMatrix(const glm::mat4& matrix)
+{
+    this->loadMatrix(location_lightSpaceMatrix, matrix);
 }
 
 void LightingPass::loadProjectionMatrix(const glm::mat4& matrix) {} // Not needed

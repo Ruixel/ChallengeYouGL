@@ -17,6 +17,7 @@ private:
     void getAllUniformLocations();
 
     int location_viewPos = 0;
+    int location_lightSpaceMatrix = 0;
 
 public:
     LightingPass();
@@ -28,6 +29,7 @@ public:
     void setFloatLightSetting(uint8_t light_num, const std::string& property, float value);
 
     void setViewPosition(const Camera& camera);
+    void setLightSpaceMatrix(const glm::mat4& matrix);
 };
 
 #endif // LIGHTINGPASS_H

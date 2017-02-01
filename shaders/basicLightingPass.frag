@@ -5,6 +5,7 @@ in vec2 TexCoords;
 uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gAlbedoSpec;
+uniform sampler2D shadowMap;
 
 struct Light
 {
@@ -19,13 +20,29 @@ const int NR_LIGHTS = 16;
 uniform Light lights[NR_LIGHTS];
 uniform vec3 viewPos;
 
+uniform mat4 lightSpaceMatrix;
+
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    projCoords = projCoords * 0.5 + 0.5;
+
+    float closestDepth = texture(shadowMap, projCoords.xy).r;
+    float currentDepth = projCoords.z;
+
+    float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
+    return shadow;
+}
+
 void main()
 {
     vec3 FragPos = texture(gPosition, TexCoords).rgb;
     vec3 Normal  = texture(gNormal, TexCoords).rgb;
     vec3 Diffuse = texture(gAlbedoSpec, TexCoords).rgb;
+    vec4 FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);
 
-    vec3 lighting = Diffuse * 0.3;
+    vec3 ambience = Diffuse * 0.3;
+    vec3 diffuse_lighting;
     vec3 viewDir  = normalize(viewPos - FragPos);
     for (int i = 0; i < NR_LIGHTS; ++i)
     {
@@ -39,13 +56,16 @@ void main()
             // Attenuation
             float distance = length(lights[i].Position - FragPos);
             float attenuation = 1.0 / (1.0 + lights[i].Linear * distance + lights[i].Quadratic * distance * distance); //(1.05 * (distance / 20));
-            diffuse  *= attenuation;
+            diffuse *= attenuation;
         } else {
             diffuse *= 1.4;
         }
 
-        lighting += diffuse;
+        diffuse_lighting += diffuse;
     }
+
+    float shadow = ShadowCalculation(FragPosLightSpace);
+    vec3 lighting = (ambience + (1.0 - shadow) * (diffuse_lighting));
 
     FragColor = vec4(lighting, 1.0);
 }

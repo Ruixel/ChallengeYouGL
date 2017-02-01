@@ -11,8 +11,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/glm.hpp>
 
-const GLuint SHADOW_WIDTH  = 1280, SHADOW_HEIGHT = 720;
-const GLfloat near_plane = 1.0f, far_plane = 750.0f;
+const GLuint SHADOW_WIDTH  = 2048, SHADOW_HEIGHT = 2048;
+const GLfloat near_plane = 1.0f, far_plane = 50.0f;
+const GLfloat ortho_size = 20.0f;
 
 class ShadowMap
 {

@@ -22,7 +22,7 @@ uniform vec3 viewPos;
 
 uniform mat4 lightSpaceMatrix;
 
-float ShadowCalculation(vec4 fragPosLightSpace)
+float ShadowCalculation(vec4 fragPosLightSpace, float shadow_bias)
 {
     vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
     projCoords = projCoords * 0.5 + 0.5;
@@ -30,7 +30,7 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     float closestDepth = texture(shadowMap, projCoords.xy).r;
     float currentDepth = projCoords.z;
 
-    float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
+    float shadow = (currentDepth - shadow_bias) > closestDepth ? 1.0 : 0.0;
     return shadow;
 }
 
@@ -58,14 +58,17 @@ void main()
             float attenuation = 1.0 / (1.0 + lights[i].Linear * distance + lights[i].Quadratic * distance * distance); //(1.05 * (distance / 20));
             diffuse *= attenuation;
         } else {
-            diffuse *= 1.4;
+            diffuse *= 1.1f;
         }
 
         diffuse_lighting += diffuse;
     }
 
-    float shadow = ShadowCalculation(FragPosLightSpace);
-    vec3 lighting = (ambience + (1.0 - shadow) * (diffuse_lighting));
+    float shadow_bias = max(0.05 * (1.0 - dot(Normal, normalize(lights[0].Position - FragPos))), 0.005);
+    float shadow = ShadowCalculation(FragPosLightSpace, shadow_bias);
+
+    //vec3 lighting = (ambience + (1.0 - shadow) * (diffuse_lighting));
+    vec3 lighting = ambience + diffuse_lighting - shadow*0.3 - 0.15;
 
     FragColor = vec4(lighting, 1.0);
 }

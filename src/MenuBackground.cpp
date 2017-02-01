@@ -125,17 +125,17 @@ void MenuBackground::renderMenu()
     // Ambient Shadows
     // DEPTH MAP PASS
     m_shadowmap.configureDepthPass();
-    m_shadowmap.setLightViewMatrix(glm::vec3(50, 100, -40), glm::vec3(0, 70, -50));
+    m_shadowmap.setLightViewMatrix(glm::vec3(10, 20, 20), glm::vec3(00, 00, -00));
     w_spawn->drawForDepthShader(m_shadowmap.getDepthShader());
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, m_window->getSize().x, m_window->getSize().y);
 
-    /*m_screenShader.use();
+    m_screenShader.use();
     glBindVertexArray(quadVao->getVaoID());
     glActiveTexture(GL_TEXTURE0);
     m_shadowmap.bindDepthTexture();
-    glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);*/
+    //glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
 
     // GEOMETRY PASS
     // Set up
@@ -225,7 +225,7 @@ void MenuBackground::renderMenu()
     //sky_dome->draw();
     m_staticShader.stop();
 
-    // GUI
+    /*/ GUI
     m_window->pushGLStates();
 
     for (auto& m_gui : this->m_GUI)
@@ -233,7 +233,7 @@ void MenuBackground::renderMenu()
         m_window->draw(*m_gui);
     }
 
-    m_window->popGLStates();
+    m_window->popGLStates();*/
 }
 
 void MenuBackground::renderGeometry()

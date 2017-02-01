@@ -14,8 +14,8 @@ ShadowMap::ShadowMap()
     // Texture Parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     // Attach texture to frame-buffer
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
@@ -26,7 +26,7 @@ ShadowMap::ShadowMap()
 
     // Set up light projection matrix
     m_depthShader.use();
-    lightProjection = glm::ortho(-10.f, 10.f, -10.f, 10.0f, near_plane, far_plane);
+    lightProjection = glm::ortho(-ortho_size, ortho_size, -ortho_size, ortho_size, near_plane, far_plane);
     m_depthShader.stop();
 }
 

@@ -3,15 +3,15 @@
 
 #include "OBJLoader.h"
 #include "Entity.h"
-#include "gStaticShader.h"
+#include "StaticShader.h"
 
 class SkyDome : public Entity
 {
 private:
-    gStaticShader* shader;
+    StaticShader* shader;
 
 public:
-    SkyDome(gStaticShader& sh);
+    SkyDome(StaticShader& sh);
 
     void draw();
     void update(const float dt);

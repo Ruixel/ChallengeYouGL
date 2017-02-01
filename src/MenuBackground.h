@@ -8,6 +8,7 @@
 #include "LightingPass.h"
 #include "GBuffer.h"
 #include "SkyDome.h"
+#include "ShadowMap.h"
 #include "gui/Widget.h"
 #include "gui/Image.h"
 
@@ -28,7 +29,8 @@ class MenuBackground
 {
 private:
     CinematicCamera m_camera;
-    // StaticShader m_staticShader;
+
+    StaticShader  m_staticShader;
     gStaticShader m_geometryShader;
     BasicShader   m_screenShader;
     LightingPass  m_LightingPassShader;
@@ -41,7 +43,8 @@ private:
     GBuffer m_gbuffer;
     std::unique_ptr<RawModel> quadVao;
 
-    std::array<Light, 32> m_lights;
+    std::array<Light, 16> m_lights;
+    ShadowMap m_shadowmap;
 
     std::vector<std::unique_ptr<GUI::Widget>> m_GUI;
     void setupGUI();

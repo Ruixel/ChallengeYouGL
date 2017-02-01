@@ -18,17 +18,20 @@ void MenuBackground::initMenu(sf::RenderWindow& window)
     quadVao = Loader::loadToVAO(bag::quadVertices, bag::quadIndices, bag::quadTexCoods);
 
     w_spawn  = std::make_unique<WorldSpawn>("dat/maps/Misc.cy", m_geometryShader, &m_camera, nullptr);
-    sky_dome = std::make_unique<SkyDome>(m_geometryShader);
+    sky_dome = std::make_unique<SkyDome>(m_staticShader);
 
     // Set up lights
-    m_lights[0].Color = glm::vec3(0.55f, 0.55f, 0.25f);
-    m_lights[0].Position = glm::vec3(5, 50, -60);
+    m_lights[1].Color = glm::vec3(0.55f, 0.55f, 0.25f);
+    m_lights[1].Position = glm::vec3(5, 50, -60);
 
     m_lights[2].Color = glm::vec3(0.55f, 0.55f, 0.25f);
     m_lights[2].Position = glm::vec3(-5, 50, -60);
 
-    m_lights[1].Color = glm::vec3(0.4f, 1, 1);
-    m_lights[1].Position = glm::vec3(0.6, 0, 0);
+    //m_lights[0].Color = glm::vec3(0.2f, 0.4f, 0.5f);
+    //m_lights[0].Position = glm::vec3(400, 800, 0);
+
+    m_lights[0].Color = glm::vec3(0.8f, 1.0f, 1.0f);
+    m_lights[0].Position = glm::vec3(400, 800, 0);
 }
 
 void MenuBackground::setupGUI()
@@ -65,10 +68,16 @@ void MenuBackground::insertGUIWidget(std::unique_ptr<GUI::Widget> gui_widget)
 
 void MenuBackground::setupCameraUniforms()
 {
+    // Geometry Shader
     m_geometryShader.use();
     glm::mat4 pMatrix = m_camera.generateProjectionMatrix(45);
     m_geometryShader.loadProjectionMatrix(pMatrix);
     m_geometryShader.stop();
+
+    // Static Shader
+    m_staticShader.use();
+    m_staticShader.loadProjectionMatrix(pMatrix);
+    m_staticShader.stop();
 }
 
 /*int n = 10;
@@ -113,12 +122,29 @@ void MenuBackground::renderMenu()
 
 void MenuBackground::renderMenu()
 {
+    // Ambient Shadows
+    // DEPTH MAP PASS
+    m_shadowmap.configureDepthPass();
+    m_shadowmap.setLightViewMatrix(glm::vec3(50, 100, -40), glm::vec3(0, 70, -50));
+    w_spawn->drawForDepthShader(m_shadowmap.getDepthShader());
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glViewport(0, 0, m_window->getSize().x, m_window->getSize().y);
+
+    m_screenShader.use();
+    glBindVertexArray(quadVao->getVaoID());
+    glActiveTexture(GL_TEXTURE0);
+    m_shadowmap.bindDepthTexture();
+    glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
     // GEOMETRY PASS
     // Set up
     m_gbuffer.bindForWriting();
 
     glDepthMask(GL_TRUE);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    //glEnable(GL_STENCIL_TEST);
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
 
@@ -129,7 +155,13 @@ void MenuBackground::renderMenu()
     m_gbuffer.unbindFramebuffer();
     m_gbuffer.bindForReading();
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+    // Stencil test
+    /*glEnable(GL_DEPTH_TEST);
+    glStencilMask(0xFF);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);*/
 
     /*
 
@@ -172,10 +204,23 @@ void MenuBackground::renderMenu()
     this->renderLights();
     this->m_LightingPassShader.setViewPosition(m_camera);
 
-    glBindVertexArray(quadVao->getVaoID());
+    /*glBindVertexArray(quadVao->getVaoID());
     //m_gbuffer.bindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
     glDrawElements(GL_TRIANGLES, quadVao->getVertexCount(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
+
+    // Stencil disable
+    glStencilMask(0x00);
+
+    // Forward Render Sky Dome
+    m_staticShader.use();
+
+    glStencilFunc(GL_EQUAL, 1, 0xFF);
+    glDisable(GL_DEPTH_TEST);
+
+    m_staticShader.loadViewMatrix(m_camera);
+    //sky_dome->draw();
+    m_staticShader.stop();
 
     // GUI
     m_window->pushGLStates();
@@ -185,7 +230,7 @@ void MenuBackground::renderMenu()
         m_window->draw(*m_gui);
     }
 
-    m_window->popGLStates();
+    m_window->popGLStates();*/
 }
 
 void MenuBackground::renderGeometry()
@@ -196,7 +241,6 @@ void MenuBackground::renderGeometry()
     m_geometryShader.loadViewMatrix(m_camera);
 
     w_spawn->draw();
-    sky_dome->draw();
 
     m_geometryShader.stop();
 

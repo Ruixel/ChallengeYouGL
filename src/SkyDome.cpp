@@ -1,6 +1,6 @@
 #include "SkyDome.h"
 
-SkyDome::SkyDome(gStaticShader& sh)
+SkyDome::SkyDome(StaticShader& sh)
 : Entity(Loader::loadObjModel("dat/skydome.obj"), Loader::loadTexture("dat/img/skypolar.jpg"))
 , shader(&sh)
 {

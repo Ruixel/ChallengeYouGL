@@ -13,6 +13,7 @@
 #include "Camera.h"
 #include "Loader.h"
 #include "gStaticShader.h"
+#include "DepthShader.h"
 #include "OBJLoader.h"
 #include "LevelTextures.h"
 #include "CYLevelLoader.h"
@@ -43,7 +44,10 @@ public:
     WorldSpawn(const char* levelPath, gStaticShader& sh, Camera* camera, PostFX* postfx);
 
     void draw();
+    void render();
     void update(const float dt);
+
+    void drawForDepthShader(DepthShader* depth_shader);
 };
 
 #endif // WORLDSPAWN_H

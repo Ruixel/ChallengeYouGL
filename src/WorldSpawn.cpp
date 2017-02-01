@@ -19,6 +19,12 @@ void WorldSpawn::draw()
     shader->isEntity(false);
     shader->loadTransformationMatrix(transformationMatrix);
 
+    render();
+
+}
+
+void WorldSpawn::render()
+{
     glActiveTexture(GL_TEXTURE0);
 
     texture_id previous_texture = CY_UNASSIGNED;
@@ -30,7 +36,14 @@ void WorldSpawn::draw()
         glDrawElements(GL_TRIANGLES, chunk.meshID->getVertexCount(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
+}
 
+void WorldSpawn::drawForDepthShader(DepthShader* depth_shader)
+{
+    depth_shader->use();
+    depth_shader->loadModelMatrix(transformationMatrix);
+
+    render();
 }
 
 void WorldSpawn::update(const float dt)

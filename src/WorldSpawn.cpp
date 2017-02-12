@@ -7,7 +7,7 @@ WorldSpawn::WorldSpawn(const char* levelPath, gStaticShader& sh, Camera* camera,
 {
     CYLevelLoader::level_textures = &this->level_textures;
     //level_objs = CYLevelLoader::loadFromFile(levelPath);
-    level_objs = CYLevelLoader::loadFromWebsite(163394);
+    level_objs = CYLevelLoader::loadFromWebsite(61272);
 
     // Change theme
     if (postfx != nullptr)

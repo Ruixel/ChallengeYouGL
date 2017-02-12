@@ -41,8 +41,7 @@ void main()
     vec3 Diffuse = texture(gAlbedoSpec, TexCoords).rgb;
     vec4 FragPosLightSpace = lightSpaceMatrix * vec4(FragPos, 1.0);
 
-    vec3 ambience = Diffuse * 0.3;
-    vec3 diffuse_lighting;
+    vec3 lighting = Diffuse * 0.3;
     vec3 viewDir  = normalize(viewPos - FragPos);
     for (int i = 0; i < NR_LIGHTS; ++i)
     {
@@ -58,17 +57,17 @@ void main()
             float attenuation = 1.0 / (1.0 + lights[i].Linear * distance + lights[i].Quadratic * distance * distance); //(1.05 * (distance / 20));
             diffuse *= attenuation;
         } else {
-            diffuse *= 1.1f;
+            diffuse *= 1.0f;
         }
 
-        diffuse_lighting += diffuse;
+        lighting += diffuse;
     }
 
-    float shadow_bias = max(0.05 * (1.0 - dot(Normal, normalize(lights[0].Position - FragPos))), 0.005);
+    float shadow_bias = max(0.05 * (1.0 - dot(Normal, normalize(lights[0].Position - FragPos))), 0.002);
     float shadow = ShadowCalculation(FragPosLightSpace, shadow_bias);
 
-    //vec3 lighting = (ambience + (1.0 - shadow) * (diffuse_lighting));
-    vec3 lighting = ambience + diffuse_lighting - shadow*0.3 - 0.15;
+    //vec3 lighting = (ambience + (0.1 - shadow*0.3) * (diffuse_lighting));
 
+    lighting -= shadow*0.2;
     FragColor = vec4(lighting, 1.0);
 }

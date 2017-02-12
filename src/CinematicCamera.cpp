@@ -6,10 +6,10 @@ CinematicCamera::CinematicCamera()
     this->m_rotation = Vector3(-PI / 6, -PI / 4, 0);
 }
 
-void CinematicCamera::update(const float dt)
+void CinematicCamera::update(const float deltaTime)
 {
 
-    //const float dt = deltaTime * 100;
+    const float dt = deltaTime * 100;
 
     auto mouseMove = m_lastMousePos - sf::Mouse::getPosition();
 
